@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ohtipi</title>
+    <link href="./assets/tailwind.min.css" rel="stylesheet" />
+    <style>
+        @font-face {
+            font-family: "San Francisco";
+            font-weight: 100;
+            src: url("./assets/onboarding/SF_Light.ttf");
+        }
+
+        @font-face {
+            font-family: "San Francisco";
+            font-weight: 300;
+            src: url("./assets/onboarding/SF_Regular.ttf");
+        }
+
+        @font-face {
+            font-family: "San Francisco";
+            font-weight: 500;
+            src: url("./assets/onboarding/SF_Medium.ttf");
+        }
+
+        * {
+            font-family: "San Francisco";
+        }
+
+        .button {
+            width: 183px;
+            height: 48px;
+            background-color: #0361ff;
+            border-radius: 4px;
+        }
+
+        .rotate {
+            animation: rotate 1000ms linear infinite;
+        }
+
+        .backdrop {
+            margin-top: -50%;
+            margin-right: -75%;
+        }
+
+        .example-screen {
+            width: 600px;
+            margin-right: -180px;
+            margin-top: 80px;
+        }
+
+        .text-pane {
+            width: 300px;
+        }
+
+        .zoom-in {
+            animation: zoom-in 2000ms ease;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes zoom-in {
+            from {
+                transform: scale(0.95)
+            }
+
+            to {
+                transform: scale(1.25)
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .flash-avoid {
+            animation: fadein 1s;
+        }
+
+        .demo-easein {
+            animation: demo-easein 4s ease-out 1;
+        }
+
+        @keyframes demo-easein {
+            0% {
+                transform: scale(1.1)
+            }
+
+            100% {
+                transform: scale(1.0)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="flex w-screen h-screen relative select-none overflow-hidden" style="background: #f3f3f3">
+
+        <!-- splash screen -->
+        <div v-if="showSplash" class="fixed w-full h-full flex" :style="splashStyle">
+            <img class="m-auto h-8 zoom-in" src="./assets/onboarding/logo.png" />
+            <svg class="absolute right-0 top-0 z-0 backdrop" style="opacity: 0.05" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 100 125" x="0px" y="0px">
+                <path d="M70,82.5008H30a2.5,2.5,0,0,1,0-5H70a2.5,2.5,0,0,1,0,5Z" />
+                <path
+                    d="M29.998,82.5018a2.5015,2.5015,0,0,1-2.2343-3.6191l30-60a2.5,2.5,0,1,1,4.4726,2.2363l-30,60A2.5012,2.5012,0,0,1,29.998,82.5018Z" />
+                <path
+                    d="M70.002,82.5018a2.5012,2.5012,0,0,1-2.2383-1.3828l-30-60a2.5,2.5,0,1,1,4.4726-2.2363l30,60a2.5015,2.5015,0,0,1-2.2343,3.6191Z" />
+            </svg>
+        </div>
+
+        <div class="flash-avoid relative p-4 h-screen w-screen oveflow-hidden flex">
+            <svg class="absolute right-0 top-0 z-0 opacity-25 backdrop" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 100 125" x="0px" y="0px">
+                <path d="M70,82.5008H30a2.5,2.5,0,0,1,0-5H70a2.5,2.5,0,0,1,0,5Z" />
+                <path
+                    d="M29.998,82.5018a2.5015,2.5015,0,0,1-2.2343-3.6191l30-60a2.5,2.5,0,1,1,4.4726,2.2363l-30,60A2.5012,2.5012,0,0,1,29.998,82.5018Z" />
+                <path
+                    d="M70.002,82.5018a2.5012,2.5012,0,0,1-2.2383-1.3828l-30-60a2.5,2.5,0,1,1,4.4726-2.2363l30,60a2.5015,2.5015,0,0,1-2.2343,3.6191Z" />
+            </svg>
+
+            <div class="flex fixed right-0 top-0 example-screen z-50 shadow-lg rounded-lg overflow-hidden demo-easein">
+                <img draggable="false" class="object-contain" src="./assets/onboarding/example.png" />
+            </div>
+
+            <div class="h-auto my-auto z-10 ml-8 text-pane" v-if="step == 0">
+                <div class="mb-6">
+                    <img draggable="false" style="height: 28px" class="w-auto" src="./assets/onboarding/logo.png">
+                </div>
+                <h1 class="mb-2 text-2xl font-bold">
+                    Welcome to Ohtipi
+                </h1>
+                <p class="mb-2 text-sm font-thin">
+                    Thanks for downloading Ohtipi!
+                </p>
+                <p class="mb-2 text-sm font-thin">
+                    Ohtipi is a Mac only app that takes OTP texts from iMessage and sends them to your clipboard to
+                    easily and quickly autofill.
+                </p>
+
+                <div @click="nextStep" class="hover:opacity-75 flex button text-white text-sm cursor-pointer my-4"
+                    id="permissions-button" style="width: 120px !important">
+                    <div class="m-auto truncate w-auto">
+                        Get Started
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-1/2 h-auto my-auto z-10 ml-8" v-if="step == 1">
+                <div class="mb-6">
+                    <img draggable="false" style="height: 28px" class="w-auto" src="./assets/onboarding/logo.png">
+                </div>
+                <h1 class="mb-2 text-2xl font-bold">
+                    We need your permission
+                </h1>
+                <p class="mb-2 text-sm font-thin">
+                    Ohtipi will work smoothly if you<br>allow us these permissions:
+                </p>
+                <div :class="`my-6 text-sm font-thin flex justify-start ${!hasFullDiskAccessPermission ? 'cursor-pointer hover:opacity-50 opacity-100' : 'opacity-50'}`"
+                    @click="setPermissions">
+                    <div
+                        :class="!hasFullDiskAccessPermission ? 'rounded my-auto mr-2 w-3 h-3 border border-red-500 bg-red-500 opacity-25' : 'rounded my-auto mr-2 w-3 h-3 bg-green-500 border border-green-500'">
+                    </div>
+                    <div class="my-auto">Full Disk Access <span v-if="!hasFullDiskAccessPermission">&rarr;</span></div>
+                </div>
+
+                <div v-if="!hasFullDiskAccessPermission" class="flex button text-white text-sm my-4 opacity-25"
+                    style="width: 150px" id="permissions-button">
+                    <div class="m-auto truncate w-auto">
+                        Continue
+                    </div>
+                </div>
+                <div v-else @click="nextStep"
+                    class="hover:opacity-75 flex button text-white text-sm cursor-pointer my-4" style="width: 150px"
+                    id="permissions-button">
+                    <div class="m-auto truncate w-auto">
+                        Continue
+                    </div>
+                </div>
+
+                <p v-if="showLoader" class="mb-2 text-sm font-medium opacity-50 flex justify-start">
+                    <span class="my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                            class="rotate">
+                            <g fill="none" fill-rule="evenodd">
+                                <g fill="#8B8B8B" fill-rule="nonzero">
+                                    <g>
+                                        <g>
+                                            <path
+                                                d="M10.004 13.97c1.063-.356 1.604 1.26.54 1.616-.967.325-1.996.46-3.015.4-4.41-.26-7.775-4.048-7.515-8.457C.274 3.12 4.063-.246 8.472.015c4.408.26 7.774 4.048 7.514 8.457-.02.356-.068.73-.137 1.08-.215 1.103-1.891.776-1.676-.326.057-.289.093-.56.11-.854.205-3.466-2.446-6.45-5.911-6.654-3.466-.205-6.45 2.445-6.655 5.91-.205 3.466 2.446 6.45 5.911 6.655.81.048 1.608-.055 2.376-.314z"
+                                                transform="translate(-46 -408) translate(46 175) translate(0 233)" />
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </span>
+                    <span class="ml-2 my-auto">
+                        {{ loaderText }}
+                    </span>
+                </p>
+
+            </div>
+
+            <div class="w-1/2 h-auto my-auto z-10 ml-8" v-if="step == 2">
+                <div class="mb-6">
+                    <img draggable="false" style="height: 28px" class="w-auto" src="./assets/onboarding/logo.png">
+                </div>
+                <h1 class="mb-2 text-2xl font-bold">
+                    Setup is done
+                </h1>
+                <p class="mb-2 text-sm font-thin mt-2">
+                    Keep an eye out for Ohtipi in your Menu Bar
+                </p>
+
+                <div class="mb-6 w-3/4 z-0 rounded overflow-hidden">
+                    <img draggable="false" src="./assets/onboarding/example-menubar.png" class="object-fill" />
+                </div>
+
+                <div class="h-auto mb-6 border border-gray-300 rounded-lg p-3" style="width: 287px">
+                    <div class="w-auto flex justify-start">
+                        <div style="background: rgba(0,0,0,0.05); color: rgba(0,0,0,0.8)"
+                            class="inline-block w-8 flex h-6 text-xs font-bold uppercase rounded">
+                            <div class="m-auto">
+                                Tip
+                            </div>
+                        </div>
+                        <div class="font-medium my-auto ml-3 text-sm opacity-75">
+                            ⌘ + Shift + E
+                        </div>
+                    </div>
+                    <div class="mt-3 w-full z-0 text-sm font-thin leading-5">
+                        Sometimes iMessage likes to sleep on the job. If OhTipi ever misses a message, use <span
+                            class="font-medium text-xs p-1">⌘ + Shift + E</span>
+                        to sync recent messages and copy the latest code to your clipboard.
+                    </div>
+                </div>
+
+                <div @click="restartApp" class="hover:opacity-75 flex button text-white text-sm cursor-pointer my-4"
+                    id="done-button">
+                    <div class="m-auto truncate w-auto">
+                        Restart Ohtipi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./assets/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                step: 0,
+                hasNotificationPermission: false,
+                hasFullDiskAccessPermission: false,
+                waiting: false,
+
+                showLoader: false,
+                loaderText: "",
+
+                showSplash: true,
+                splashStyle: "background: #f3f3f3; transition: all 800ms ease; z-index: 99999999"
+            },
+            methods: {
+                nextStep() {
+                    this.step++;
+                },
+                setPermissions() {
+                    if (this.waiting) return;
+
+                    if (!this.hasFullDiskAccessPermission) {
+                        this.loaderText = "Opening System Preferences..."
+                        this.waiting = true;
+                        this.showLoader = true;
+                        window.webkit.messageHandlers.twoFHeyMessageHandler.postMessage("open-full-disk-access");
+                        setTimeout(() => {
+                            this.hasFullDiskAccessPermission = true;
+                            this.waiting = false;
+                            this.showLoader = false;
+                        }, 4000)
+                    }
+                },
+                restartApp() {
+                    window.webkit.messageHandlers.twoFHeyMessageHandler.postMessage("close-onboarding");
+                }
+            },
+            mounted() {
+                const splashTimeoutMs = 1400;
+                setTimeout(() => {
+                    this.splashStyle =
+                        `opacity: 0; background: #f3f3f3; transition: all ${splashTimeoutMs / 2}ms ease; z-index: 99999999`
+
+                    setTimeout(() => {
+                        this.showSplash = false;
+                    }, splashTimeoutMs / 2)
+                }, splashTimeoutMs);
+            }
+        })
+    </script>
+</body>
+
+</html>

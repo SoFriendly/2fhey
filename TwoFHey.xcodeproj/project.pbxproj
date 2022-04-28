@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
+		D41FABE12817806E00B0F829 /* onboarding.html in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE02817806E00B0F829 /* onboarding.html */; };
+		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
+		D41FABE528178CDB00B0F829 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FABE428178CDB00B0F829 /* main.swift */; };
+		D4F5CAA02817688800A39E6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CA9F2817688800A39E6D /* AppDelegate.swift */; };
+		D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAA12817688800A39E6D /* ViewController.swift */; };
+		D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4F5CAA32817688900A39E6D /* Assets.xcassets */; };
+		D4F5CAA72817688900A39E6D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4F5CAA52817688900A39E6D /* Main.storyboard */; };
+		D4F5CAB2281768B000A39E6D /* OTPParserContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAAF281768B000A39E6D /* OTPParserContants.swift */; };
+		D4F5CAB3281768B000A39E6D /* CustomOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAB0281768B000A39E6D /* CustomOTPParser.swift */; };
+		D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAB1281768B000A39E6D /* OTPParser.swift */; };
+		D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAB6281768C500A39E6D /* OverlayView.swift */; };
+		D4F5CABC281768E100A39E6D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CABB281768E100A39E6D /* Message.swift */; };
+		D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CABD281768EC00A39E6D /* MessageManager.swift */; };
+		D4F5CAC12817691000A39E6D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D4F5CAC02817691000A39E6D /* SQLite */; };
+		D4F5CAC32817725100A39E6D /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAC22817725100A39E6D /* PermissionManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		D41FABE02817806E00B0F829 /* onboarding.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = onboarding.html; sourceTree = "<group>"; };
+		D41FABE22817808C00B0F829 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		D41FABE428178CDB00B0F829 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		D4F5CA9C2817688800A39E6D /* TwoFHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoFHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4F5CA9F2817688800A39E6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D4F5CAA12817688800A39E6D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D4F5CAA32817688900A39E6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D4F5CAA62817688900A39E6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TwoFHey.entitlements; sourceTree = "<group>"; };
+		D4F5CAAF281768B000A39E6D /* OTPParserContants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParserContants.swift; sourceTree = "<group>"; };
+		D4F5CAB0281768B000A39E6D /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
+		D4F5CAB1281768B000A39E6D /* OTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParser.swift; sourceTree = "<group>"; };
+		D4F5CAB6281768C500A39E6D /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		D4F5CABB281768E100A39E6D /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		D4F5CABD281768EC00A39E6D /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
+		D4F5CAC22817725100A39E6D /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D4F5CA992817688800A39E6D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */,
+				D4F5CAC12817691000A39E6D /* SQLite in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D41FABD628177D7F00B0F829 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D41FABD728177D7F00B0F829 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D41FABD92817803100B0F829 /* wwwonboarding */ = {
+			isa = PBXGroup;
+			children = (
+				D41FABE22817808C00B0F829 /* assets */,
+				D41FABE02817806E00B0F829 /* onboarding.html */,
+			);
+			path = wwwonboarding;
+			sourceTree = "<group>";
+		};
+		D4F5CA932817688800A39E6D = {
+			isa = PBXGroup;
+			children = (
+				D4F5CA9E2817688800A39E6D /* TwoFHey */,
+				D4F5CA9D2817688800A39E6D /* Products */,
+				D41FABD628177D7F00B0F829 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D4F5CA9D2817688800A39E6D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D4F5CA9C2817688800A39E6D /* TwoFHey.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D4F5CA9E2817688800A39E6D /* TwoFHey */ = {
+			isa = PBXGroup;
+			children = (
+				D41FABD92817803100B0F829 /* wwwonboarding */,
+				D4F5CABD281768EC00A39E6D /* MessageManager.swift */,
+				D4F5CABA281768D800A39E6D /* Models */,
+				D4F5CAB5281768BE00A39E6D /* Views */,
+				D4F5CAAE281768A100A39E6D /* OTPParser */,
+				D4F5CA9F2817688800A39E6D /* AppDelegate.swift */,
+				D4F5CAA12817688800A39E6D /* ViewController.swift */,
+				D4F5CAA32817688900A39E6D /* Assets.xcassets */,
+				D4F5CAA52817688900A39E6D /* Main.storyboard */,
+				D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */,
+				D4F5CAC22817725100A39E6D /* PermissionManager.swift */,
+				D41FABE428178CDB00B0F829 /* main.swift */,
+			);
+			path = TwoFHey;
+			sourceTree = "<group>";
+		};
+		D4F5CAAE281768A100A39E6D /* OTPParser */ = {
+			isa = PBXGroup;
+			children = (
+				D4F5CAB0281768B000A39E6D /* CustomOTPParser.swift */,
+				D4F5CAB1281768B000A39E6D /* OTPParser.swift */,
+				D4F5CAAF281768B000A39E6D /* OTPParserContants.swift */,
+			);
+			path = OTPParser;
+			sourceTree = "<group>";
+		};
+		D4F5CAB5281768BE00A39E6D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D4F5CAB6281768C500A39E6D /* OverlayView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D4F5CABA281768D800A39E6D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D4F5CABB281768E100A39E6D /* Message.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D4F5CA9B2817688800A39E6D /* TwoFHey */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */;
+			buildPhases = (
+				D4F5CA982817688800A39E6D /* Sources */,
+				D4F5CA992817688800A39E6D /* Frameworks */,
+				D4F5CA9A2817688800A39E6D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TwoFHey;
+			packageProductDependencies = (
+				D4F5CAC02817691000A39E6D /* SQLite */,
+			);
+			productName = TwoFHey;
+			productReference = D4F5CA9C2817688800A39E6D /* TwoFHey.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D4F5CA942817688800A39E6D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					D4F5CA9B2817688800A39E6D = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+				};
+			};
+			buildConfigurationList = D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "TwoFHey" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D4F5CA932817688800A39E6D;
+			packageReferences = (
+				D4F5CABF2817691000A39E6D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
+			productRefGroup = D4F5CA9D2817688800A39E6D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D4F5CA9B2817688800A39E6D /* TwoFHey */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D4F5CA9A2817688800A39E6D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */,
+				D41FABE32817808C00B0F829 /* assets in Resources */,
+				D41FABE12817806E00B0F829 /* onboarding.html in Resources */,
+				D4F5CAA72817688900A39E6D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D4F5CA982817688800A39E6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */,
+				D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */,
+				D4F5CAC32817725100A39E6D /* PermissionManager.swift in Sources */,
+				D4F5CAB2281768B000A39E6D /* OTPParserContants.swift in Sources */,
+				D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */,
+				D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */,
+				D41FABE528178CDB00B0F829 /* main.swift in Sources */,
+				D4F5CAA02817688800A39E6D /* AppDelegate.swift in Sources */,
+				D4F5CABC281768E100A39E6D /* Message.swift in Sources */,
+				D4F5CAB3281768B000A39E6D /* CustomOTPParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		D4F5CAA52817688900A39E6D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D4F5CAA62817688900A39E6D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D4F5CAA92817688900A39E6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D4F5CAAA2817688900A39E6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		D4F5CAAC2817688900A39E6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = col.yac.TwoFHey;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D4F5CAAD2817688900A39E6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = col.yac.TwoFHey;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "TwoFHey" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4F5CAA92817688900A39E6D /* Debug */,
+				D4F5CAAA2817688900A39E6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4F5CAAC2817688900A39E6D /* Debug */,
+				D4F5CAAD2817688900A39E6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D4F5CABF2817691000A39E6D /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D4F5CAC02817691000A39E6D /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4F5CABF2817691000A39E6D /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D4F5CA942817688800A39E6D /* Project object */;
+}
