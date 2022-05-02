@@ -8,6 +8,8 @@
 import Cocoa
 import Combine
 import SwiftUI
+import ServiceManagement
+import HotKey
 
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?) {
@@ -38,6 +40,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var lastNotificationMessage: Message? = nil
     var shouldShowNotificationOverlay = false
     
+    var hotKey: HotKey?
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let icon = NSImage(named: "TrayIcon")!
         icon.isTemplate = true
@@ -54,7 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             weakSelf.mostRecentMessages = messages.suffix(3)
-            weakSelf.statusBarItem.menu = weakSelf.createMenuForMessages()
+            weakSelf.refreshMenu()
             
             weakSelf.shouldShowNotificationOverlay = true
         }.store(in: &cancellable)
@@ -62,6 +66,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
 
         messageManager.startListening()
+        
+        if AppStateManager.shared.globalShortcutEnabled {
+            setupGlobalKeyShortcut()
+        }
     }
     
     func showOverlayForMessage(_ message: MessageWithParsedOTP) {
@@ -85,6 +93,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         overlayWindow = window
     }
     
+    func refreshMenu() {
+        statusBarItem.menu = createMenuForMessages()
+    }
+    
     func createOnboardingWindow() -> NSWindow? {
         let storyboard = NSStoryboard(name: "Main", bundle: Bundle(for: ViewController.self))
         let myViewController =  storyboard.instantiateInitialController() as? NSWindowController
@@ -104,7 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func createMenuForMessages() -> NSMenu {
         let statusBarMenu = NSMenu()
         statusBarMenu.addItem(
-            withTitle: PermissionManager.shared.hasFullDiscAccess() == .authorized ? "🟢 Connected to iMessage" : "⚠️ Setup 2FHey",
+            withTitle: AppStateManager.shared.hasFullDiscAccess() == .authorized ? "🟢 Connected to iMessage" : "⚠️ Setup 2FHey",
             action: #selector(AppDelegate.onPressSetup),
             keyEquivalent: "")
 
@@ -127,11 +139,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let settingsMenu = NSMenu()
         let keyboardShortCutItem = NSMenuItem(title: "Keyboard Shortcuts", action: #selector(AppDelegate.onPressKeyboardShortcuts), keyEquivalent: "")
         keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if Ohtipi uses the same keyboard shortcuts as another app"
-        keyboardShortCutItem.state = .on
+        keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
         settingsMenu.addItem(keyboardShortCutItem)
 
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
-        autoLaunchItem.state = .on
+        autoLaunchItem.state = AppStateManager.shared.shouldLaunchOnLogin ? .on : .off
         settingsMenu.addItem(autoLaunchItem)
         
         let settingsItem = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
@@ -161,11 +173,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func onPressAutoLaunch() {
-        
+        AppStateManager.shared.shouldLaunchOnLogin = !AppStateManager.shared.shouldLaunchOnLogin
+        refreshMenu()
     }
     
     @objc func onPressKeyboardShortcuts() {
-        
+        AppStateManager.shared.globalShortcutEnabled = !AppStateManager.shared.globalShortcutEnabled
+        refreshMenu()
+        setupGlobalKeyShortcut()
+    }
+    
+    func setupGlobalKeyShortcut() {
+        if AppStateManager.shared.globalShortcutEnabled && hotKey == nil {
+            // Setup hot key for ⌥⌘R
+            hotKey = HotKey(key: .e, modifiers: [.command, .shift])
+            hotKey?.keyDownHandler = { [weak self] in
+                self?.resync()
+            }
+        } else if !AppStateManager.shared.globalShortcutEnabled {
+            hotKey = nil
+        }
     }
     
     @objc func quit() {

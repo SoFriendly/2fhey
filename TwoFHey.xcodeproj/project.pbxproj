@@ -11,6 +11,12 @@
 		D41FABE12817806E00B0F829 /* onboarding.html in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE02817806E00B0F829 /* onboarding.html */; };
 		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
 		D41FABE528178CDB00B0F829 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FABE428178CDB00B0F829 /* main.swift */; };
+		D4331327281F5D3500AC5343 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D4331326281F5D3500AC5343 /* SQLite */; };
+		D433132F281F630400AC5343 /* AutoLauncherAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */; };
+		D433133D281F643600AC5343 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D433133C281F643600AC5343 /* main.swift */; };
+		D433133F281F654200AC5343 /* AutoLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = D433132C281F630400AC5343 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D4331341281F655900AC5343 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4331340281F655900AC5343 /* ServiceManagement.framework */; };
+		D4331344281F6B6700AC5343 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = D4331343281F6B6700AC5343 /* HotKey */; };
 		D4F5CAA02817688800A39E6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CA9F2817688800A39E6D /* AppDelegate.swift */; };
 		D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAA12817688800A39E6D /* ViewController.swift */; };
 		D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4F5CAA32817688900A39E6D /* Assets.xcassets */; };
@@ -21,15 +27,33 @@
 		D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAB6281768C500A39E6D /* OverlayView.swift */; };
 		D4F5CABC281768E100A39E6D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CABB281768E100A39E6D /* Message.swift */; };
 		D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CABD281768EC00A39E6D /* MessageManager.swift */; };
-		D4F5CAC12817691000A39E6D /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D4F5CAC02817691000A39E6D /* SQLite */; };
-		D4F5CAC32817725100A39E6D /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAC22817725100A39E6D /* PermissionManager.swift */; };
+		D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAC22817725100A39E6D /* AppStateManager.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D433133E281F652900AC5343 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				D433133F281F654200AC5343 /* AutoLauncher.app in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D41FABE02817806E00B0F829 /* onboarding.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = onboarding.html; sourceTree = "<group>"; };
 		D41FABE22817808C00B0F829 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		D41FABE428178CDB00B0F829 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		D433132C281F630400AC5343 /* AutoLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLauncherAppDelegate.swift; sourceTree = "<group>"; };
+		D4331337281F630600AC5343 /* AutoLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AutoLauncher.entitlements; sourceTree = "<group>"; };
+		D433133B281F639800AC5343 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D433133C281F643600AC5343 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		D4331340281F655900AC5343 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		D4F5CA9C2817688800A39E6D /* TwoFHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoFHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F5CA9F2817688800A39E6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4F5CAA12817688800A39E6D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -42,16 +66,25 @@
 		D4F5CAB6281768C500A39E6D /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		D4F5CABB281768E100A39E6D /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		D4F5CABD281768EC00A39E6D /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
-		D4F5CAC22817725100A39E6D /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+		D4F5CAC22817725100A39E6D /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D4331329281F630400AC5343 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4F5CA992817688800A39E6D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4331341281F655900AC5343 /* ServiceManagement.framework in Frameworks */,
+				D4331327281F5D3500AC5343 /* SQLite in Frameworks */,
+				D4331344281F6B6700AC5343 /* HotKey in Frameworks */,
 				D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */,
-				D4F5CAC12817691000A39E6D /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +94,7 @@
 		D41FABD628177D7F00B0F829 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4331340281F655900AC5343 /* ServiceManagement.framework */,
 				D41FABD728177D7F00B0F829 /* WebKit.framework */,
 			);
 			name = Frameworks;
@@ -75,10 +109,22 @@
 			path = wwwonboarding;
 			sourceTree = "<group>";
 		};
+		D433132D281F630400AC5343 /* AutoLauncher */ = {
+			isa = PBXGroup;
+			children = (
+				D433133B281F639800AC5343 /* Info.plist */,
+				D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */,
+				D4331337281F630600AC5343 /* AutoLauncher.entitlements */,
+				D433133C281F643600AC5343 /* main.swift */,
+			);
+			path = AutoLauncher;
+			sourceTree = "<group>";
+		};
 		D4F5CA932817688800A39E6D = {
 			isa = PBXGroup;
 			children = (
 				D4F5CA9E2817688800A39E6D /* TwoFHey */,
+				D433132D281F630400AC5343 /* AutoLauncher */,
 				D4F5CA9D2817688800A39E6D /* Products */,
 				D41FABD628177D7F00B0F829 /* Frameworks */,
 			);
@@ -88,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				D4F5CA9C2817688800A39E6D /* TwoFHey.app */,
+				D433132C281F630400AC5343 /* AutoLauncher.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,7 +152,7 @@
 				D4F5CAA32817688900A39E6D /* Assets.xcassets */,
 				D4F5CAA52817688900A39E6D /* Main.storyboard */,
 				D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */,
-				D4F5CAC22817725100A39E6D /* PermissionManager.swift */,
+				D4F5CAC22817725100A39E6D /* AppStateManager.swift */,
 				D41FABE428178CDB00B0F829 /* main.swift */,
 			);
 			path = TwoFHey;
@@ -140,6 +187,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D433132B281F630400AC5343 /* AutoLauncher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4331338281F630600AC5343 /* Build configuration list for PBXNativeTarget "AutoLauncher" */;
+			buildPhases = (
+				D4331328281F630400AC5343 /* Sources */,
+				D4331329281F630400AC5343 /* Frameworks */,
+				D433132A281F630400AC5343 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AutoLauncher;
+			productName = AutoLauncher;
+			productReference = D433132C281F630400AC5343 /* AutoLauncher.app */;
+			productType = "com.apple.product-type.application";
+		};
 		D4F5CA9B2817688800A39E6D /* TwoFHey */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */;
@@ -147,6 +211,7 @@
 				D4F5CA982817688800A39E6D /* Sources */,
 				D4F5CA992817688800A39E6D /* Frameworks */,
 				D4F5CA9A2817688800A39E6D /* Resources */,
+				D433133E281F652900AC5343 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -154,7 +219,8 @@
 			);
 			name = TwoFHey;
 			packageProductDependencies = (
-				D4F5CAC02817691000A39E6D /* SQLite */,
+				D4331326281F5D3500AC5343 /* SQLite */,
+				D4331343281F6B6700AC5343 /* HotKey */,
 			);
 			productName = TwoFHey;
 			productReference = D4F5CA9C2817688800A39E6D /* TwoFHey.app */;
@@ -170,6 +236,9 @@
 				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
+					D433132B281F630400AC5343 = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
 					D4F5CA9B2817688800A39E6D = {
 						CreatedOnToolsVersion = 13.3.1;
 					};
@@ -185,18 +254,27 @@
 			);
 			mainGroup = D4F5CA932817688800A39E6D;
 			packageReferences = (
-				D4F5CABF2817691000A39E6D /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				D4331325281F5D3500AC5343 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				D4331342281F6B6700AC5343 /* XCRemoteSwiftPackageReference "HotKey" */,
 			);
 			productRefGroup = D4F5CA9D2817688800A39E6D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				D4F5CA9B2817688800A39E6D /* TwoFHey */,
+				D433132B281F630400AC5343 /* AutoLauncher */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D433132A281F630400AC5343 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4F5CA9A2817688800A39E6D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -211,13 +289,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D4331328281F630400AC5343 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D433133D281F643600AC5343 /* main.swift in Sources */,
+				D433132F281F630400AC5343 /* AutoLauncherAppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4F5CA982817688800A39E6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */,
 				D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */,
-				D4F5CAC32817725100A39E6D /* PermissionManager.swift in Sources */,
+				D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */,
 				D4F5CAB2281768B000A39E6D /* OTPParserContants.swift in Sources */,
 				D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */,
 				D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */,
@@ -242,6 +329,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D4331339281F630600AC5343 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AutoLauncher/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = col.yac.AutoLauncher;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D433133A281F630600AC5343 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AutoLauncher/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = col.yac.AutoLauncher;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		D4F5CAA92817688900A39E6D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -360,6 +501,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -384,6 +526,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -406,6 +549,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D4331338281F630600AC5343 /* Build configuration list for PBXNativeTarget "AutoLauncher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4331339281F630600AC5343 /* Debug */,
+				D433133A281F630600AC5343 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "TwoFHey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -427,21 +579,34 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D4F5CABF2817691000A39E6D /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+		D4331325281F5D3500AC5343 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.2;
+				branch = master;
+				kind = branch;
+			};
+		};
+		D4331342281F6B6700AC5343 /* XCRemoteSwiftPackageReference "HotKey" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/soffes/HotKey";
+			requirement = {
+				branch = master;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D4F5CAC02817691000A39E6D /* SQLite */ = {
+		D4331326281F5D3500AC5343 /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D4F5CABF2817691000A39E6D /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			package = D4331325281F5D3500AC5343 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
 			productName = SQLite;
+		};
+		D4331343281F6B6700AC5343 /* HotKey */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4331342281F6B6700AC5343 /* XCRemoteSwiftPackageReference "HotKey" */;
+			productName = HotKey;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

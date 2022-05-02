@@ -102,6 +102,7 @@ class MessageManager: ObservableObject {
         
         do {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
+            guard parsedOtps.count > 0 else { return }
             messages.append(contentsOf: parsedOtps)
         } catch let err {
             print("ERR: \(err)")
