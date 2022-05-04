@@ -62,5 +62,4 @@ class AppStateManager {
             UserDefaults.standard.set(newValue, forKey: Constants.globalShortcutEnabledKey)
         }
     }
-    
 }

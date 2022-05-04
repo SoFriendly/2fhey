@@ -22,6 +22,12 @@ class MessageManager: ObservableObject {
     private let checkTimeInterval: TimeInterval = 1
     private var processedGuids: Set<String> = []
     
+    var otpParser: OTPParser
+    
+    init(withOTPParser otpParser: OTPParser) {
+        self.otpParser = otpParser
+    }
+    
     var timer: Timer?
     
     private func timeOffsetForDate(_ date: Date) -> Int {
@@ -98,7 +104,7 @@ class MessageManager: ObservableObject {
     }
     
     @objc func syncMessages() {
-        guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -48, to: Date()) else { return }
+        guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }
         
         do {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
@@ -121,7 +127,7 @@ class MessageManager: ObservableObject {
         }
         
         return filteredMessages.compactMap { message in
-            guard let parsedOTP = OTPParserUtils.parseMessage(message.text) else { return nil }
+            guard let parsedOTP = otpParser.parseMessage(message.text) else { return nil }
             return (message, parsedOTP)
         }
     }

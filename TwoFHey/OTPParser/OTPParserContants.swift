@@ -1,9 +1,9 @@
 import Foundation
 
-extension String {
-    var isInt: Bool {
-        return Int(self) != nil
-    }
+protocol OTParserConfig {
+    var knownServices: [String] { get }
+    var authWords: Set<String> { get }
+    var servicePatterns: [String] { get }
 }
 
 struct OTPParserConstants {
@@ -147,188 +147,134 @@ struct OTPParserConstants {
       ]
     
     public static let servicePatterns = [
-        try! NSRegularExpression(pattern: #"\bfor\s+your\s+([\w\d ]{2,64})\s+account\b"#),
-        try! NSRegularExpression(pattern: #"\bon\s+your\s+([\w\d ]{2,64})\s+account\b"#),
-        try! NSRegularExpression(pattern: #"\bas\s+your\s+([\w\d ]{2,64})\s+account\b"#),
-        try! NSRegularExpression(pattern: #"\bas\s+([\w\d ]{2,64})\s+account\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+account\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+verification\s+code\b"#),
+        #"\bfor\s+your\s+([\w\d ]{2,64})\s+account\b"#,
+        #"\bon\s+your\s+([\w\d ]{2,64})\s+account\b"#,
+        #"\bas\s+your\s+([\w\d ]{2,64})\s+account\b"#,
+        #"\bas\s+([\w\d ]{2,64})\s+account\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+account\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+verification\s+code\b"#,
 
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+verification\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+verification\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+activation\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+activation\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+activation\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+otp\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+otp\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+auth\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+auth\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+authentication\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+authentication\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+authentication\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+security\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+security\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+security\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+confirmation\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+confirmation\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+confirmation\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+access\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+access\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d ]{2,64})\s+access\s+pin\b"#),
+        #"\byour\s+([\w\d ]{2,64})\s+verification\s+number\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+verification\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+activation\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+activation\s+number\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+activation\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+otp\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+otp\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+auth\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+auth\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+authentication\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+authentication\s+number\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+authentication\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+security\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+security\s+number\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+security\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+confirmation\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+confirmation\s+number\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+confirmation\s+pin\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+access\s+code\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+access\s+number\b"#,
+        #"\byour\s+([\w\d ]{2,64})\s+access\s+pin\b"#,
 
-        try! NSRegularExpression(pattern: #"\byour\s+verification\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+verification\s+number\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+verification\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+activation\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+activation\s+number\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+activation\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+otp\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+otp\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+auth\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+auth\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+authentication\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+authentication\s+number\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+authentication\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+security\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+security\s+number\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+security\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+confirmation\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+confirmation\s+number\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+confirmation\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+access\s+code\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+access\s+number\s+for\s+([\w\d ]{2,64})\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+access\s+pin\s+for\s+([\w\d ]{2,64})\b"#),
+        #"\byour\s+verification\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+verification\s+number\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+verification\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+activation\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+activation\s+number\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+activation\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+otp\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+otp\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+auth\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+auth\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+authentication\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+authentication\s+number\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+authentication\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+security\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+security\s+number\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+security\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+confirmation\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+confirmation\s+number\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+confirmation\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+access\s+code\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+access\s+number\s+for\s+([\w\d ]{2,64})\b"#,
+        #"\byour\s+access\s+pin\s+for\s+([\w\d ]{2,64})\b"#,
 
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d]{2,64})\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\byour\s+([\w\d]{2,64})\s+pin\b"#),
+        #"\byour\s+([\w\d]{2,64})\s+code\b"#,
+        #"\byour\s+([\w\d]{2,64})\s+pin\b"#,
 
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+verification\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+verification\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+verification\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+activation\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+activation\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+activation\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+otp\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+otp\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+auth\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+auth\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+auth\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+authentication\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+authentication\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+authentication\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+security\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+security\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+security\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+confirmation\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+confirmation\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+confirmation\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+access\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+access\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+login\s+access\s+pin\b"#),
+        #"\b([\w\d]{2,64})\s+login\s+verification\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+verification\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+verification\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+activation\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+activation\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+activation\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+otp\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+otp\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+auth\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+auth\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+auth\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+authentication\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+authentication\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+authentication\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+security\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+security\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+security\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+confirmation\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+confirmation\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+confirmation\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+access\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+access\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+login\s+access\s+pin\b"#,
 
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+verification\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+verification\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+verification\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+activation\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+activation\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+activation\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+otp\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+otp\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+auth\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+auth\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+auth\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+authentication\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+authentication\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+authentication\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+security\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+security\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+security\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+confirmation\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+confirmation\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+confirmation\s+pin\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+access\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+access\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{2,64})\s+access\s+pin\b"#),
+        #"\b([\w\d]{2,64})\s+verification\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+verification\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+verification\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+activation\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+activation\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+activation\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+otp\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+otp\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+auth\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+auth\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+auth\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+authentication\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+authentication\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+authentication\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+security\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+security\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+security\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+confirmation\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+confirmation\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+confirmation\s+pin\b"#,
+        #"\b([\w\d]{2,64})\s+access\s+code\b"#,
+        #"\b([\w\d]{2,64})\s+access\s+number\b"#,
+        #"\b([\w\d]{2,64})\s+access\s+pin\b"#,
 
-        try! NSRegularExpression(pattern: #"^welcome\s+to\s+([\w\d ]{2,64})[,;.]"#),
-        try! NSRegularExpression(pattern: #"^welcome\s+to\s+([\w\d]{2,64})\b"#),
+        #"^welcome\s+to\s+([\w\d ]{2,64})[,;.]"#,
+        #"^welcome\s+to\s+([\w\d]{2,64})\b"#,
 
-        try! NSRegularExpression(pattern: #"^\[([^\]\d]{2,64})]"#),
-        try! NSRegularExpression(pattern: #"^\(([^)\d]{2,64})\)"#),
+        #"^\[([^\]\d]{2,64})]"#,
+        #"^\(([^)\d]{2,64})\)"#,
 
-        try! NSRegularExpression(pattern: #"\bcode\s+for\s+([\w\d]{3,64})\b"#),
-        try! NSRegularExpression(pattern: #"\bpin\s+for\s+([\w\d]{3,64})\b"#),
-        try! NSRegularExpression(pattern: #"\botp\s+for\s+([\w\d]{3,64})\b"#),
-        try! NSRegularExpression(pattern: #"\bnumber\s+for\s+([\w\d]{3,64})\b"#),
+        #"\bcode\s+for\s+([\w\d]{3,64})\b"#,
+        #"\bpin\s+for\s+([\w\d]{3,64})\b"#,
+        #"\botp\s+for\s+([\w\d]{3,64})\b"#,
+        #"\bnumber\s+for\s+([\w\d]{3,64})\b"#,
 
-        try! NSRegularExpression(pattern: #"\b([\w\d]{3,64})\s+login\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{3,64})\s+login\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{3,64})\s+login\s+pin\b"#),
+        #"\b([\w\d]{3,64})\s+login\s+code\b"#,
+        #"\b([\w\d]{3,64})\s+login\s+number\b"#,
+        #"\b([\w\d]{3,64})\s+login\s+pin\b"#,
 
-        try! NSRegularExpression(pattern: #"\b([\w\d]{3,64})\s+code\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{3,64})\s+number\b"#),
-        try! NSRegularExpression(pattern: #"\b([\w\d]{3,64})\s+pin\b"#),
+        #"\b([\w\d]{3,64})\s+code\b"#,
+        #"\b([\w\d]{3,64})\s+number\b"#,
+        #"\b([\w\d]{3,64})\s+pin\b"#,
 
-        try! NSRegularExpression(pattern: #"【([\u4e00-\u9fa5\d\w]+)"#),
-    ]
+        #"【([\u4e00-\u9fa5\d\w]+)"#,
+    ].map { regExp in try! NSRegularExpression(pattern: regExp) }
     
     struct CodeMatchingRegularExpressions {
         static let standardFourToEight = try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)
         static let dashedThreeAndThree = try! NSRegularExpression(pattern: #"\b(\d{3}[- ]\d{3})\b"#)
     }
     
-    let customParsers: [CustomOTPParser] = [
-        CustomOTPParser(
-            notes: "Kotak Bank, includes a bunch of numbers",
-            example: "123456 is the OTP for transaction of INR 1234.00 on your Kotak Bank Card 1234 at AMAZON PAY INDIA PRIVATET valid for 15 mins. DONT SHARE OTP WITH ANYONE INCLUDING BANK OFFICIALS.",
-            requiredServiceName: "transaction",
-            canParseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                return message.contains("Kotak Bank") && words.count > 5 && words[0].isInt
-            }, parseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                return ParsedOTP(service: "kotak bank", code: words[0])
-            }),
-        CustomOTPParser(
-            notes: "Generic catch 1 (Epic Games, possibly others)",
-            example: "Your verification code is 732825",
-            requiredServiceName: nil,
-            canParseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                return message.contains("Your security code:") && words[3].replacingOccurrences(of: ".", with: "").isInt
-            }, parseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                return ParsedOTP(service: "Unknown", code: words[3].replacingOccurrences(of: ".", with: ""))
-            }),
-        // misc. unknown user reported
-
-        // unknown
-
-        CustomOTPParser(
-            notes: "Portal Verification",
-            example: "Your portal verification code is : jh7112 Msg&Data rates may apply. Reply STOP to opt-out",
-            requiredServiceName: nil,
-            canParseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                return message.contains("portal verification") && words.count > 6 && words[6].count == 6
-            }, parseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                return ParsedOTP(service: "Unknown", code: words[6])
-            }),
-        // cater allen
-
-        CustomOTPParser(
-            notes: "Cater Allen's complex OTP",
-            example: "OTP to MAKE A NEW PAYMENT of GBP 9.94 to 560027 & 27613445. Call us if this wasn't you. NEVER share this code, not even with Cater Allen staff 699486",
-            requiredServiceName: nil,
-            canParseMessage: { message in
-                let words = message.components(separatedBy: " ")
-                guard let lastWord = words.last, lastWord.isInt else { return false }
-
-                return message.contains("Cater Allen staff") && message.contains("OTP to MAKE A NEW PAYMENT")
-            }, parseMessage: { message in
-                guard let lastWord = message.components(separatedBy: " ").last else { return nil }
-                return ParsedOTP(service: "Cater Allen", code: lastWord)
-            }),
-    ]
 }

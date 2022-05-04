@@ -27,7 +27,8 @@ class OverlayWindow: NSWindow {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    let messageManager = MessageManager()
+    var messageManager: MessageManager?
+    var configManager: ParserConfigManager?
 
     var statusBarItem: NSStatusItem!
 
@@ -45,13 +46,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let icon = NSImage(named: "TrayIcon")!
         icon.isTemplate = true
-            
+
         // Create the status item
         let statusBar = NSStatusBar.system
         statusBarItem = statusBar.statusItem(withLength: NSStatusItem.squareLength)
         statusBarItem.button?.image = icon
 
-        messageManager.$messages.sink { [weak self] messages in
+        NSApp.activate(ignoringOtherApps: true)
+
+        if AppStateManager.shared.globalShortcutEnabled {
+            setupGlobalKeyShortcut()
+        }
+
+        initMessageManager()
+    }
+    
+    func initConfigManager() {
+    }
+    
+    func initMessageManager() {
+        let configManager = ParserConfigManager()
+        configManager.$config.sink(receiveValue: { [weak self] config in
+            guard let config = config else { return }
+            let otpParser = TwoFHeyOTPParser(withConfig: config)
+            self?.messageManager?.otpParser = otpParser
+        }).store(in: &cancellable)
+        self.configManager = configManager
+            
+        let otpParser = TwoFHeyOTPParser(withConfig: configManager.config ?? configManager.DEFAULT_CONFIG)
+
+        messageManager = MessageManager(withOTPParser: otpParser)
+        
+        startListeningForMesssages()
+    }
+    
+    func startListeningForMesssages() {
+        messageManager?.$messages.sink { [weak self] messages in
             guard let weakSelf = self else { return }
             if let newestMessage = messages.last, newestMessage.0 != weakSelf.lastNotificationMessage && weakSelf.shouldShowNotificationOverlay {
                 weakSelf.showOverlayForMessage(newestMessage)
@@ -62,16 +92,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             weakSelf.shouldShowNotificationOverlay = true
         }.store(in: &cancellable)
-    
-        NSApp.activate(ignoringOtherApps: true)
-
-        messageManager.startListening()
-        
-        if AppStateManager.shared.globalShortcutEnabled {
-            setupGlobalKeyShortcut()
-        }
+        messageManager?.startListening()
     }
-    
+
     func showOverlayForMessage(_ message: MessageWithParsedOTP) {
         if let overlayWindow = overlayWindow {
             overlayWindow.close()
@@ -169,7 +192,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func resync() {
         shouldShowNotificationOverlay = false
         lastNotificationMessage = nil
-        messageManager.reset()
+        messageManager?.reset()
     }
 
     @objc func onPressAutoLaunch() {

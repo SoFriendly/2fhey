@@ -14,11 +14,4 @@ struct Message: Equatable {
     let handle: String
     let group: String?
     let fromMe: Bool
-//    let date: Date?
 }
-//
-//extension Message {
-//    init(from row: Row) {
-//
-//    }
-//}
