@@ -13,7 +13,7 @@ import HotKey
 
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?) {
-        super.init(contentRect: NSRect(x: 0, y: 0, width: 300, height: 100), styleMask: [.closable, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: NSRect(x: 0, y: 0, width: 400, height: 300), styleMask: [.closable, .fullSizeContentView], backing: .buffered, defer: false)
         makeKeyAndOrderFront(nil)
         isReleasedWhenClosed = false
         styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
@@ -78,6 +78,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         messageManager = MessageManager(withOTPParser: otpParser)
         
         startListeningForMesssages()
+        
+        configManager.downloadLatestServiceConfig()
     }
     
     func startListeningForMesssages() {

@@ -27,12 +27,12 @@ class ParserConfigManager: ObservableObject {
         return try? JSONDecoder().decode(OTPParserConfiguration.self, from: data)
     }
     
-    private var configURL = URL(string: "https://test.com")
+    private var configURL = URL(string: "https://raw.githubusercontent.com/SoFriendly/2fhey/main/AppConfig.json")
     
     func downloadLatestServiceConfig() {
         guard let configURL = configURL else { return }
         
-        URLSession.shared.dataTask(with: configURL) { [weak self] data, response, _ in
+        let task = URLSession.shared.dataTask(with: configURL) { [weak self] data, response, _ in
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data, let decoded = try? JSONDecoder().decode(OTPParserConfiguration.self, from: data) else { return }
                 
             if let configurationFilePath = self?.configurationFilePath {
@@ -43,5 +43,7 @@ class ParserConfigManager: ObservableObject {
                 self?.config = decoded
             }
         }
+        
+        task.resume()
     }
 }
