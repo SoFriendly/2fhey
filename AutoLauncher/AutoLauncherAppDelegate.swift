@@ -9,6 +9,7 @@ import Cocoa
 
 let TwoFHeyKillLauncherNotification = Notification.Name("TwoFHeyKillLauncherNotification")
 
+@NSApplicationMain
 class AutoLauncherAppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification)

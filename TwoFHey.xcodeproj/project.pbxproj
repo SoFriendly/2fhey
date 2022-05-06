@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4081CBE2825DEB60031071E /* Main.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4081CBC2825DEB60031071E /* Main.xib */; };
 		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
 		D41FABE12817806E00B0F829 /* onboarding.html in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE02817806E00B0F829 /* onboarding.html */; };
 		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
 		D41FABE528178CDB00B0F829 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FABE428178CDB00B0F829 /* main.swift */; };
 		D4331327281F5D3500AC5343 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D4331326281F5D3500AC5343 /* SQLite */; };
 		D433132F281F630400AC5343 /* AutoLauncherAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */; };
-		D433133D281F643600AC5343 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D433133C281F643600AC5343 /* main.swift */; };
 		D433133F281F654200AC5343 /* AutoLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = D433132C281F630400AC5343 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4331341281F655900AC5343 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4331340281F655900AC5343 /* ServiceManagement.framework */; };
 		D4331344281F6B6700AC5343 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = D4331343281F6B6700AC5343 /* HotKey */; };
@@ -48,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D4081CBD2825DEB60031071E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = ../../../backtrack/Launcher/Base.lproj/Main.xib; sourceTree = "<group>"; };
 		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D41FABE02817806E00B0F829 /* onboarding.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = onboarding.html; sourceTree = "<group>"; };
 		D41FABE22817808C00B0F829 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -56,7 +57,6 @@
 		D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLauncherAppDelegate.swift; sourceTree = "<group>"; };
 		D4331337281F630600AC5343 /* AutoLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AutoLauncher.entitlements; sourceTree = "<group>"; };
 		D433133B281F639800AC5343 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		D433133C281F643600AC5343 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D4331340281F655900AC5343 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		D479A3DF2821E74500915AAA /* CustomOTPParsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOTPParsers.swift; sourceTree = "<group>"; };
 		D479A3E12821EE2600915AAA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 				D433133B281F639800AC5343 /* Info.plist */,
 				D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */,
 				D4331337281F630600AC5343 /* AutoLauncher.entitlements */,
-				D433133C281F643600AC5343 /* main.swift */,
+				D4081CBC2825DEB60031071E /* Main.xib */,
 			);
 			path = AutoLauncher;
 			sourceTree = "<group>";
@@ -292,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4081CBE2825DEB60031071E /* Main.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,7 +314,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D433133D281F643600AC5343 /* main.swift in Sources */,
 				D433132F281F630400AC5343 /* AutoLauncherAppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,6 +342,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		D4081CBC2825DEB60031071E /* Main.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D4081CBD2825DEB60031071E /* Base */,
+			);
+			name = Main.xib;
+			sourceTree = "<group>";
+		};
 		D4F5CAA52817688900A39E6D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -361,17 +369,17 @@
 				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoLauncher/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = col.yac.AutoLauncher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -388,17 +396,17 @@
 				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoLauncher/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = col.yac.AutoLauncher;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -529,7 +537,8 @@
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -537,7 +546,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = col.yac.TwoFHey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -554,7 +563,8 @@
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 10;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -562,7 +572,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = col.yac.TwoFHey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
