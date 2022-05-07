@@ -79,7 +79,7 @@
 		D479A3E62822B7B300915AAA /* ParserConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserConfigManager.swift; sourceTree = "<group>"; };
 		D4AF833C2825FEE70034A7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D4AF833E2826018D0034A7BE /* Main.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Main.xib; sourceTree = "<group>"; };
-		D4F5CA9C2817688800A39E6D /* TwoFHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoFHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4F5CA9C2817688800A39E6D /* 2FHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2FHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F5CA9F2817688800A39E6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4F5CAA12817688800A39E6D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D4F5CAA32817688900A39E6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 		D4F5CA9D2817688800A39E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D4F5CA9C2817688800A39E6D /* TwoFHey.app */,
+				D4F5CA9C2817688800A39E6D /* 2FHey.app */,
 				D433132C281F630400AC5343 /* AutoLauncher.app */,
 				D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */,
 			);
@@ -278,9 +278,9 @@
 			productReference = D433132C281F630400AC5343 /* AutoLauncher.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D4F5CA9B2817688800A39E6D /* TwoFHey */ = {
+		D4F5CA9B2817688800A39E6D /* 2FHey */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */;
+			buildConfigurationList = D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "2FHey" */;
 			buildPhases = (
 				D4F5CA982817688800A39E6D /* Sources */,
 				D4F5CA992817688800A39E6D /* Frameworks */,
@@ -291,13 +291,13 @@
 			);
 			dependencies = (
 			);
-			name = TwoFHey;
+			name = 2FHey;
 			packageProductDependencies = (
 				D4331326281F5D3500AC5343 /* SQLite */,
 				D4331343281F6B6700AC5343 /* HotKey */,
 			);
 			productName = TwoFHey;
-			productReference = D4F5CA9C2817688800A39E6D /* TwoFHey.app */;
+			productReference = D4F5CA9C2817688800A39E6D /* 2FHey.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -339,7 +339,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D4F5CA9B2817688800A39E6D /* TwoFHey */,
+				D4F5CA9B2817688800A39E6D /* 2FHey */,
 				D433132B281F630400AC5343 /* AutoLauncher */,
 				D4123A7B2826EF3B002C3C42 /* TwoFHeyTests */,
 			);
@@ -419,7 +419,7 @@
 /* Begin PBXTargetDependency section */
 		D4123A812826EF3B002C3C42 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D4F5CA9B2817688800A39E6D /* TwoFHey */;
+			target = D4F5CA9B2817688800A39E6D /* 2FHey */;
 			targetProxy = D4123A802826EF3B002C3C42 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -640,13 +640,16 @@
 		D4F5CAAC2817688900A39E6D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TwoFHey/Info.plist;
@@ -668,13 +671,16 @@
 		D4F5CAAD2817688900A39E6D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TwoFHey/Info.plist;
@@ -723,7 +729,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */ = {
+		D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "2FHey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D4F5CAAC2817688900A39E6D /* Debug */,
