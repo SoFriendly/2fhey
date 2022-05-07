@@ -64,6 +64,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             AppStateManager.shared.shouldLaunchOnLogin = true
             AppStateManager.shared.globalShortcutEnabled = true
             AppStateManager.shared.hasSetup = true
+            openOnboardingWindow()
+        } else if AppStateManager.shared.hasFullDiscAccess() != .authorized {
+            openOnboardingWindow()
         }
     }
     
@@ -192,6 +195,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         onboardingWindow?.center()
         onboardingWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
     
     @objc func resync() {
