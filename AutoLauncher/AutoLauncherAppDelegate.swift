@@ -15,7 +15,7 @@ class AutoLauncherAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification)
     {
 
-        let appIdentifier = "col.yac.TwoFHey"
+        let appIdentifier = "com.sofriendly.2fhey"
 
         let runningApps = NSWorkspace.shared.runningApplications
         let appIsRunning = !runningApps.filter { $0.bundleIdentifier == appIdentifier }.isEmpty

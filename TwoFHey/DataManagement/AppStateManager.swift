@@ -18,10 +18,10 @@ class AppStateManager {
     
     private struct Constants {
         // Helper Application Bundle Identifier
-        static let autoLauncherBundleID = "col.yac.AutoLauncher"
+        static let autoLauncherBundleID = "com.sofriendly.2fhey.AutoLauncher"
         
-        static let autoLauncherPrefKey = "col.yac.TwoFHey.shouldAutoLaunch"
-        static let globalShortcutEnabledKey = "col.yac.TwoFHey.globalShortcutEnabled"
+        static let autoLauncherPrefKey = "com.sofriendly.2fhey.shouldAutoLaunch"
+        static let globalShortcutEnabledKey = "com.sofriendly.2fhey.globalShortcutEnabled"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {

@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "hotkey",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/soffes/HotKey",
+      "state" : {
+        "branch" : "master",
+        "revision" : "c13662730cb5bc28de4a799854bbb018a90649bf"
+      }
+    },
+    {
+      "identity" : "sqlite.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/stephencelis/SQLite.swift.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "593a7495579a4bdba13490cd1da6296dbcea1f9e"
+      }
+    }
+  ],
+  "version" : 2
+}
