@@ -22,6 +22,7 @@ class AppStateManager {
         
         static let autoLauncherPrefKey = "com.sofriendly.2fhey.shouldAutoLaunch"
         static let globalShortcutEnabledKey = "com.sofriendly.2fhey.globalShortcutEnabled"
+        static let hasSetupKey = "com.sofriendly.2fhey.hasSetup"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
@@ -42,6 +43,15 @@ class AppStateManager {
         }
         
         return .unknown
+    }
+
+    var hasSetup: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Constants.hasSetupKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.hasSetupKey)
+        }
     }
     
     var shouldLaunchOnLogin: Bool {

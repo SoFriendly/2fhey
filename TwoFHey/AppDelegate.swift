@@ -59,9 +59,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         initMessageManager()
-    }
-    
-    func initConfigManager() {
+        
+        if !AppStateManager.shared.hasSetup {
+            AppStateManager.shared.shouldLaunchOnLogin = true
+            AppStateManager.shared.globalShortcutEnabled = true
+            AppStateManager.shared.hasSetup = true
+        }
     }
     
     func initMessageManager() {

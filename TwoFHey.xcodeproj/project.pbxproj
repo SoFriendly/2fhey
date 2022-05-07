@@ -13,7 +13,6 @@
 		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
 		D4331327281F5D3500AC5343 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D4331326281F5D3500AC5343 /* SQLite */; };
 		D433132F281F630400AC5343 /* AutoLauncherAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */; };
-		D433133F281F654200AC5343 /* AutoLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = D433132C281F630400AC5343 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4331341281F655900AC5343 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4331340281F655900AC5343 /* ServiceManagement.framework */; };
 		D4331344281F6B6700AC5343 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = D4331343281F6B6700AC5343 /* HotKey */; };
 		D479A3E02821E74500915AAA /* CustomOTPParsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3DF2821E74500915AAA /* CustomOTPParsers.swift */; };
@@ -21,6 +20,7 @@
 		D479A3E42821FF9A00915AAA /* OTPParserConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3E32821FF9A00915AAA /* OTPParserConfiguration.swift */; };
 		D479A3E72822B7B300915AAA /* ParserConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3E62822B7B300915AAA /* ParserConfigManager.swift */; };
 		D4AF833B2825FE400034A7BE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FABE428178CDB00B0F829 /* main.swift */; };
+		D4AF833D2825FFFA0034A7BE /* AutoLauncher.app in Copy Files */ = {isa = PBXBuildFile; fileRef = D433132C281F630400AC5343 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4F5CAA02817688800A39E6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CA9F2817688800A39E6D /* AppDelegate.swift */; };
 		D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAA12817688800A39E6D /* ViewController.swift */; };
 		D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4F5CAA32817688900A39E6D /* Assets.xcassets */; };
@@ -35,14 +35,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D433133E281F652900AC5343 /* CopyFiles */ = {
+		D433133E281F652900AC5343 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Contents/Library/LoginItems;
 			dstSubfolderSpec = 1;
 			files = (
-				D433133F281F654200AC5343 /* AutoLauncher.app in CopyFiles */,
+				D4AF833D2825FFFA0034A7BE /* AutoLauncher.app in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -233,7 +234,7 @@
 				D4F5CA982817688800A39E6D /* Sources */,
 				D4F5CA992817688800A39E6D /* Frameworks */,
 				D4F5CA9A2817688800A39E6D /* Resources */,
-				D433133E281F652900AC5343 /* CopyFiles */,
+				D433133E281F652900AC5343 /* Copy Files */,
 			);
 			buildRules = (
 			);
