@@ -27,14 +27,9 @@ class AppStateManager {
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
         var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
-        
-        if #available(macOS 10.15, *) {
-            homeDirectory.appendPathComponent("Library/Safari/CloudTabs.db")
-        } else {
-            homeDirectory.appendPathComponent("Library/Safari/Bookmarks.plist")
-        }
+        homeDirectory.appendPathComponent("/Library/Messages/chat.db")
 
-        let fileExists = FileManager.default.fileExists(atPath: homeDirectory.absoluteString)
+        let fileExists = FileManager.default.fileExists(atPath: homeDirectory.path)
         let data = try? Data(contentsOf: homeDirectory)
         if data == nil && fileExists {
             return .denied
