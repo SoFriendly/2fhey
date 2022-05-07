@@ -30,7 +30,7 @@
         .button {
             width: 183px;
             height: 48px;
-            background-color: #0361ff;
+            background-color: #16c433;
             border-radius: 4px;
         }
 
@@ -112,26 +112,26 @@
 
         <!-- splash screen -->
         <div v-if="showSplash" class="fixed w-full h-full flex" :style="splashStyle">
-            <img class="m-auto h-8 zoom-in" src="./assets/onboarding/logo.png" />
-            <svg class="absolute right-0 top-0 z-0 backdrop" style="opacity: 0.05" xmlns="http://www.w3.org/2000/svg"
+            <img class="m-auto h-20 zoom-in" src="./assets/onboarding/logo.png" />
+            <!-- <svg class="absolute right-0 top-0 z-0 backdrop" style="opacity: 0.05" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 100 125" x="0px" y="0px">
                 <path d="M70,82.5008H30a2.5,2.5,0,0,1,0-5H70a2.5,2.5,0,0,1,0,5Z" />
                 <path
                     d="M29.998,82.5018a2.5015,2.5015,0,0,1-2.2343-3.6191l30-60a2.5,2.5,0,1,1,4.4726,2.2363l-30,60A2.5012,2.5012,0,0,1,29.998,82.5018Z" />
                 <path
                     d="M70.002,82.5018a2.5012,2.5012,0,0,1-2.2383-1.3828l-30-60a2.5,2.5,0,1,1,4.4726-2.2363l30,60a2.5015,2.5015,0,0,1-2.2343,3.6191Z" />
-            </svg>
+            </svg> -->
         </div>
 
         <div class="flash-avoid relative p-4 h-screen w-screen oveflow-hidden flex">
-            <svg class="absolute right-0 top-0 z-0 opacity-25 backdrop" xmlns="http://www.w3.org/2000/svg"
+            <!-- <svg class="absolute right-0 top-0 z-0 opacity-25 backdrop" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 100 125" x="0px" y="0px">
                 <path d="M70,82.5008H30a2.5,2.5,0,0,1,0-5H70a2.5,2.5,0,0,1,0,5Z" />
                 <path
                     d="M29.998,82.5018a2.5015,2.5015,0,0,1-2.2343-3.6191l30-60a2.5,2.5,0,1,1,4.4726,2.2363l-30,60A2.5012,2.5012,0,0,1,29.998,82.5018Z" />
                 <path
                     d="M70.002,82.5018a2.5012,2.5012,0,0,1-2.2383-1.3828l-30-60a2.5,2.5,0,1,1,4.4726-2.2363l30,60a2.5015,2.5015,0,0,1-2.2343,3.6191Z" />
-            </svg>
+            </svg> -->
 
             <div class="flex fixed right-0 top-0 example-screen z-50 shadow-lg rounded-lg overflow-hidden demo-easein">
                 <img draggable="false" class="object-contain" src="./assets/onboarding/example.png" />
@@ -139,7 +139,7 @@
 
             <div class="h-auto my-auto z-10 ml-8 text-pane" v-if="step == 0">
                 <div class="mb-6">
-                    <img draggable="false" style="height: 28px" class="w-auto" src="./assets/onboarding/logo.png">
+                    <img draggable="false" style="height: 150px" class="w-auto" src="./assets/onboarding/logo.png">
                 </div>
                 <h1 class="mb-2 text-2xl font-bold">
                     Welcome to 2FHey
@@ -162,7 +162,7 @@
 
             <div class="w-1/2 h-auto my-auto z-10 ml-8" v-if="step == 1">
                 <div class="mb-6">
-                    <img draggable="false" style="height: 28px" class="w-auto" src="./assets/onboarding/logo.png">
+                    <img draggable="false" style="height: 150px" class="w-auto" src="./assets/onboarding/logo.png">
                 </div>
                 <h1 class="mb-2 text-2xl font-bold">
                     We need your permission
