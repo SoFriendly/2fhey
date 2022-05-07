@@ -161,12 +161,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu.addItem(NSMenuItem.separator())
 
         let resyncItem = NSMenuItem(title: "Resync", action: #selector(AppDelegate.resync), keyEquivalent: "")
-        resyncItem.toolTip = "Sometimes iMessage likes to sleep on the job. If OhTipi ever misses a message, use this option to sync recent messages and copy the latest code to your clipboard"
+        resyncItem.toolTip = "Sometimes iMessage likes to sleep on the job. If 2FHey ever misses a message, use this option to sync recent messages and copy the latest code to your clipboard"
         statusBarMenu.addItem(resyncItem)
         
         let settingsMenu = NSMenu()
         let keyboardShortCutItem = NSMenuItem(title: "Keyboard Shortcuts", action: #selector(AppDelegate.onPressKeyboardShortcuts), keyEquivalent: "")
-        keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if Ohtipi uses the same keyboard shortcuts as another app"
+        keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if 2FHey uses the same keyboard shortcuts as another app"
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
         settingsMenu.addItem(keyboardShortCutItem)
 
@@ -179,7 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu.addItem(settingsItem)
         
         statusBarMenu.addItem(
-            withTitle: "Quit Ohtipi",
+            withTitle: "Quit 2FHey",
             action: #selector(AppDelegate.quit),
             keyEquivalent: "")
         return statusBarMenu
