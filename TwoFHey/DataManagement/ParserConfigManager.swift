@@ -7,13 +7,13 @@
 
 import Foundation
 
-class ParserConfigManager: ObservableObject {
-    let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices)
+public class ParserConfigManager: ObservableObject {
+    public static let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices)
     
     @Published var config: OTPParserConfiguration?
     
     init() {
-        config = loadLocalServiceConfig() ?? DEFAULT_CONFIG
+        config = loadLocalServiceConfig() ?? ParserConfigManager.DEFAULT_CONFIG
     }
     
     private var configurationFilePath: URL? {

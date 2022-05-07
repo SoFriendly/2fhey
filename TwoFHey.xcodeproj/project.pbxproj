@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D4123A7628261377002C3C42 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7528261377002C3C42 /* UIConstants.swift */; };
+		D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */; };
 		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
 		D41FABE12817806E00B0F829 /* onboarding.html in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE02817806E00B0F829 /* onboarding.html */; };
 		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
@@ -35,6 +36,16 @@
 		D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAC22817725100A39E6D /* AppStateManager.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D4123A802826EF3B002C3C42 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D4F5CA942817688800A39E6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D4F5CA9B2817688800A39E6D;
+			remoteInfo = TwoFHey;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		D433133E281F652900AC5343 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -51,6 +62,8 @@
 
 /* Begin PBXFileReference section */
 		D4123A7528261377002C3C42 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwoFHeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFHeyTests.swift; sourceTree = "<group>"; };
 		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D41FABE02817806E00B0F829 /* onboarding.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = onboarding.html; sourceTree = "<group>"; };
 		D41FABE22817808C00B0F829 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -82,6 +95,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D4123A792826EF3B002C3C42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4331329281F630400AC5343 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -103,6 +123,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */ = {
+			isa = PBXGroup;
+			children = (
+				D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */,
+			);
+			path = TwoFHeyTests;
+			sourceTree = "<group>";
+		};
 		D41FABD628177D7F00B0F829 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +175,7 @@
 			children = (
 				D4F5CA9E2817688800A39E6D /* TwoFHey */,
 				D433132D281F630400AC5343 /* AutoLauncher */,
+				D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */,
 				D4F5CA9D2817688800A39E6D /* Products */,
 				D41FABD628177D7F00B0F829 /* Frameworks */,
 			);
@@ -157,6 +186,7 @@
 			children = (
 				D4F5CA9C2817688800A39E6D /* TwoFHey.app */,
 				D433132C281F630400AC5343 /* AutoLauncher.app */,
+				D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,6 +243,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D4123A7B2826EF3B002C3C42 /* TwoFHeyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4123A822826EF3B002C3C42 /* Build configuration list for PBXNativeTarget "TwoFHeyTests" */;
+			buildPhases = (
+				D4123A782826EF3B002C3C42 /* Sources */,
+				D4123A792826EF3B002C3C42 /* Frameworks */,
+				D4123A7A2826EF3B002C3C42 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D4123A812826EF3B002C3C42 /* PBXTargetDependency */,
+			);
+			name = TwoFHeyTests;
+			productName = TwoFHeyTests;
+			productReference = D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D433132B281F630400AC5343 /* AutoLauncher */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4331338281F630600AC5343 /* Build configuration list for PBXNativeTarget "AutoLauncher" */;
@@ -262,6 +310,10 @@
 				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
+					D4123A7B2826EF3B002C3C42 = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = D4F5CA9B2817688800A39E6D;
+					};
 					D433132B281F630400AC5343 = {
 						CreatedOnToolsVersion = 13.3.1;
 					};
@@ -289,11 +341,19 @@
 			targets = (
 				D4F5CA9B2817688800A39E6D /* TwoFHey */,
 				D433132B281F630400AC5343 /* AutoLauncher */,
+				D4123A7B2826EF3B002C3C42 /* TwoFHeyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D4123A7A2826EF3B002C3C42 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D433132A281F630400AC5343 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -316,6 +376,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D4123A782826EF3B002C3C42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4331328281F630400AC5343 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -348,6 +416,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D4123A812826EF3B002C3C42 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D4F5CA9B2817688800A39E6D /* TwoFHey */;
+			targetProxy = D4123A802826EF3B002C3C42 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		D4F5CAA52817688900A39E6D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -360,6 +436,40 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D4123A832826EF3B002C3C42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H66PPM438;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey.TwoFHeyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwoFHey.app/Contents/MacOS/TwoFHey";
+			};
+			name = Debug;
+		};
+		D4123A842826EF3B002C3C42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H66PPM438;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey.TwoFHeyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwoFHey.app/Contents/MacOS/TwoFHey";
+			};
+			name = Release;
+		};
 		D4331339281F630600AC5343 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -586,6 +696,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D4123A822826EF3B002C3C42 /* Build configuration list for PBXNativeTarget "TwoFHeyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4123A832826EF3B002C3C42 /* Debug */,
+				D4123A842826EF3B002C3C42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D4331338281F630600AC5343 /* Build configuration list for PBXNativeTarget "AutoLauncher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }).store(in: &cancellable)
         self.configManager = configManager
             
-        let otpParser = TwoFHeyOTPParser(withConfig: configManager.config ?? configManager.DEFAULT_CONFIG)
+        let otpParser = TwoFHeyOTPParser(withConfig: configManager.config ?? ParserConfigManager.DEFAULT_CONFIG)
 
         messageManager = MessageManager(withOTPParser: otpParser)
         

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OTPParserConfiguration: Encodable, Decodable {
+public struct OTPParserConfiguration: Encodable, Decodable {
     let servicePatterns: [NSRegularExpression]
     let knownServices: [String]
     
@@ -16,13 +16,13 @@ struct OTPParserConfiguration: Encodable, Decodable {
         self.knownServices = knownServices
     }
         
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(knownServices, forKey: .knownServices)
         try container.encode(servicePatterns.map { $0.pattern }, forKey: .servicePatterns)
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let knownServices = try container.decode([String].self, forKey: CodingKeys.knownServices)
         let servicePatterns = try container.decode([String].self, forKey: CodingKeys.servicePatterns)

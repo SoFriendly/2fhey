@@ -2,12 +2,34 @@ import Foundation
 import Cocoa
 
 public struct ParsedOTP {
-    let service: String?
-    let code: String
+    public init(service: String?, code: String) {
+        self.service = service
+        self.code = code
+    }
+    
+    public let service: String?
+    public let code: String
+    
     
     func copyToClipboard() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(code, forType: .string)
+    }
+}
+
+extension ParsedOTP: Equatable {
+    static public func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.service == rhs.service && lhs.code == rhs.code
+    }
+}
+
+extension String {
+    var withNonDigitsRemoved: Self? {
+        guard let regExp = try? NSRegularExpression(pattern: #"[^\d]"#, options: .caseInsensitive) else { return nil }
+        let range = NSRange(location: 0, length: self.utf16.count)
+
+        //regExp.replaceMatches(in: str, options: .reportProgress, range: range, withTemplate: "")
+        return regExp.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "")
     }
 }
 
@@ -18,7 +40,7 @@ protocol OTPParser {
 public class TwoFHeyOTPParser: OTPParser {
     var config: OTPParserConfiguration
     
-    init(withConfig config: OTPParserConfiguration) {
+    public init(withConfig config: OTPParserConfiguration) {
         self.config = config
     }
         
@@ -33,7 +55,7 @@ public class TwoFHeyOTPParser: OTPParser {
         }
         
         if afterCodePosition < message.endIndex {
-            let next = message[message.index(after: afterCodePosition)]
+            let next = message[afterCodePosition]
             // make sure next character is whitespace or ending grammar
             if !OTPParserConstants.endingCharacters.contains(next) {
                 return false
@@ -67,7 +89,7 @@ public class TwoFHeyOTPParser: OTPParser {
                 guard let code = match.firstCaptureGroupInString(lowercaseMessage) else { continue }
 
                 if isValidCodeInMessageContext(message: lowercaseMessage, code: code) {
-                    return ParsedOTP(service: service, code: code)
+                    return ParsedOTP(service: service, code: code.withNonDigitsRemoved ?? code)
                 }
             }
         }
