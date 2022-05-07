@@ -74,10 +74,6 @@ public class TwoFHeyOTPParser: OTPParser {
         
         let service = inferServiceFromMessage(message)
         
-        if let possibleCode = OTPParserConstants.CodeMatchingRegularExpressions.standardFourToEight.firstCaptureGroupInString(lowercaseMessage) {
-            return ParsedOTP(service: service, code: possibleCode)
-        }
-        
         let standardRegExps: [NSRegularExpression] = [
             OTPParserConstants.CodeMatchingRegularExpressions.standardFourToEight,
             OTPParserConstants.CodeMatchingRegularExpressions.dashedThreeAndThree,
