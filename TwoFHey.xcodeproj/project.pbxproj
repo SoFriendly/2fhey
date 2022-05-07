@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4123A7628261377002C3C42 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7528261377002C3C42 /* UIConstants.swift */; };
 		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
 		D41FABE12817806E00B0F829 /* onboarding.html in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE02817806E00B0F829 /* onboarding.html */; };
 		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
@@ -49,6 +50,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D4123A7528261377002C3C42 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D41FABE02817806E00B0F829 /* onboarding.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = onboarding.html; sourceTree = "<group>"; };
 		D41FABE22817808C00B0F829 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				D4F5CAA52817688900A39E6D /* Main.storyboard */,
 				D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */,
 				D41FABE428178CDB00B0F829 /* main.swift */,
+				D4123A7528261377002C3C42 /* UIConstants.swift */,
 			);
 			path = TwoFHey;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 			files = (
 				D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */,
 				D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */,
+				D4123A7628261377002C3C42 /* UIConstants.swift in Sources */,
 				D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */,
 				D479A3E42821FF9A00915AAA /* OTPParserConfiguration.swift in Sources */,
 				D479A3E02821E74500915AAA /* CustomOTPParsers.swift in Sources */,

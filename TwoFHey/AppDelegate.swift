@@ -13,13 +13,15 @@ import HotKey
 
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?) {
-        super.init(contentRect: NSRect(x: 0, y: 0, width: 400, height: 300), styleMask: [.closable, .fullSizeContentView], backing: .buffered, defer: false)
+        // UIConstants.codePopupPosition
+        let poisiton = UIConstants.codePopupPosition
+        super.init(contentRect: NSRect(x: poisiton.x, y: poisiton.y, width: 300, height: 150), styleMask: [.closable, .fullSizeContentView], backing: .buffered, defer: false)
         makeKeyAndOrderFront(nil)
         isReleasedWhenClosed = false
         styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
         contentView = NSHostingView(rootView: OverlayView(line1: line1, line2: line2))
         
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: UIConstants.codePopupDuration, repeats: false) { [weak self] _ in
             self?.close()
         }
     }
