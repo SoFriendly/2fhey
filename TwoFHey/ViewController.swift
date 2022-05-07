@@ -42,7 +42,7 @@ extension ViewController: WKScriptMessageHandler{
         }
 
         if messageText == "open-full-disk-access" {
-            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?security?Privacy_AllFiles")!)
+            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!)
         } else if messageText == "close-onboarding" {
             let url = URL(fileURLWithPath: Bundle.main.resourcePath!)
             let path = url.deletingLastPathComponent().deletingLastPathComponent().absoluteString

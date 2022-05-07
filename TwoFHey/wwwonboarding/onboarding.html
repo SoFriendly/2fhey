@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Ohtipi</title>
+    <title>2FHey</title>
     <link href="./assets/tailwind.min.css" rel="stylesheet" />
     <style>
         @font-face {
@@ -138,17 +138,14 @@
             </div>
 
             <div class="h-auto my-auto z-10 ml-8 text-pane" v-if="step == 0">
-                <div class="mb-6">
-                    <img draggable="false" style="height: 28px" class="w-auto" src="./assets/onboarding/logo.png">
-                </div>
                 <h1 class="mb-2 text-2xl font-bold">
-                    Welcome to Ohtipi
+                    Welcome to 2FHey
                 </h1>
                 <p class="mb-2 text-sm font-thin">
-                    Thanks for downloading Ohtipi!
+                    Thanks for downloading 2FHey!
                 </p>
                 <p class="mb-2 text-sm font-thin">
-                    Ohtipi is a Mac only app that takes OTP texts from iMessage and sends them to your clipboard to
+                    2FHey is a Mac only app that takes OTP texts from iMessage and sends them to your clipboard to
                     easily and quickly autofill.
                 </p>
 
@@ -168,7 +165,7 @@
                     We need your permission
                 </h1>
                 <p class="mb-2 text-sm font-thin">
-                    Ohtipi will work smoothly if you<br>allow us these permissions:
+                    2FHey will work smoothly if you<br>allow us these permissions:
                 </p>
                 <div :class="`my-6 text-sm font-thin flex justify-start ${!hasFullDiskAccessPermission ? 'cursor-pointer hover:opacity-50 opacity-100' : 'opacity-50'}`"
                     @click="setPermissions">
@@ -224,7 +221,7 @@
                     Setup is done
                 </h1>
                 <p class="mb-2 text-sm font-thin mt-2">
-                    Keep an eye out for Ohtipi in your Menu Bar
+                    Keep an eye out for 2FHey in your Menu Bar
                 </p>
 
                 <div class="mb-6 w-3/4 z-0 rounded overflow-hidden">
@@ -244,7 +241,7 @@
                         </div>
                     </div>
                     <div class="mt-3 w-full z-0 text-sm font-thin leading-5">
-                        Sometimes iMessage likes to sleep on the job. If OhTipi ever misses a message, use <span
+                        Sometimes iMessage likes to sleep on the job. If 2FHey ever misses a message, use <span
                             class="font-medium text-xs p-1">⌘ + Shift + E</span>
                         to sync recent messages and copy the latest code to your clipboard.
                     </div>
@@ -253,7 +250,7 @@
                 <div @click="restartApp" class="hover:opacity-75 flex button text-white text-sm cursor-pointer my-4"
                     id="done-button">
                     <div class="m-auto truncate w-auto">
-                        Restart Ohtipi
+                        Restart 2FHey
                     </div>
                 </div>
             </div>
