@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4081CBE2825DEB60031071E /* Main.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4081CBC2825DEB60031071E /* Main.xib */; };
 		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
 		D41FABE12817806E00B0F829 /* onboarding.html in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE02817806E00B0F829 /* onboarding.html */; };
 		D41FABE32817808C00B0F829 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D41FABE22817808C00B0F829 /* assets */; };
@@ -21,6 +20,7 @@
 		D479A3E72822B7B300915AAA /* ParserConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3E62822B7B300915AAA /* ParserConfigManager.swift */; };
 		D4AF833B2825FE400034A7BE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FABE428178CDB00B0F829 /* main.swift */; };
 		D4AF833D2825FFFA0034A7BE /* AutoLauncher.app in Copy Files */ = {isa = PBXBuildFile; fileRef = D433132C281F630400AC5343 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D4AF833F2826018D0034A7BE /* Main.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4AF833E2826018D0034A7BE /* Main.xib */; };
 		D4F5CAA02817688800A39E6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CA9F2817688800A39E6D /* AppDelegate.swift */; };
 		D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAA12817688800A39E6D /* ViewController.swift */; };
 		D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4F5CAA32817688900A39E6D /* Assets.xcassets */; };
@@ -49,7 +49,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D4081CBD2825DEB60031071E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = ../../../backtrack/Launcher/Base.lproj/Main.xib; sourceTree = "<group>"; };
 		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D41FABE02817806E00B0F829 /* onboarding.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = onboarding.html; sourceTree = "<group>"; };
 		D41FABE22817808C00B0F829 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -64,6 +63,7 @@
 		D479A3E32821FF9A00915AAA /* OTPParserConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPParserConfiguration.swift; sourceTree = "<group>"; };
 		D479A3E62822B7B300915AAA /* ParserConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserConfigManager.swift; sourceTree = "<group>"; };
 		D4AF833C2825FEE70034A7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D4AF833E2826018D0034A7BE /* Main.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Main.xib; sourceTree = "<group>"; };
 		D4F5CA9C2817688800A39E6D /* TwoFHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoFHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F5CA9F2817688800A39E6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4F5CAA12817688800A39E6D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 				D433133B281F639800AC5343 /* Info.plist */,
 				D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */,
 				D4331337281F630600AC5343 /* AutoLauncher.entitlements */,
-				D4081CBC2825DEB60031071E /* Main.xib */,
+				D4AF833E2826018D0034A7BE /* Main.xib */,
 			);
 			path = AutoLauncher;
 			sourceTree = "<group>";
@@ -295,7 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4081CBE2825DEB60031071E /* Main.xib in Resources */,
+				D4AF833F2826018D0034A7BE /* Main.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,14 +345,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		D4081CBC2825DEB60031071E /* Main.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4081CBD2825DEB60031071E /* Base */,
-			);
-			name = Main.xib;
-			sourceTree = "<group>";
-		};
 		D4F5CAA52817688900A39E6D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
