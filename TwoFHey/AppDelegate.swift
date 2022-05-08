@@ -14,8 +14,8 @@ import HotKey
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?) {
         // UIConstants.codePopupPosition
-        let poisiton = UIConstants.codePopupPosition
-        super.init(contentRect: NSRect(x: poisiton.x, y: poisiton.y, width: 300, height: 150), styleMask: [.closable, .fullSizeContentView], backing: .buffered, defer: false)
+        let position = UIConstants.codePopupPosition
+        super.init(contentRect: NSRect(x: position.x, y: position.y, width: 300, height: 150), styleMask: [.closable, .fullSizeContentView], backing: .buffered, defer: false)
         makeKeyAndOrderFront(nil)
         isReleasedWhenClosed = false
         styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
