@@ -90,6 +90,12 @@ public class TwoFHeyOTPParser: OTPParser {
             }
         }
         
+        for customPattern in config.customPatterns {
+            if customPattern.matcherPattern.firstMatchInString(lowercaseMessage) != nil, let matchedCode = customPattern.codeExtractorPattern.firstCaptureGroupInString(lowercaseMessage) {
+                return ParsedOTP(service: service, code: matchedCode)
+            }
+        }
+        
         let matchedParser = CUSTOM_PARSERS.first { parser in
             if let requiredName = parser.requiredServiceName, requiredName != service {
                 return false

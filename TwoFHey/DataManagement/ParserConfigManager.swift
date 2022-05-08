@@ -8,7 +8,7 @@
 import Foundation
 
 public class ParserConfigManager: ObservableObject {
-    public static let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices)
+    public static let DEFAULT_CONFIG = OTPParserConfiguration(servicePatterns: OTPParserConstants.servicePatterns, knownServices: OTPParserConstants.knownServices, customPatterns: [])
     
     @Published var config: OTPParserConfiguration?
     

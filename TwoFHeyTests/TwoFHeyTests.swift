@@ -165,6 +165,24 @@ class TwoFHeyTests: XCTestCase {
         XCTAssertEqual(parser.parseMessage(#"388-941-4444 your code is 333222"#), ParsedOTP(service: nil, code: "333222"))
 
     }
+    
+    func testCustomPattern() throws {
+//        let customPattern = OTPParserCustomPatternConfiguration()
+        let jsonPattern = #"""
+{
+  "matcherPattern": "^someweird-.+$",
+  "codeExtractorPattern": "^someweird.+:((\\d|\\D){4,6})$"
+}
+"""#
+        let decoded = try JSONDecoder().decode(OTPParserCustomPatternConfiguration.self, from: jsonPattern.data(using: .utf8)!)
+        
+        let testConfig = OTPParserConfiguration(servicePatterns: [], knownServices: [], customPatterns: [decoded])
+
+        let parser = TwoFHeyOTPParser(withConfig: testConfig)
+
+        XCTAssertEqual(parser.parseMessage(#"someweird-pattern:a1b2c3"#), ParsedOTP(service: nil, code: "a1b2c3"))
+
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
