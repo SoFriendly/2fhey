@@ -49,7 +49,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		D433133E281F652900AC5343 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = Contents/Library/LoginItems;
 			dstSubfolderSpec = 1;
 			files = (
