@@ -17,20 +17,20 @@ struct OverlayView: View {
                 Image("MessageBubble").foregroundColor(.white)
                 VStack(alignment: .leading) {
                     if let line1 = line1 {
-                        Text(line1).font(.system(size: 18))
+                        Text(line1).font(.system(size: 18)).foregroundColor(.white)
                     }
                     if let line2 = line2 {
-                        Text(line2)
+                        Text(line2).foregroundColor(.white)
                     }
                 }
             }
             .padding(8)
-            .background(Color(red: 0, green: 98/255, blue: 1))
+            .background(Color(red: 0.09, green: 0.77, blue: 0.20))
             .cornerRadius(5)
         }
         .padding(8)
-        .background(.black.opacity(0.5))
-        .border(.white.opacity(0.13), width: 1)
+        .background(.black.opacity(0.6))
+        //.border(.black.opacity(0.5), width: 1)
         .cornerRadius(5)
     }
 }
