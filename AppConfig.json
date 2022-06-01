@@ -228,11 +228,10 @@
     "customPatterns": [
 
 {
-	“serviceName”: “no provider name”,
-“matcherPattern”: "\d{2,8}\nValid”,
-	“codeExtractorPattern”: "(\d{2,8})”
+	“serviceName”: "no provider name",
+"matcherPattern": "\d{2,8}\nValid",
+	"codeExtractorPattern": "(\d{2,8})"
 }
-
 
 ]
 }
