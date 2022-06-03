@@ -42,7 +42,7 @@ extension NSTextCheckingResult {
 }
 
 extension NSRegularExpression {
-    func firstMatchInString(_ string: String) -> NSTextCheckingResult? {
+    public func firstMatchInString(_ string: String) -> NSTextCheckingResult? {
         let range = NSRange(location: 0, length: string.utf16.count)
         return firstMatch(in: string, options: [], range: range)
     }

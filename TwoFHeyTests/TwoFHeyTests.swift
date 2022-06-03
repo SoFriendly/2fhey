@@ -183,6 +183,26 @@ class TwoFHeyTests: XCTestCase {
         XCTAssertEqual(parser.parseMessage(#"someweird-pattern:a1b2c3"#), ParsedOTP(service: nil, code: "a1b2c3"))
 
     }
+    
+    func testCustomPatternWithNoServieName() {
+        let message = "46143020\nvalid 5 minutes\ndurata 5 minuti\ndurée 5 minutes\ngültig 5 minuten\r"
+        let jsonPattern = #"""
+      {
+         "serviceName":"no provider name",
+         "matcherPattern":"\\d{2,8}.*valid",
+         "codeExtractorPattern":"(\\d{2,8})"
+      }
+"""#
+        let decoded = try! JSONDecoder().decode(OTPParserCustomPatternConfiguration.self, from: jsonPattern.data(using: .utf8)!)
+        
+        let testConfig = OTPParserConfiguration(servicePatterns: [], knownServices: [], customPatterns: [decoded])
+
+        XCTAssertNotNil(decoded.matcherPattern.firstMatchInString(message), "")
+        
+        let parser = TwoFHeyOTPParser(withConfig: testConfig)
+
+        XCTAssertEqual(parser.parseMessage(message), ParsedOTP(service: nil, code: "46143020"))
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
