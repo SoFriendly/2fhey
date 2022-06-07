@@ -8,8 +8,8 @@
 import Foundation
 
 public struct OTPParserCustomPatternConfiguration: Codable {
-    let matcherPattern: NSRegularExpression
-    let codeExtractorPattern: NSRegularExpression
+    public let matcherPattern: NSRegularExpression
+    public let codeExtractorPattern: NSRegularExpression
 
     public init(matcherPattern: NSRegularExpression, codeExtractorPattern: NSRegularExpression) {
         self.matcherPattern = matcherPattern
@@ -28,8 +28,9 @@ public struct OTPParserCustomPatternConfiguration: Codable {
         let matcherPattern = try container.decode(String.self, forKey: CodingKeys.matcherPattern)
         let codeExtractorPattern = try container.decode(String.self, forKey: CodingKeys.codeExtractorPattern)
         
-        self.matcherPattern = try NSRegularExpression(pattern: matcherPattern)
-        self.codeExtractorPattern = try NSRegularExpression(pattern: codeExtractorPattern)
+        let regexOptions: NSRegularExpression.Options = [.caseInsensitive, .dotMatchesLineSeparators]
+        self.matcherPattern = try NSRegularExpression(pattern: matcherPattern, options: regexOptions)
+        self.codeExtractorPattern = try NSRegularExpression(pattern: codeExtractorPattern, options: regexOptions)
     }
     
     enum CodingKeys: String, CodingKey {
