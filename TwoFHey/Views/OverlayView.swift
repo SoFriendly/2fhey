@@ -13,6 +13,7 @@ struct OverlayView: View {
     
     var body: some View {
         HStack {
+            
             HStack {
                 Image("MessageBubble").foregroundColor(.white)
                 VStack(alignment: .leading) {
@@ -29,9 +30,12 @@ struct OverlayView: View {
             .cornerRadius(5)
         }
         .padding(8)
-        .background(.black.opacity(0.6))
-        //.border(.black.opacity(0.5), width: 1)
         .cornerRadius(5)
+     
+
+        //.background(.black.opacity(0.6)) Isn't compatible with macOS 11
+        //.border(.black.opacity(0.5), width: 1)
+        
     }
 }
 
