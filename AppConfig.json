@@ -230,6 +230,11 @@
          "serviceName":"no provider name",
          "matcherPattern":"\\d{2,8}.+Valid",
          "codeExtractorPattern":"(\\d{2,8})"
-      }
+      },
+      {
+         "serviceName":"Chase",
+         "matcherPattern":"From: Chase\\nWe'll NEVER call you to ask for this code\\.\\nOne-Time Code:\\d{8,8}\\nOnly use this online\\. Code expires in 30 min\\.",
+         "codeExtractorPattern":"(\\d{8,8})"
+      },
    ]
 }
