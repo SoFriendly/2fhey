@@ -78,6 +78,12 @@ public class TwoFHeyOTPParser: OTPParser {
             OTPParserConstants.CodeMatchingRegularExpressions.standardFourToEight,
             OTPParserConstants.CodeMatchingRegularExpressions.dashedThreeAndThree,
         ]
+        
+        for customPattern in config.customPatterns {
+            if customPattern.matcherPattern.firstMatchInString(lowercaseMessage) != nil, let matchedCode = customPattern.codeExtractorPattern.firstCaptureGroupInString(lowercaseMessage) {
+                return ParsedOTP(service: customPattern.serviceName, code: matchedCode)
+            }
+        }
 
         for regex in standardRegExps {
             let matches = regex.matchesInString(lowercaseMessage)
@@ -90,11 +96,7 @@ public class TwoFHeyOTPParser: OTPParser {
             }
         }
         
-        for customPattern in config.customPatterns {
-            if customPattern.matcherPattern.firstMatchInString(lowercaseMessage) != nil, let matchedCode = customPattern.codeExtractorPattern.firstCaptureGroupInString(lowercaseMessage) {
-                return ParsedOTP(service: service, code: matchedCode)
-            }
-        }
+        
         
         let matchedParser = CUSTOM_PARSERS.first { parser in
             if let requiredName = parser.requiredServiceName, requiredName != service {
