@@ -10,10 +10,12 @@ import Foundation
 public struct OTPParserCustomPatternConfiguration: Codable {
     public let matcherPattern: NSRegularExpression
     public let codeExtractorPattern: NSRegularExpression
+    public let serviceName: String
 
-    public init(matcherPattern: NSRegularExpression, codeExtractorPattern: NSRegularExpression) {
+    public init(matcherPattern: NSRegularExpression, codeExtractorPattern: NSRegularExpression, serviceName: String) {
         self.matcherPattern = matcherPattern
         self.codeExtractorPattern = codeExtractorPattern
+        self.serviceName = serviceName
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -27,15 +29,18 @@ public struct OTPParserCustomPatternConfiguration: Codable {
         
         let matcherPattern = try container.decode(String.self, forKey: CodingKeys.matcherPattern)
         let codeExtractorPattern = try container.decode(String.self, forKey: CodingKeys.codeExtractorPattern)
+        let serviceName = try container.decode(String.self, forKey: CodingKeys.serviceName)
         
         let regexOptions: NSRegularExpression.Options = [.caseInsensitive, .dotMatchesLineSeparators]
         self.matcherPattern = try NSRegularExpression(pattern: matcherPattern, options: regexOptions)
         self.codeExtractorPattern = try NSRegularExpression(pattern: codeExtractorPattern, options: regexOptions)
+        self.serviceName = serviceName
     }
     
     enum CodingKeys: String, CodingKey {
-       case matcherPattern
-       case codeExtractorPattern
+        case matcherPattern
+        case codeExtractorPattern
+        case serviceName
     }
 }
 
