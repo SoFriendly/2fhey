@@ -241,5 +241,10 @@
          "matcherPattern":"From: Chase  \\nWe'll NEVER call you to ask for this code\\.  \\nOne-Time Code:\\d{8,8}  \\nOnly use this online\\. Code expires in 30 min\\.",
          "codeExtractorPattern":"(\\d{8,8})"
       },
+      {
+         "serviceName":"DigitalOcean",
+         "matcherPattern":"[\\w\\d]{6,6} is your DigitalOcean verification code\\.",
+         "codeExtractorPattern":"([\\w\\d]{6,6})"
+      },
    ]
 }
