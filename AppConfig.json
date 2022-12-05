@@ -251,5 +251,10 @@
         "matcherPattern": "驗證密碼[\\d{4,8}]",
         "codeExtractorPattern": "(\\d{4,8})"
       },
+      {
+         "serviceName":"DigitalOcean",
+         "matcherPattern":"[\\w\\d]{6,6} is your DigitalOcean verification code\\.",
+         "codeExtractorPattern":"([\\w\\d]{6,6})"
+      },
    ]
 }
