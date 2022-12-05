@@ -241,5 +241,15 @@
          "matcherPattern":"From: Chase  \\nWe'll NEVER call you to ask for this code\\.  \\nOne-Time Code:\\d{8}  \\nOnly use this online\\. Code expires in 30 min\\.",
          "codeExtractorPattern":"(\\d{8})"
       },
+      {
+        "serviceName": "Taishin Bank One-Time Code",
+        "matcherPattern": "驗證碼為[\\d{4,8}]",
+        "codeExtractorPattern": "(\\d{4,8})"
+      },
+      {
+        "serviceName": "Taishin Bank One-Time Code",
+        "matcherPattern": "驗證密碼[\\d{4,8}]",
+        "codeExtractorPattern": "(\\d{4,8})"
+      },
    ]
 }
