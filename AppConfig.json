@@ -256,5 +256,10 @@
          "matcherPattern":"[\\w\\d]{6,6} is your DigitalOcean verification code\\.",
          "codeExtractorPattern":"([\\w\\d]{6,6})"
       },
+      {
+         "serviceName":"CN General",
+         "matcherPattern":"验证码([(是)(为)]?)(\\d{4,8})",
+         "codeExtractorPattern":"(\\d{4,8})"
+      }
    ]
 }
