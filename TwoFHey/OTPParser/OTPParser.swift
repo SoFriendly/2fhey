@@ -10,10 +10,21 @@ public struct ParsedOTP {
     public let service: String?
     public let code: String
     
-    
-    func copyToClipboard() {
+    func copyToClipboard(completion: @escaping (_ some: Bool) -> Void = { _ in })  {
+        // Check for setting here to avoid reading from clipboard unnecessarily
+        let originalContents = AppStateManager.shared.restoreContentsEnabled ? NSPasteboard.general.string(forType: .string) : nil
+        
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(code, forType: .string)
+        
+        if (originalContents != nil) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 20.0) {
+                NSPasteboard.general.setString(originalContents!, forType: .string)
+                completion(true)
+            }
+        } else {
+            completion(true)
+        }
     }
 }
 

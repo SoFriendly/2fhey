@@ -22,6 +22,7 @@ class AppStateManager {
         
         static let autoLauncherPrefKey = "com.sofriendly.2fhey.shouldAutoLaunch"
         static let globalShortcutEnabledKey = "com.sofriendly.2fhey.globalShortcutEnabled"
+        static let restoreContentsEnabledKey = "com.sofriendly.2fhey.restoreContentsEnabled"
         static let hasSetupKey = "com.sofriendly.2fhey.hasSetup"
     }
     
@@ -65,6 +66,15 @@ class AppStateManager {
         }
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: Constants.globalShortcutEnabledKey)
+        }
+    }
+    
+    var restoreContentsEnabled: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Constants.restoreContentsEnabledKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.restoreContentsEnabledKey)
         }
     }
 }

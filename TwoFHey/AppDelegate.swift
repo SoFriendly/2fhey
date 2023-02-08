@@ -117,7 +117,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
         
-        message.1.copyToClipboard()
+        message.1.copyToClipboard() { didRestoreContents in
+            if (didRestoreContents) {
+                let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
+                self.overlayWindow = window
+            }
+        }
+        
         window.makeKeyAndOrderFront(nil)
         
         overlayWindow = window
@@ -172,6 +178,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
         settingsMenu.addItem(keyboardShortCutItem)
 
+        let restoreContentsItem = NSMenuItem(title: "Restore Clipboard Contents", action: #selector(AppDelegate.onPressRestoreClipboardContents), keyEquivalent: "")
+        restoreContentsItem.toolTip = "Disable restore clipboard contents if you don't want 2FHey to restore your clipboard to what it was before receiving a code"
+        restoreContentsItem.state = AppStateManager.shared.restoreContentsEnabled ? .on : .off
+        settingsMenu.addItem(restoreContentsItem)
+
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
         autoLaunchItem.state = AppStateManager.shared.shouldLaunchOnLogin ? .on : .off
         settingsMenu.addItem(autoLaunchItem)
@@ -212,6 +223,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppStateManager.shared.globalShortcutEnabled = !AppStateManager.shared.globalShortcutEnabled
         refreshMenu()
         setupGlobalKeyShortcut()
+    }
+    
+    @objc func onPressRestoreClipboardContents() {
+        AppStateManager.shared.restoreContentsEnabled = !AppStateManager.shared.restoreContentsEnabled
+        refreshMenu()
     }
     
     func setupGlobalKeyShortcut() {
