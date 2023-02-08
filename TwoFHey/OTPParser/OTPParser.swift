@@ -18,7 +18,8 @@ public struct ParsedOTP {
         NSPasteboard.general.setString(code, forType: .string)
         
         if (originalContents != nil) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 20.0) {
+            let timeInterval = DispatchTimeInterval.seconds(AppStateManager.shared.restoreContentsDelayTime)
+            DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval) {
                 NSPasteboard.general.setString(originalContents!, forType: .string)
                 completion(true)
             }

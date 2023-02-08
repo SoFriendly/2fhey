@@ -178,9 +178,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
         settingsMenu.addItem(keyboardShortCutItem)
 
+        let restoreContentsMenu = NSMenu()
+        let delayTimes = [0, 5, 10, 15, 20]
+        delayTimes.forEach { delayTime in
+            let item = NSMenuItem(title: "\(String(describing: delayTime)) sec", action: #selector(AppDelegate.onPressRestoreClipboardContents), keyEquivalent: "")
+            if (delayTime == 0) {
+                item.title = "Disabled"
+            }
+            item.representedObject = delayTime
+            item.state = AppStateManager.shared.restoreContentsDelayTime == delayTime ? .on : .off
+            restoreContentsMenu.addItem(item)
+        }
+        
         let restoreContentsItem = NSMenuItem(title: "Restore Clipboard Contents", action: #selector(AppDelegate.onPressRestoreClipboardContents), keyEquivalent: "")
         restoreContentsItem.toolTip = "Disable restore clipboard contents if you don't want 2FHey to restore your clipboard to what it was before receiving a code"
         restoreContentsItem.state = AppStateManager.shared.restoreContentsEnabled ? .on : .off
+        restoreContentsItem.submenu = restoreContentsMenu
         settingsMenu.addItem(restoreContentsItem)
 
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
@@ -225,8 +238,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupGlobalKeyShortcut()
     }
     
-    @objc func onPressRestoreClipboardContents() {
-        AppStateManager.shared.restoreContentsEnabled = !AppStateManager.shared.restoreContentsEnabled
+    @objc func onPressRestoreClipboardContents(sender: NSMenuItem) {
+        AppStateManager.shared.restoreContentsDelayTime = sender.representedObject as! Int
         refreshMenu()
     }
     
