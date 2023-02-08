@@ -23,7 +23,7 @@ public struct ParsedOTP {
                 completion(true)
             }
         } else {
-            completion(true)
+            completion(false)
         }
     }
 }
