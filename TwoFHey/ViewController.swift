@@ -31,6 +31,7 @@ class ViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
+    
 
 
 }
@@ -43,6 +44,8 @@ extension ViewController: WKScriptMessageHandler{
 
         if messageText == "open-full-disk-access" {
             NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!)
+        } else if messageText == "open-accessibility" {
+            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
         } else if messageText == "close-onboarding" {
             let url = URL(fileURLWithPath: Bundle.main.resourcePath!)
             let path = url.deletingLastPathComponent().deletingLastPathComponent().absoluteString

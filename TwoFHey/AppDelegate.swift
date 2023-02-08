@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 import ServiceManagement
 import HotKey
+import ApplicationServices
 
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?) {
@@ -44,6 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mostRecentMessages: [MessageWithParsedOTP] = []
     var lastNotificationMessage: Message? = nil
     var shouldShowNotificationOverlay = false
+    var originalClipboardContents: String? = nil
     
     var hotKey: HotKey?
     
@@ -63,15 +65,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         initMessageManager()
+        setupKeyboardListener()
         
         if !AppStateManager.shared.hasSetup {
             AppStateManager.shared.shouldLaunchOnLogin = true
             AppStateManager.shared.globalShortcutEnabled = true
             AppStateManager.shared.hasSetup = true
             openOnboardingWindow()
-        } else if AppStateManager.shared.hasFullDiscAccess() != .authorized {
+        } else if AppStateManager.shared.hasFullDiscAccess() != .authorized || !AppStateManager.shared.hasAccessibilityPermission() {
             openOnboardingWindow()
         }
+        
     }
     
     func initMessageManager() {
@@ -117,13 +121,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
         
-        message.1.copyToClipboard() { didRestoreContents in
-            if (didRestoreContents) {
-                let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
-                self.overlayWindow = window
-            }
-        }
-        
+        self.originalClipboardContents = message.1.copyToClipboard()
         window.makeKeyAndOrderFront(nil)
         
         overlayWindow = window
@@ -211,6 +209,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return statusBarMenu
     }
     
+    func setupKeyboardListener() {
+        if (AppStateManager.shared.restoreContentsEnabled && AppStateManager.shared.hasAccessibilityPermission()) {
+            NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
+                // If command + V pressed
+                if (event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command && event.keyCode == 9) {
+                    if (self.originalClipboardContents != nil) {
+                        let timeInterval = DispatchTimeInterval.seconds(AppStateManager.shared.restoreContentsDelayTime)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval) {
+                            let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
+                            self.overlayWindow = window
+                            NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
+                            self.originalClipboardContents = nil
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func openOnboardingWindow() {
         if onboardingWindow == nil {
             onboardingWindow = createOnboardingWindow()
@@ -239,7 +256,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func onPressRestoreClipboardContents(sender: NSMenuItem) {
-        AppStateManager.shared.restoreContentsDelayTime = sender.representedObject as! Int
+        let newDelayTime = sender.representedObject == nil ? 0 : sender.representedObject as! Int;
+        AppStateManager.shared.restoreContentsDelayTime = newDelayTime
         refreshMenu()
     }
     
@@ -255,6 +273,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    private func getAccessibilityPermission(prompt: Bool) -> Bool {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: prompt]
+        let status = AXIsProcessTrustedWithOptions(options)
+        return status
+    }
+    
     @objc func quit() {
         NSApp.terminate(nil)
     }
@@ -266,7 +290,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func onPressCode(_ sender: Any) {
         guard let index = (sender as? NSMenuItem)?.tag else { return }
         let (_, parsedOtp) = mostRecentMessages[index]
-        parsedOtp.copyToClipboard()
+        self.originalClipboardContents = parsedOtp.copyToClipboard()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -278,5 +302,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
 
+    
 }
 

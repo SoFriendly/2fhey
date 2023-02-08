@@ -7,6 +7,9 @@
 
 import Foundation
 import ServiceManagement
+import SwiftUI
+import ApplicationServices
+
 enum FullDiskAccessStatus {
     case authorized, denied, unknown
 }
@@ -41,6 +44,13 @@ class AppStateManager {
         
         return .unknown
     }
+    
+    func hasAccessibilityPermission() -> Bool {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]
+        let status = AXIsProcessTrustedWithOptions(options)
+    
+        return status
+    }
 
     var hasSetup: Bool {
         get {
@@ -73,7 +83,13 @@ class AppStateManager {
     // Set to 0 to disable
     var restoreContentsDelayTime: Int {
         get {
-            return UserDefaults.standard.integer(forKey: Constants.restoreContentsDelayTimeKey)
+            let value = UserDefaults.standard.value(forKey: Constants.restoreContentsDelayTimeKey)
+            if (value == nil) {
+                // Default value
+                return 5;
+            } else {
+                return value as! Int
+            }
         }
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: Constants.restoreContentsDelayTimeKey)
