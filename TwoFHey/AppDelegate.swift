@@ -122,6 +122,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
         
         self.originalClipboardContents = message.1.copyToClipboard()
+        restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
+
         window.makeKeyAndOrderFront(nil)
         
         overlayWindow = window
@@ -210,19 +212,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func setupKeyboardListener() {
-        if (AppStateManager.shared.restoreContentsEnabled && AppStateManager.shared.hasAccessibilityPermission()) {
-            NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
-                // If command + V pressed
+        if (AppStateManager.shared.restoreContentsEnabled) {
+            NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .systemDefined, .appKitDefined]) { (event) in
+                // If command + V pressed, race restoring the clipboard contents between this listener and the default delay interval
                 if (event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command && event.keyCode == 9) {
-                    if (self.originalClipboardContents != nil) {
-                        let timeInterval = DispatchTimeInterval.seconds(AppStateManager.shared.restoreContentsDelayTime)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval) {
-                            let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
-                            self.overlayWindow = window
-                            NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
-                            self.originalClipboardContents = nil
-                        }
-                    }
+                    self.restoreClipboardContents(withDelay: 5)
                 }
             }
         }
@@ -241,6 +235,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func resync() {
         shouldShowNotificationOverlay = false
         lastNotificationMessage = nil
+        originalClipboardContents = nil
         messageManager?.reset()
     }
 
@@ -291,6 +286,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let index = (sender as? NSMenuItem)?.tag else { return }
         let (_, parsedOtp) = mostRecentMessages[index]
         self.originalClipboardContents = parsedOtp.copyToClipboard()
+        restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
+    }
+    
+    // Restores clipboard contents after a provided delay in seconds
+    // Meant to be called any number of times, each call will race between each other and only
+    // restore contents when contents are set
+    func restoreClipboardContents(withDelay delaySeconds: Int) {
+        let delayTimeInterval = DispatchTimeInterval.seconds(delaySeconds)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delayTimeInterval) {
+            if (self.originalClipboardContents != nil) {
+                let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
+                self.overlayWindow = window
+                NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
+                self.originalClipboardContents = nil
+            }
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -300,8 +311,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
-
     
 }
 
