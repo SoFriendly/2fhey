@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 import ServiceManagement
 import HotKey
+import ApplicationServices
 
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?) {
@@ -44,6 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mostRecentMessages: [MessageWithParsedOTP] = []
     var lastNotificationMessage: Message? = nil
     var shouldShowNotificationOverlay = false
+    var originalClipboardContents: String? = nil
     
     var hotKey: HotKey?
     
@@ -63,15 +65,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         initMessageManager()
+        setupKeyboardListener()
         
         if !AppStateManager.shared.hasSetup {
             AppStateManager.shared.shouldLaunchOnLogin = true
             AppStateManager.shared.globalShortcutEnabled = true
             AppStateManager.shared.hasSetup = true
             openOnboardingWindow()
-        } else if AppStateManager.shared.hasFullDiscAccess() != .authorized {
+        } else if AppStateManager.shared.hasFullDiscAccess() != .authorized || !AppStateManager.shared.hasAccessibilityPermission() {
             openOnboardingWindow()
         }
+        
     }
     
     func initMessageManager() {
@@ -117,7 +121,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
         
-        message.1.copyToClipboard()
+        self.originalClipboardContents = message.1.copyToClipboard()
+        restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
+
         window.makeKeyAndOrderFront(nil)
         
         overlayWindow = window
@@ -172,6 +178,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
         settingsMenu.addItem(keyboardShortCutItem)
 
+        let restoreContentsMenu = NSMenu()
+        let delayTimes = [0, 5, 10, 15, 20]
+        delayTimes.forEach { delayTime in
+            let item = NSMenuItem(title: "\(String(describing: delayTime)) sec", action: #selector(AppDelegate.onPressRestoreClipboardContents), keyEquivalent: "")
+            if (delayTime == 0) {
+                item.title = "Disabled"
+            }
+            item.representedObject = delayTime
+            item.state = AppStateManager.shared.restoreContentsDelayTime == delayTime ? .on : .off
+            restoreContentsMenu.addItem(item)
+        }
+        
+        let restoreContentsItem = NSMenuItem(title: "Restore Clipboard Contents", action: #selector(AppDelegate.onPressRestoreClipboardContents), keyEquivalent: "")
+        restoreContentsItem.toolTip = "Disable restore clipboard contents if you don't want 2FHey to restore your clipboard to what it was before receiving a code"
+        restoreContentsItem.state = AppStateManager.shared.restoreContentsEnabled ? .on : .off
+        restoreContentsItem.submenu = restoreContentsMenu
+        settingsMenu.addItem(restoreContentsItem)
+
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
         autoLaunchItem.state = AppStateManager.shared.shouldLaunchOnLogin ? .on : .off
         settingsMenu.addItem(autoLaunchItem)
@@ -187,6 +211,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return statusBarMenu
     }
     
+    func setupKeyboardListener() {
+        if (AppStateManager.shared.restoreContentsEnabled) {
+            NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .systemDefined, .appKitDefined]) { (event) in
+                // If command + V pressed, race restoring the clipboard contents between this listener and the default delay interval
+                if (event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command && event.keyCode == 9) {
+                    self.restoreClipboardContents(withDelay: 5)
+                }
+            }
+        }
+    }
+    
     func openOnboardingWindow() {
         if onboardingWindow == nil {
             onboardingWindow = createOnboardingWindow()
@@ -200,6 +235,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func resync() {
         shouldShowNotificationOverlay = false
         lastNotificationMessage = nil
+        originalClipboardContents = nil
         messageManager?.reset()
     }
 
@@ -214,6 +250,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupGlobalKeyShortcut()
     }
     
+    @objc func onPressRestoreClipboardContents(sender: NSMenuItem) {
+        let newDelayTime = sender.representedObject == nil ? 0 : sender.representedObject as! Int;
+        AppStateManager.shared.restoreContentsDelayTime = newDelayTime
+        refreshMenu()
+    }
+    
     func setupGlobalKeyShortcut() {
         if AppStateManager.shared.globalShortcutEnabled && hotKey == nil {
             // Setup hot key for ⌥⌘R
@@ -224,6 +266,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if !AppStateManager.shared.globalShortcutEnabled {
             hotKey = nil
         }
+    }
+    
+    private func getAccessibilityPermission(prompt: Bool) -> Bool {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: prompt]
+        let status = AXIsProcessTrustedWithOptions(options)
+        return status
     }
     
     @objc func quit() {
@@ -237,7 +285,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func onPressCode(_ sender: Any) {
         guard let index = (sender as? NSMenuItem)?.tag else { return }
         let (_, parsedOtp) = mostRecentMessages[index]
-        parsedOtp.copyToClipboard()
+        self.originalClipboardContents = parsedOtp.copyToClipboard()
+        restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
+    }
+    
+    // Restores clipboard contents after a provided delay in seconds
+    // Meant to be called any number of times, each call will race between each other and only
+    // restore contents when contents are set
+    func restoreClipboardContents(withDelay delaySeconds: Int) {
+        let delayTimeInterval = DispatchTimeInterval.seconds(delaySeconds)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delayTimeInterval) {
+            if (self.originalClipboardContents != nil) {
+                let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
+                self.overlayWindow = window
+                NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
+                self.originalClipboardContents = nil
+            }
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -247,7 +311,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
-
+    
 }
 
