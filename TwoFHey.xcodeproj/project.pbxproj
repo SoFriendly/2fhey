@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6547376E29B8973800523B18 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6547376D29B8973800523B18 /* Permission.swift */; };
+		658FC8BA29B8395D008CB815 /* ViewControllerNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658FC8B929B8395D008CB815 /* ViewControllerNative.swift */; };
 		D4123A7628261377002C3C42 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7528261377002C3C42 /* UIConstants.swift */; };
 		D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */; };
 		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
@@ -61,6 +63,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6547376D29B8973800523B18 /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
+		658FC8B929B8395D008CB815 /* ViewControllerNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerNative.swift; sourceTree = "<group>"; };
 		D4123A7528261377002C3C42 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwoFHeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFHeyTests.swift; sourceTree = "<group>"; };
@@ -202,6 +206,8 @@
 				D4F5CAAE281768A100A39E6D /* OTPParser */,
 				D4F5CA9F2817688800A39E6D /* AppDelegate.swift */,
 				D4F5CAA12817688800A39E6D /* ViewController.swift */,
+				6547376D29B8973800523B18 /* Permission.swift */,
+				658FC8B929B8395D008CB815 /* ViewControllerNative.swift */,
 				D4F5CAA32817688900A39E6D /* Assets.xcassets */,
 				D4F5CAA52817688900A39E6D /* Main.storyboard */,
 				D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */,
@@ -286,6 +292,7 @@
 				D4F5CA992817688800A39E6D /* Frameworks */,
 				D4F5CA9A2817688800A39E6D /* Resources */,
 				D433133E281F652900AC5343 /* Copy Files */,
+				6547376F29B89DD300523B18 /* Reset Accessibility Permissions */,
 			);
 			buildRules = (
 			);
@@ -375,6 +382,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6547376F29B89DD300523B18 /* Reset Accessibility Permissions */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Reset Accessibility Permissions";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ntccutil reset Accessibility $PRODUCT_BUNDLE_IDENTIFIER || true\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D4123A782826EF3B002C3C42 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -407,9 +436,11 @@
 				D4F5CAA22817688800A39E6D /* ViewController.swift in Sources */,
 				D4AF833B2825FE400034A7BE /* main.swift in Sources */,
 				D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */,
+				658FC8BA29B8395D008CB815 /* ViewControllerNative.swift in Sources */,
 				D479A3E22821EE2600915AAA /* Extensions.swift in Sources */,
 				D4F5CAA02817688800A39E6D /* AppDelegate.swift in Sources */,
 				D4F5CABC281768E100A39E6D /* Message.swift in Sources */,
+				6547376E29B8973800523B18 /* Permission.swift in Sources */,
 				D4F5CAB3281768B000A39E6D /* CustomOTPParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -652,7 +683,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -683,7 +714,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;

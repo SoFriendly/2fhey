@@ -34,6 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var messageManager: MessageManager?
     var configManager: ParserConfigManager?
+    private var permissionsService = PermissionsService()
 
     var statusBarItem: NSStatusItem!
 
@@ -48,6 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var originalClipboardContents: String? = nil
     
     var hotKey: HotKey?
+    
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let icon = NSImage(named: "TrayIcon")!
@@ -134,7 +136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func createOnboardingWindow() -> NSWindow? {
-        let storyboard = NSStoryboard(name: "Main", bundle: Bundle(for: ViewController.self))
+        let storyboard = NSStoryboard(name: "Main", bundle: Bundle(for: ViewControllerNative.self))
         let myViewController =  storyboard.instantiateInitialController() as? NSWindowController
         let window = myViewController?.window
 //        window?.titleVisibility = .hidden
