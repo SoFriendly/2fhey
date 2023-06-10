@@ -265,6 +265,11 @@
          "serviceName":"Geico",
          "matcherPattern":"GEICO: Your verification code is: \\w{6}. It expires in 10 minutes. Please do not reply to this message.",
          "codeExtractorPattern":": (\\w{6})."
+      },
+      {
+         "serviceName":"Google",
+         "matcherPattern":"G-\\d{6} is your Google verification code.",
+         "codeExtractorPattern":"(\\d{6})"
       }
    ]
 }
