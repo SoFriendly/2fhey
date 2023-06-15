@@ -265,6 +265,11 @@
          "serviceName":"Geico",
          "matcherPattern":"GEICO: Your verification code is: \\w{6}. It expires in 10 minutes. Please do not reply to this message.",
          "codeExtractorPattern":": (\\w{6})."
+      },
+      {
+         "serviceName":"DBS Bank",
+         "matcherPattern":"To approve, use [A-Z]{3}-([0-9]{6}) within",
+         "codeExtractorPattern":"([0-9]{6})"
       }
    ]
 }
