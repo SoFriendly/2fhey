@@ -265,6 +265,11 @@
          "serviceName":"Geico",
          "matcherPattern":"GEICO: Your verification code is: \\w{6}. It expires in 10 minutes. Please do not reply to this message.",
          "codeExtractorPattern":": (\\w{6})."
+      },
+      {
+         "serviceName":"OneLogin",
+         "matcherPattern":"Security Code: \\w{6} \\n\\nSecurity code will expire in 2 minutes\\. If you did not request a security code, please contact your administrator\\.",
+         "codeExtractorPattern":"(\\w{6})"
       }
    ]
 }
