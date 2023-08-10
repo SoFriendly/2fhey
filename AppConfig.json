@@ -265,6 +265,11 @@
          "serviceName":"Geico",
          "matcherPattern":"GEICO: Your verification code is: \\w{6}. It expires in 10 minutes. Please do not reply to this message.",
          "codeExtractorPattern":": (\\w{6})."
+      },
+      {
+         "serviceName":"USPS",
+         "matcherPattern":"USPS Account Services: your validation code is \\w{6}\\nMsg & data rates may apply\\nReply HELP for help\\nReply STOP to cancel",
+         "codeExtractorPattern":": (\\w{6})."
       }
    ]
 }
