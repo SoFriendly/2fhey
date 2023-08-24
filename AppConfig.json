@@ -267,6 +267,11 @@
          "codeExtractorPattern":": (\\w{6})."
       },
       {
+         "serviceName":"USPS",
+         "matcherPattern":"USPS Account Services: your validation code is \\w{6}\\nMsg & data rates may apply\\nReply HELP for help\\nReply STOP to cancel",
+         "codeExtractorPattern":": (\\w{6})."
+      },
+      {
          "serviceName":"Google",
          "matcherPattern":"G-\\d{6} is your Google verification code.",
          "codeExtractorPattern":"(\\d{6})"
