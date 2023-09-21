@@ -275,6 +275,11 @@
          "serviceName":"Google",
          "matcherPattern":"G-\\d{6} is your Google verification code.",
          "codeExtractorPattern":"(\\d{6})"
+      },
+      {
+         "serviceName":"AOD",
+         "matcherPattern":"AOD FCU security code: \\d{6}[\\s\\S]+",
+         "codeExtractorPattern":"(\\d{6})"
       }
    ]
 }
