@@ -283,7 +283,7 @@
       },
       {
          "serviceName":"MPC",
-         "matcherPattern":"Dear [\\S]+\\s[\\S]+,[\\s]+Your security code is: \\d{5,6}[\\s]+This code expires in 15 minutes, so please complete this step as soon as possible.",
+         "matcherPattern":"Dear [\\s\\S]+,\n\nYour security code is: \\d{5,6}\n\nThis code expires in 15 minutes, so please complete this step as soon as possible.",
          "codeExtractorPattern":"(\\d{5,6})"
       }
    ]
