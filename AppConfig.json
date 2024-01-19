@@ -280,6 +280,11 @@
          "serviceName":"AOD",
          "matcherPattern":"AOD FCU security code: \\d{6}[\\s\\S]+",
          "codeExtractorPattern":"(\\d{6})"
+      },
+      {
+         "serviceName":"MIGov",
+         "matcherPattern":"Your passcode is \\n\\d{4}-\\d{6}\\n\\nThe passcode will expire in 5 minutes.\\nThank you.",
+         "codeExtractorPattern":"\\d{4}-(\\d{6})"
       }
    ]
 }
