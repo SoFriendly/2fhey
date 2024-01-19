@@ -338,7 +338,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let delayTimeInterval = DispatchTimeInterval.seconds(delaySeconds)
         DispatchQueue.main.asyncAfter(deadline: .now() + delayTimeInterval) {
             if (self.originalClipboardContents != nil) {
-                let window = OverlayWindow(line1: "Clipboard contents restored", line2: nil)
+                let window = OverlayWindow(line1: "Clipboard Restored", line2: nil)
                 self.overlayWindow = window
                 NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
                 self.originalClipboardContents = nil
