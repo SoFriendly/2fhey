@@ -143,6 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
 
         window.makeKeyAndOrderFront(nil)
+        window.level = NSWindow.Level.statusBar
         
         overlayWindow = window
     }
