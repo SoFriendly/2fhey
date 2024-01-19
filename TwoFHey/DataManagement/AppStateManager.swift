@@ -14,6 +14,27 @@ enum FullDiskAccessStatus {
     case authorized, denied, unknown
 }
 
+enum NotificationPosition: Int {
+    case leftEdgeTop, leftEdgeBottom, rightEdgeTop, rightEdgeBottom
+    
+    static let defaultValue: NotificationPosition = .leftEdgeTop
+    
+    static let all: [NotificationPosition] = [.leftEdgeTop, .leftEdgeBottom, .rightEdgeTop, .rightEdgeBottom]
+    
+    var name: String {
+        switch self {
+        case .leftEdgeTop:
+            return "Left Edge, Top"
+        case .leftEdgeBottom:
+            return "Left Edge, Bottom"
+        case .rightEdgeTop:
+            return "Right Edge, Top"
+        case .rightEdgeBottom:
+            return "Right Edge, Bottom"
+        }
+    }
+}
+
 class AppStateManager {
     static let shared = AppStateManager()
     
@@ -25,6 +46,7 @@ class AppStateManager {
         
         static let autoLauncherPrefKey = "com.sofriendly.2fhey.shouldAutoLaunch"
         static let globalShortcutEnabledKey = "com.sofriendly.2fhey.globalShortcutEnabled"
+        static let notificationPositionKey = "com.sofriendly.2fhey.notificationPosition"
         static let restoreContentsDelayTimeKey = "com.sofriendly.2fhey.restoreContentsDelayTime"
         static let restoreContentsEnabledKey = "com.sofriendly.2fhey.restoreContentsEnabledKey"
         static let hasSetupKey = "com.sofriendly.2fhey.hasSetup"
@@ -77,6 +99,19 @@ class AppStateManager {
         }
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: Constants.globalShortcutEnabledKey)
+        }
+    }
+    
+    var notificationPosition: NotificationPosition {
+        get {
+            if let storedRawValue = UserDefaults.standard.value(forKey: Constants.notificationPositionKey) as? Int {
+                return NotificationPosition(rawValue: storedRawValue) ?? NotificationPosition.defaultValue
+            } else {
+                return NotificationPosition.defaultValue
+            }
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue.rawValue, forKey: Constants.notificationPositionKey)
         }
     }
     

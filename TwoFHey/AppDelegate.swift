@@ -13,9 +13,25 @@ import HotKey
 import ApplicationServices
 
 class OverlayWindow: NSWindow {
-    init(line1: String?, line2: String?) {
-        let poisiton = UIConstants.codePopupPosition
-        super.init(contentRect: NSRect(x: poisiton.x, y: poisiton.y, width: 300, height: 150), styleMask: [.closable, .fullSizeContentView, .borderless], backing: .buffered, defer: false)
+    init(line1: String?, line2: String?, position: NotificationPosition = .defaultValue) {
+        let position = AppStateManager.shared.notificationPosition
+        let windowSize = UIConstants.codePopupWindowSize
+        let margin = UIConstants.codePopupMargin
+        var windowRect: NSRect
+        let mainScreenRect = NSScreen.main?.visibleFrame ?? NSRect()
+        
+        switch position {
+        case .leftEdgeTop:
+            windowRect = NSRect(x: margin, y: mainScreenRect.maxY - margin - windowSize.height, width: windowSize.width, height: windowSize.height)
+        case .leftEdgeBottom:
+            windowRect = NSRect(x: margin, y: margin, width: windowSize.width, height: windowSize.height)
+        case .rightEdgeTop:
+            windowRect = NSRect(x: mainScreenRect.maxX - margin - windowSize.width, y: mainScreenRect.maxY - margin - windowSize.height, width: windowSize.width, height: windowSize.height)
+        case .rightEdgeBottom:
+            windowRect = NSRect(x: mainScreenRect.maxX - margin - windowSize.width, y: margin, width: windowSize.width, height: windowSize.height)
+        }
+        
+        super.init(contentRect: windowRect, styleMask: [.closable, .fullSizeContentView, .borderless], backing: .buffered, defer: false)
 
         makeKeyAndOrderFront(nil)
         isReleasedWhenClosed = false
@@ -127,6 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
 
         window.makeKeyAndOrderFront(nil)
+        window.level = NSWindow.Level.statusBar
         
         overlayWindow = window
     }
@@ -175,6 +192,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu.addItem(resyncItem)
         
         let settingsMenu = NSMenu()
+        
+        let notificationPositionMenu = NSMenu()
+        let positions = NotificationPosition.all
+        positions.forEach { position in
+            let item = NSMenuItem(title: position.name, action: #selector(AppDelegate.onPressNotificationPosition), keyEquivalent: "")
+            item.representedObject = position
+            item.state = AppStateManager.shared.notificationPosition == position ? .on : .off
+            notificationPositionMenu.addItem(item)
+        }
+        
+        let notificationPositionItem = NSMenuItem(title: "Notification Position", action: nil, keyEquivalent: "")
+        notificationPositionItem.toolTip = "Select where notifications will appear on the screen"
+        notificationPositionItem.state = .off
+        notificationPositionItem.submenu = notificationPositionMenu
+        settingsMenu.addItem(notificationPositionItem)
+        
         let keyboardShortCutItem = NSMenuItem(title: "Keyboard Shortcuts", action: #selector(AppDelegate.onPressKeyboardShortcuts), keyEquivalent: "")
         keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if 2FHey uses the same keyboard shortcuts as another app"
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
@@ -267,6 +300,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         } else if !AppStateManager.shared.globalShortcutEnabled {
             hotKey = nil
+        }
+    }
+    
+    @objc func onPressNotificationPosition(sender: NSMenuItem) {
+        if let newNotificationPosition = sender.representedObject as? NotificationPosition {
+            AppStateManager.shared.notificationPosition = newNotificationPosition
+            refreshMenu()
         }
     }
     
