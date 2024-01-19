@@ -258,7 +258,7 @@
       },
       {
          "serviceName":"CN General",
-         "matcherPattern":"验证码([(是)(为)]?)(\\d{4,8})",
+         "matcherPattern":"验证码([是为：:\\s]*)(\\d{4,8})",
          "codeExtractorPattern":"(\\d{4,8})"
       },
       {
@@ -285,6 +285,11 @@
          "serviceName":"MIGov",
          "matcherPattern":"Your passcode is \\n\\d{4}-\\d{6}\\n\\nThe passcode will expire in 5 minutes.\\nThank you.",
          "codeExtractorPattern":"\\d{4}-(\\d{6})"
+      },
+     {
+         "serviceName":"MPC",
+         "matcherPattern":"Dear [\\s\\S]+,\n\nYour security code is: \\d{5,6}\n\nThis code expires in 15 minutes, so please complete this step as soon as possible.",
+         "codeExtractorPattern":"(\\d{5,6})"
       }
    ]
 }
