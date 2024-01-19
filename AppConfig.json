@@ -267,6 +267,10 @@
          "codeExtractorPattern":": (\\w{6})."
       },
       {
+         "serviceName":"OneLogin",
+         "matcherPattern":"Security Code: \\w{6} \\n\\nSecurity code will expire in 2 minutes\\. If you did not request a security code, please contact your administrator\\.",
+         "codeExtractorPattern":"(\\w{6})"
+      },
          "serviceName":"USPS",
          "matcherPattern":"USPS Account Services: your validation code is \\w{6}\\nMsg & data rates may apply\\nReply HELP for help\\nReply STOP to cancel",
          "codeExtractorPattern":": (\\w{6})."
