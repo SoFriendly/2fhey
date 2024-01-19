@@ -267,6 +267,11 @@
          "codeExtractorPattern":": (\\w{6})."
       },
       {
+         "serviceName":"DBS Bank",
+         "matcherPattern":"To approve, use [A-Z]{3}-([0-9]{6}) within",
+         "codeExtractorPattern":"([0-9]{6})"
+      },
+     {
          "serviceName":"OneLogin",
          "matcherPattern":"Security Code: \\w{6} \\n\\nSecurity code will expire in 2 minutes\\. If you did not request a security code, please contact your administrator\\.",
          "codeExtractorPattern":"(\\w{6})"
