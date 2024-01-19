@@ -13,9 +13,25 @@ import HotKey
 import ApplicationServices
 
 class OverlayWindow: NSWindow {
-    init(line1: String?, line2: String?) {
-        let poisiton = UIConstants.codePopupPosition
-        super.init(contentRect: NSRect(x: poisiton.x, y: poisiton.y, width: 300, height: 150), styleMask: [.closable, .fullSizeContentView, .borderless], backing: .buffered, defer: false)
+    init(line1: String?, line2: String?, position: NotificationPosition = .defaultValue) {
+        let position = AppStateManager.shared.notificationPosition
+        let windowSize = UIConstants.codePopupWindowSize
+        let margin = UIConstants.codePopupMargin
+        var windowRect: NSRect
+        let mainScreenRect = NSScreen.main?.visibleFrame ?? NSRect()
+        
+        switch position {
+        case .leftEdgeTop:
+            windowRect = NSRect(x: margin, y: mainScreenRect.maxY - margin - windowSize.height, width: windowSize.width, height: windowSize.height)
+        case .leftEdgeBottom:
+            windowRect = NSRect(x: margin, y: margin, width: windowSize.width, height: windowSize.height)
+        case .rightEdgeTop:
+            windowRect = NSRect(x: mainScreenRect.maxX - margin - windowSize.width, y: mainScreenRect.maxY - margin - windowSize.height, width: windowSize.width, height: windowSize.height)
+        case .rightEdgeBottom:
+            windowRect = NSRect(x: mainScreenRect.maxX - margin - windowSize.width, y: margin, width: windowSize.width, height: windowSize.height)
+        }
+        
+        super.init(contentRect: windowRect, styleMask: [.closable, .fullSizeContentView, .borderless], backing: .buffered, defer: false)
 
         makeKeyAndOrderFront(nil)
         isReleasedWhenClosed = false
