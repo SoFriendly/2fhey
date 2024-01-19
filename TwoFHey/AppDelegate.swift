@@ -175,6 +175,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu.addItem(resyncItem)
         
         let settingsMenu = NSMenu()
+        
+        let notificationPositionMenu = NSMenu()
+        let positions = NotificationPosition.all
+        positions.forEach { position in
+            let item = NSMenuItem(title: position.name, action: #selector(AppDelegate.onPressNotificationPosition), keyEquivalent: "")
+            item.representedObject = position
+            item.state = AppStateManager.shared.notificationPosition == position ? .on : .off
+            notificationPositionMenu.addItem(item)
+        }
+        
+        let notificationPositionItem = NSMenuItem(title: "Notification Position", action: nil, keyEquivalent: "")
+        notificationPositionItem.toolTip = "Select where notifications will appear on the screen"
+        notificationPositionItem.state = .off
+        notificationPositionItem.submenu = notificationPositionMenu
+        settingsMenu.addItem(notificationPositionItem)
+        
         let keyboardShortCutItem = NSMenuItem(title: "Keyboard Shortcuts", action: #selector(AppDelegate.onPressKeyboardShortcuts), keyEquivalent: "")
         keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if 2FHey uses the same keyboard shortcuts as another app"
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
@@ -267,6 +283,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         } else if !AppStateManager.shared.globalShortcutEnabled {
             hotKey = nil
+        }
+    }
+    
+    @objc func onPressNotificationPosition(sender: NSMenuItem) {
+        if let newNotificationPosition = sender.representedObject as? NotificationPosition {
+            AppStateManager.shared.notificationPosition = newNotificationPosition
+            refreshMenu()
         }
     }
     
