@@ -280,6 +280,11 @@
          "serviceName":"AOD",
          "matcherPattern":"AOD FCU security code: \\d{6}[\\s\\S]+",
          "codeExtractorPattern":"(\\d{6})"
+      },
+      {
+         "serviceName":"MPC",
+         "matcherPattern":"Dear [\\s\\S]+,\n\nYour security code is: \\d{5,6}\n\nThis code expires in 15 minutes, so please complete this step as soon as possible.",
+         "codeExtractorPattern":"(\\d{5,6})"
       }
    ]
 }
