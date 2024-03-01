@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  AutoLauncher
-//
-//  Created by Drew Pomerleau on 5/1/22.
-//
-
 import Cocoa
 
 let TwoFHeyKillLauncherNotification = Notification.Name("TwoFHeyKillLauncherNotification")

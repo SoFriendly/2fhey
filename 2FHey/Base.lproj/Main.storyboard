@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Application-->
+        <scene sceneID="JPo-4y-FX3">
+            <objects>
+                <application id="hnw-xV-0zn" sceneMemberID="viewController">
+                    <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+                        <items>
+                            <menuItem title="2FHey" id="1Xt-HY-uBw">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="2FHey" systemMenu="apple" id="uQy-DD-JDr">
+                                    <items>
+                                        <menuItem title="About 2FHey" id="5kV-Vb-QxS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Check for Updates" id="pFf-uA-7Ga">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="hide:" target="Ady-hI-5gd" id="Ffz-dG-1hh"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                                        <menuItem title="Hide 2FHey" keyEquivalent="h" id="Olw-nP-bQN">
+                                            <connections>
+                                                <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="hideOtherApplications:" target="Ady-hI-5gd" id="VT4-aY-XCT"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Show All" id="Kd2-mp-pUS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="unhideAllApplications:" target="Ady-hI-5gd" id="Dhg-Le-xox"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
+                                        <menuItem title="Quit 2FHey" keyEquivalent="q" id="4sb-4s-VLi">
+                                            <connections>
+                                                <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Help" hidden="YES" enabled="NO" id="wpr-3q-Mcd">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                    </menu>
+                    <connections>
+                        <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
+                    </connections>
+                </application>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="_FHey" customModuleProvider="target"/>
+                <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+                <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="75" y="0.0"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="R2V-B0-nI4">
+            <objects>
+                <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
+                    <window key="window" title="2FHey" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                        <windowStyleMask key="styleMask" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="196" y="172" width="830" height="511"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="7GX-Ad-kHa" kind="relationship" relationship="window.shadowedContentViewController" id="9O2-z8-upc"/>
+                    </connections>
+                </windowController>
+            </objects>
+            <point key="canvasLocation" x="81" y="433.5"/>
+        </scene>
+        <!--View Controller Native-->
+        <scene sceneID="2Nh-lJ-438">
+            <objects>
+                <customObject id="2LY-Sl-brB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <viewController id="7GX-Ad-kHa" customClass="ViewControllerNative" customModule="_FHey" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="cBE-z0-DVQ">
+                        <rect key="frame" x="0.0" y="0.0" width="873" height="548"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Rc1-wH-dv2">
+                                <rect key="frame" x="0.0" y="0.0" width="873" height="548"/>
+                                <subviews>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="xe7-qa-jwg">
+                                        <rect key="frame" x="52" y="335" width="100" height="125"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="5Xs-wT-A30"/>
+                                    </imageView>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4iA-cm-AxR">
+                                        <rect key="frame" x="418" y="18" width="600" height="513"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="513" id="38v-8b-M41"/>
+                                            <constraint firstAttribute="width" constant="600" id="PYN-Wb-6mG"/>
+                                        </constraints>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="example" id="grr-GW-gWX"/>
+                                    </imageView>
+                                    <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GIZ-vp-171">
+                                        <rect key="frame" x="35" y="43" width="394" height="251"/>
+                                        <subviews>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qqW-5C-cMf">
+                                                <rect key="frame" x="11" y="188" width="220" height="14"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Thanks for downloading 2FHey!" id="zmm-Pa-qLO">
+                                                    <font key="font" size="12" name="SFMono-Regular"/>
+                                                    <color key="textColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LqF-3P-dR8">
+                                                <rect key="frame" x="11" y="215" width="232" height="28"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Welcome to 2FHey" id="mb8-lu-4mg">
+                                                    <font key="font" size="23" name="SFMono-Bold"/>
+                                                    <color key="textColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CXs-UH-2oP">
+                                                <rect key="frame" x="11" y="111" width="366" height="61"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" id="eZd-z4-dtN">
+                                                    <font key="font" size="13" name="SFMono-Regular"/>
+                                                    <string key="title">2FHey is a Mac only app that takes OTP texts 
+from iMessage and sends them to your 
+clipboard to easily and quickly autofill.</string>
+                                                    <color key="textColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Pkz-cL-FpH">
+                                                <rect key="frame" x="13" y="46" width="120" height="47"/>
+                                                <subviews>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qfy-6D-irz">
+                                                        <rect key="frame" x="0.0" y="0.0" width="120" height="47"/>
+                                                        <buttonCell key="cell" type="bevel" title="Get Started" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="ryy-oa-v04">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" size="14" name="SFMono-Semibold"/>
+                                                        </buttonCell>
+                                                        <color key="bezelColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="contentTintColor" name="selectedTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <connections>
+                                                            <action selector="btnGetStartedAction:" target="7GX-Ad-kHa" id="dhH-u5-MgX"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="47" id="FI3-Cq-Vpm"/>
+                                                    <constraint firstAttribute="width" constant="120" id="G2u-UI-dtz"/>
+                                                    <constraint firstItem="qfy-6D-irz" firstAttribute="leading" secondItem="Pkz-cL-FpH" secondAttribute="leading" id="HCh-v7-HJ5"/>
+                                                    <constraint firstAttribute="trailing" secondItem="qfy-6D-irz" secondAttribute="trailing" id="Mw3-bm-faj"/>
+                                                    <constraint firstItem="qfy-6D-irz" firstAttribute="top" secondItem="Pkz-cL-FpH" secondAttribute="top" id="cLR-qo-W7P"/>
+                                                    <constraint firstAttribute="bottom" secondItem="qfy-6D-irz" secondAttribute="bottom" id="pOd-f1-1s2"/>
+                                                </constraints>
+                                            </customView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="Pkz-cL-FpH" firstAttribute="leading" secondItem="GIZ-vp-171" secondAttribute="leading" constant="13" id="AgR-kU-DIq"/>
+                                            <constraint firstAttribute="height" constant="251" id="c09-fK-UPZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="Pkz-cL-FpH" secondAttribute="bottom" constant="46" id="n3E-Sa-dlo"/>
+                                            <constraint firstAttribute="width" constant="394" id="njX-NE-mX9"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dGo-b0-Wey">
+                                        <rect key="frame" x="35" y="51" width="410" height="308"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pgY-aO-C9D">
+                                                <rect key="frame" x="18" y="244" width="328" height="56"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" id="s7f-J5-eIU">
+                                                    <font key="font" size="23" name="SFMono-Heavy"/>
+                                                    <string key="title">2FHey needs full disk 
+permissions</string>
+                                                    <color key="textColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b9o-ee-LjZ">
+                                                <rect key="frame" x="18" y="220" width="309" height="14"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Promise, there's no other way to do this." id="PbO-QW-L3V">
+                                                    <font key="font" size="12" name="SFMono-Regular"/>
+                                                    <color key="textColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uN9-DA-41x">
+                                                <rect key="frame" x="18" y="136" width="380" height="73"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" id="gpR-Yc-kIe">
+                                                    <font key="font" size="12" name="SFMono-Regular"/>
+                                                    <string key="title">I know, I know. It's an invasive sounding permission.
+2FHey is open source so feel free to check the code.</string>
+                                                    <color key="textColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8gM-bE-hsj">
+                                                <rect key="frame" x="59" y="132" width="98" height="16"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="bevel" title="Accessibility -&gt;" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="tfw-hK-IQv">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <color key="bezelColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="contentTintColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="btnAccessibiliyAction:" target="7GX-Ad-kHa" id="AvM-g3-fas"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lNZ-WQ-DS4">
+                                                <rect key="frame" x="59" y="108" width="119" height="16"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="bevel" title="Full disk Access -&gt;" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="VPE-aZ-hdc">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <color key="bezelColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="contentTintColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="btnFullDiskAction:" target="7GX-Ad-kHa" id="Ksa-3w-wwT"/>
+                                                </connections>
+                                            </button>
+                                            <button hidden="YES" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4IQ-ql-Hon">
+                                                <rect key="frame" x="20" y="31" width="120" height="47"/>
+                                                <buttonCell key="cell" type="bevel" title="Restart" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="WgF-eW-i7S">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" size="15" name="SFMono-Bold"/>
+                                                </buttonCell>
+                                                <color key="bezelColor" red="0.08235294118" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="contentTintColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="47" id="AV9-tm-oEu"/>
+                                                    <constraint firstAttribute="width" constant="120" id="fZE-Bu-fVv"/>
+                                                </constraints>
+                                                <connections>
+                                                    <action selector="btnRestartAction:" target="7GX-Ad-kHa" id="KRW-t5-lGi"/>
+                                                </connections>
+                                            </button>
+                                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="emu-BF-d7u">
+                                                <rect key="frame" x="20" y="133" width="15" height="15"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            </customView>
+                                            <customView id="Lco-sW-UEw">
+                                                <rect key="frame" x="20" y="109" width="15" height="15"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            </customView>
+                                        </subviews>
+                                    </customView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="4iA-cm-AxR" firstAttribute="centerY" secondItem="Rc1-wH-dv2" secondAttribute="centerY" id="KhA-QK-by0"/>
+                                    <constraint firstItem="GIZ-vp-171" firstAttribute="leading" secondItem="Rc1-wH-dv2" secondAttribute="leading" constant="35" id="ZRx-C0-yFw"/>
+                                    <constraint firstAttribute="trailing" secondItem="4iA-cm-AxR" secondAttribute="trailing" constant="-145" id="g9m-JN-Ycb"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Rc1-wH-dv2" firstAttribute="top" secondItem="cBE-z0-DVQ" secondAttribute="top" id="I7S-3p-AZ4"/>
+                            <constraint firstAttribute="trailing" secondItem="Rc1-wH-dv2" secondAttribute="trailing" id="TMD-oc-jEM"/>
+                            <constraint firstItem="Rc1-wH-dv2" firstAttribute="leading" secondItem="cBE-z0-DVQ" secondAttribute="leading" id="jKV-Kh-eVG"/>
+                            <constraint firstAttribute="bottom" secondItem="Rc1-wH-dv2" secondAttribute="bottom" id="r4x-m1-COb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnAccessibility" destination="8gM-bE-hsj" id="XU2-d2-cGl"/>
+                        <outlet property="btnFullDisk" destination="lNZ-WQ-DS4" id="HU6-Md-DDx"/>
+                        <outlet property="btnGetStarted" destination="qfy-6D-irz" id="U29-Z6-JxO"/>
+                        <outlet property="btnRestart" destination="4IQ-ql-Hon" id="XKP-AZ-SBx"/>
+                        <outlet property="containerView" destination="Rc1-wH-dv2" id="XzN-sn-xlg"/>
+                        <outlet property="containerView1" destination="GIZ-vp-171" id="gF9-bN-1aD"/>
+                        <outlet property="containerView2" destination="dGo-b0-Wey" id="49s-9X-SNw"/>
+                        <outlet property="imgLogo" destination="xe7-qa-jwg" id="Rdv-tH-3DP"/>
+                        <outlet property="mainView" destination="cBE-z0-DVQ" id="E5g-o5-rM8"/>
+                        <outlet property="viewBtnGetStarted" destination="Pkz-cL-FpH" id="O0c-cl-9lM"/>
+                        <outlet property="viewStatus1" destination="emu-BF-d7u" id="YzW-WI-zA0"/>
+                        <outlet property="viewStatus2" destination="Lco-sW-UEw" id="mHd-xQ-wae"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="990.5" y="806"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="hIz-AP-VOD">
+            <objects>
+                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="_FHey" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="m2S-Jp-Qdl">
+                        <rect key="frame" x="0.0" y="0.0" width="873" height="547"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HsG-zN-YDg">
+                                <rect key="frame" x="0.0" y="0.0" width="873" height="547"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="HsG-zN-YDg" secondAttribute="trailing" id="5N4-XR-tNT"/>
+                            <constraint firstItem="HsG-zN-YDg" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="L8x-8E-bC7"/>
+                            <constraint firstItem="HsG-zN-YDg" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="OWE-Q0-bOY"/>
+                            <constraint firstAttribute="bottom" secondItem="HsG-zN-YDg" secondAttribute="bottom" id="lVe-h7-dyA"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webkitView" destination="HsG-zN-YDg" id="FDs-G5-oMw"/>
+                    </connections>
+                </viewController>
+                <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="81.5" y="1231.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="example" width="761" height="513"/>
+        <image name="logo" width="521" height="600"/>
+    </resources>
+</document>
