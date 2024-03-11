@@ -299,6 +299,11 @@
          "serviceName":"MPC",
          "matcherPattern":"Dear [\\s\\S]+,\n\nYour security code is: \\d{5,6}\n\nThis code expires in 15 minutes, so please complete this step as soon as possible.",
          "codeExtractorPattern":"(\\d{5,6})"
+      },
+      {
+         "serviceName": "pf-bank",
+         "matcherPattern": "^[0-9]{8}\\nValid 5 minutes\\nDurata 5 minuti\\nDurée 5 minutes\\nGültig 5 Minuten$",
+         "codeExtractorPattern": "^[0-9]{8}"
       }
    ]
 }
