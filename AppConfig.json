@@ -302,7 +302,7 @@
       },
       {
          "serviceName": "pf-bank",
-         "matcherPattern": "^[0-9]{8}\\nValid 5 minutes\\nDurata 5 minuti\\nDurée 5 minutes\\nGültig 5 Minuten$",
+         "matcherPattern": "^[0-9]{8}\nValid 5 minutes\nDurata 5 minuti\nDurée 5 minutes\nGültig 5 Minuten$",
          "codeExtractorPattern": "^[0-9]{8}"
       }
    ]
