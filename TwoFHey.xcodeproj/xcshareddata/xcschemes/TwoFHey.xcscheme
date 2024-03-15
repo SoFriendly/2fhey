@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D4F5CA9B2817688800A39E6D"
-               BuildableName = "2FHey.app"
-               BlueprintName = "2FHey"
-               ReferencedContainer = "container:2FHey.xcodeproj">
+               BuildableName = "TwoFHey.app"
+               BlueprintName = "TwoFHey"
+               ReferencedContainer = "container:TwoFHey.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D4123A7B2826EF3B002C3C42"
-               BuildableName = "2FHeyTests.xctest"
-               BlueprintName = "2FHeyTests"
-               ReferencedContainer = "container:2FHey.xcodeproj">
+               BuildableName = "TwoFHeyTests.xctest"
+               BlueprintName = "TwoFHeyTests"
+               ReferencedContainer = "container:TwoFHey.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D4F5CA9B2817688800A39E6D"
-            BuildableName = "2FHey.app"
-            BlueprintName = "2FHey"
-            ReferencedContainer = "container:2FHey.xcodeproj">
+            BuildableName = "TwoFHey.app"
+            BlueprintName = "TwoFHey"
+            ReferencedContainer = "container:TwoFHey.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D4F5CA9B2817688800A39E6D"
-            BuildableName = "2FHey.app"
-            BlueprintName = "2FHey"
-            ReferencedContainer = "container:2FHey.xcodeproj">
+            BuildableName = "TwoFHey.app"
+            BlueprintName = "TwoFHey"
+            ReferencedContainer = "container:TwoFHey.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
@@ -83,7 +83,6 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
-      customArchiveName = "2FHey"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

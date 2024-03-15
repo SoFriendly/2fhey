@@ -10,6 +10,7 @@
 		6547376E29B8973800523B18 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6547376D29B8973800523B18 /* Permission.swift */; };
 		658FC8BA29B8395D008CB815 /* ViewControllerNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658FC8B929B8395D008CB815 /* ViewControllerNative.swift */; };
 		D4123A7628261377002C3C42 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7528261377002C3C42 /* UIConstants.swift */; };
+		D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */; };
 		D41FABD828177D7F00B0F829 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41FABD728177D7F00B0F829 /* WebKit.framework */; };
 		D4331327281F5D3500AC5343 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D4331326281F5D3500AC5343 /* SQLite */; };
 		D433132F281F630400AC5343 /* AutoLauncherAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D433132E281F630400AC5343 /* AutoLauncherAppDelegate.swift */; };
@@ -34,6 +35,16 @@
 		D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAC22817725100A39E6D /* AppStateManager.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D4123A802826EF3B002C3C42 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D4F5CA942817688800A39E6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D4F5CA9B2817688800A39E6D;
+			remoteInfo = TwoFHey;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		D433133E281F652900AC5343 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -52,6 +63,8 @@
 		6547376D29B8973800523B18 /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
 		658FC8B929B8395D008CB815 /* ViewControllerNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerNative.swift; sourceTree = "<group>"; };
 		D4123A7528261377002C3C42 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwoFHeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFHeyTests.swift; sourceTree = "<group>"; };
 		D41FABD728177D7F00B0F829 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		D41FABE428178CDB00B0F829 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D433132C281F630400AC5343 /* AutoLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AutoLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,11 +78,11 @@
 		D479A3E62822B7B300915AAA /* ParserConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserConfigManager.swift; sourceTree = "<group>"; };
 		D4AF833C2825FEE70034A7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D4AF833E2826018D0034A7BE /* Main.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Main.xib; sourceTree = "<group>"; };
-		D4F5CA9C2817688800A39E6D /* 2FHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2FHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4F5CA9C2817688800A39E6D /* TwoFHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoFHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F5CA9F2817688800A39E6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4F5CAA32817688900A39E6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D4F5CAA62817688900A39E6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		D4F5CAA82817688900A39E6D /* 2FHey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = 2FHey.entitlements; sourceTree = "<group>"; };
+		D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TwoFHey.entitlements; sourceTree = "<group>"; };
 		D4F5CAAF281768B000A39E6D /* OTPParserContants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParserContants.swift; sourceTree = "<group>"; };
 		D4F5CAB0281768B000A39E6D /* CustomOTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomOTPParser.swift; sourceTree = "<group>"; };
 		D4F5CAB1281768B000A39E6D /* OTPParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTPParser.swift; sourceTree = "<group>"; };
@@ -80,6 +93,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D4123A792826EF3B002C3C42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4331329281F630400AC5343 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -101,6 +121,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */ = {
+			isa = PBXGroup;
+			children = (
+				D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */,
+			);
+			path = TwoFHeyTests;
+			sourceTree = "<group>";
+		};
 		D41FABD628177D7F00B0F829 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,8 +162,9 @@
 		D4F5CA932817688800A39E6D = {
 			isa = PBXGroup;
 			children = (
-				D4F5CA9E2817688800A39E6D /* 2FHey */,
+				D4F5CA9E2817688800A39E6D /* TwoFHey */,
 				D433132D281F630400AC5343 /* AutoLauncher */,
+				D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */,
 				D4F5CA9D2817688800A39E6D /* Products */,
 				D41FABD628177D7F00B0F829 /* Frameworks */,
 			);
@@ -144,13 +173,14 @@
 		D4F5CA9D2817688800A39E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D4F5CA9C2817688800A39E6D /* 2FHey.app */,
+				D4F5CA9C2817688800A39E6D /* TwoFHey.app */,
 				D433132C281F630400AC5343 /* AutoLauncher.app */,
+				D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D4F5CA9E2817688800A39E6D /* 2FHey */ = {
+		D4F5CA9E2817688800A39E6D /* TwoFHey */ = {
 			isa = PBXGroup;
 			children = (
 				D4AF833C2825FEE70034A7BE /* Info.plist */,
@@ -163,11 +193,11 @@
 				658FC8B929B8395D008CB815 /* ViewControllerNative.swift */,
 				D4F5CAA32817688900A39E6D /* Assets.xcassets */,
 				D4F5CAA52817688900A39E6D /* Main.storyboard */,
-				D4F5CAA82817688900A39E6D /* 2FHey.entitlements */,
+				D4F5CAA82817688900A39E6D /* TwoFHey.entitlements */,
 				D41FABE428178CDB00B0F829 /* main.swift */,
 				D4123A7528261377002C3C42 /* UIConstants.swift */,
 			);
-			path = 2FHey;
+			path = TwoFHey;
 			sourceTree = "<group>";
 		};
 		D4F5CAAE281768A100A39E6D /* OTPParser */ = {
@@ -202,6 +232,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D4123A7B2826EF3B002C3C42 /* TwoFHeyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4123A822826EF3B002C3C42 /* Build configuration list for PBXNativeTarget "TwoFHeyTests" */;
+			buildPhases = (
+				D4123A782826EF3B002C3C42 /* Sources */,
+				D4123A792826EF3B002C3C42 /* Frameworks */,
+				D4123A7A2826EF3B002C3C42 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D4123A812826EF3B002C3C42 /* PBXTargetDependency */,
+			);
+			name = TwoFHeyTests;
+			productName = TwoFHeyTests;
+			productReference = D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D433132B281F630400AC5343 /* AutoLauncher */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4331338281F630600AC5343 /* Build configuration list for PBXNativeTarget "AutoLauncher" */;
@@ -219,9 +267,9 @@
 			productReference = D433132C281F630400AC5343 /* AutoLauncher.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D4F5CA9B2817688800A39E6D /* 2FHey */ = {
+		D4F5CA9B2817688800A39E6D /* TwoFHey */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "2FHey" */;
+			buildConfigurationList = D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */;
 			buildPhases = (
 				D4F5CA982817688800A39E6D /* Sources */,
 				D4F5CA992817688800A39E6D /* Frameworks */,
@@ -233,13 +281,13 @@
 			);
 			dependencies = (
 			);
-			name = 2FHey;
+			name = TwoFHey;
 			packageProductDependencies = (
 				D4331326281F5D3500AC5343 /* SQLite */,
 				D4331343281F6B6700AC5343 /* HotKey */,
 			);
 			productName = TwoFHey;
-			productReference = D4F5CA9C2817688800A39E6D /* 2FHey.app */;
+			productReference = D4F5CA9C2817688800A39E6D /* TwoFHey.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -252,6 +300,10 @@
 				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
+					D4123A7B2826EF3B002C3C42 = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = D4F5CA9B2817688800A39E6D;
+					};
 					D433132B281F630400AC5343 = {
 						CreatedOnToolsVersion = 13.3.1;
 					};
@@ -260,7 +312,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "2FHey" */;
+			buildConfigurationList = D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "TwoFHey" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -277,13 +329,21 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D4F5CA9B2817688800A39E6D /* 2FHey */,
+				D4F5CA9B2817688800A39E6D /* TwoFHey */,
 				D433132B281F630400AC5343 /* AutoLauncher */,
+				D4123A7B2826EF3B002C3C42 /* TwoFHeyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D4123A7A2826EF3B002C3C42 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D433132A281F630400AC5343 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -326,6 +386,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D4123A782826EF3B002C3C42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4331328281F630400AC5343 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -359,6 +427,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D4123A812826EF3B002C3C42 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D4F5CA9B2817688800A39E6D /* TwoFHey */;
+			targetProxy = D4123A802826EF3B002C3C42 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		D4F5CAA52817688900A39E6D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -371,6 +447,40 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D4123A832826EF3B002C3C42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H66PPM438;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey.TwoFHeyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwoFHey.app/Contents/MacOS/TwoFHey";
+			};
+			name = Debug;
+		};
+		D4123A842826EF3B002C3C42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H66PPM438;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey.TwoFHeyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwoFHey.app/Contents/MacOS/TwoFHey";
+			};
+			name = Release;
+		};
 		D4331339281F630600AC5343 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -378,11 +488,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
 				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoLauncher/Info.plist;
@@ -409,11 +517,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AutoLauncher/AutoLauncher.entitlements;
 				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoLauncher/Info.plist;
@@ -553,29 +659,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = 2FHey/2FHey.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = 2FHey/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = 2FHey;
+				INFOPLIST_FILE = TwoFHey/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -588,29 +690,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = 2FHey/2FHey.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = 2FHey/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = 2FHey;
+				INFOPLIST_FILE = TwoFHey/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -619,6 +717,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D4123A822826EF3B002C3C42 /* Build configuration list for PBXNativeTarget "TwoFHeyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4123A832826EF3B002C3C42 /* Debug */,
+				D4123A842826EF3B002C3C42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D4331338281F630600AC5343 /* Build configuration list for PBXNativeTarget "AutoLauncher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -628,7 +735,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "2FHey" */ = {
+		D4F5CA972817688800A39E6D /* Build configuration list for PBXProject "TwoFHey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D4F5CAA92817688900A39E6D /* Debug */,
@@ -637,7 +744,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "2FHey" */ = {
+		D4F5CAAB2817688900A39E6D /* Build configuration list for PBXNativeTarget "TwoFHey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D4F5CAAC2817688900A39E6D /* Debug */,
