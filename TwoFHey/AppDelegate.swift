@@ -63,6 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let icon = NSImage(named: "TrayIcon")!
         icon.isTemplate = true
+        print("App Launched")
 
         // Create the status item
         let statusBar = NSStatusBar.system
