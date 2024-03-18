@@ -307,7 +307,7 @@
          "codeExtractorPattern": "^[0-9]{8}"
       },
       {
-         "serviceName": "Online Account Access",
+         "serviceName": "Vodafone",
          "matcherPattern": "Don't share this code with anyone\\. Fraudsters can use it to access your online account and place orders\\. The code is valid for 20 minutes\\. Your code is [0-9A-Z]{5}\\.",
          "codeExtractorPattern": "([0-9A-Z]{5})\\."
       },
