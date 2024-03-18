@@ -311,9 +311,9 @@
          "matcherPattern": "Don't share this code with anyone\\. Fraudsters can use it to access your online account and place orders\\. The code is valid for 20 minutes\\. Your code is [0-9A-Z]{5}\\.",
          "codeExtractorPattern": "([0-9A-Z]{5})\\."
       },
-      {
+   {
          "serviceName": "Amex SafeKey",
-         "matcherPattern": "Your Amex SafeKey One-Time Password for INR \\d+\\.\\d\\d is (\\d{6})\\.\\sValid for \\d+ mins for Card ending xxxxx\\. Never share this password\\.",
+         "matcherPattern": "Your Amex SafeKey One-Time Password for INR \\d+\\.\\d\\d is (\\d{6})\\. Valid for \\d+ mins for Card ending xxxxx\\. Never share this password\\.",
          "codeExtractorPattern": "(\\d{6})"
       },
       {
