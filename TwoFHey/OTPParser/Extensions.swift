@@ -26,13 +26,13 @@ extension StringProtocol {
 
 extension NSTextCheckingResult {
     func firstCaptureGroupInString(_ string: String) -> String? {
-        guard numberOfRanges > 0 else { return nil }
-        let matchRange = range(at: 1)
-        guard let substringRange = Range(matchRange, in: string) else { return nil }
+        // Check if the desired capture group index is within bounds
+        guard numberOfRanges > 1, let substringRange = Range(range(at: 1), in: string) else { return nil }
         
         return String(string[substringRange])
     }
 }
+
 
 extension NSRegularExpression {
     public func firstMatchInString(_ string: String) -> NSTextCheckingResult? {
