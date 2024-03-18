@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D4F5CA9B2817688800A39E6D"
-               BuildableName = "TwoFHey.app"
+               BuildableName = "2FHey.app"
                BlueprintName = "TwoFHey"
                ReferencedContainer = "container:TwoFHey.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D4F5CA9B2817688800A39E6D"
-            BuildableName = "TwoFHey.app"
+            BuildableName = "2FHey.app"
             BlueprintName = "TwoFHey"
             ReferencedContainer = "container:TwoFHey.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D4F5CA9B2817688800A39E6D"
-            BuildableName = "TwoFHey.app"
+            BuildableName = "2FHey.app"
             BlueprintName = "TwoFHey"
             ReferencedContainer = "container:TwoFHey.xcodeproj">
          </BuildableReference>

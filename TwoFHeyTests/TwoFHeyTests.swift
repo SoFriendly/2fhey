@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import TwoFHey
+import _FHey
 
 class TwoFHeyTests: XCTestCase {
 

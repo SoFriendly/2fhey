@@ -461,7 +461,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwoFHey.app/Contents/MacOS/TwoFHey";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/2FHey.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/2FHey";
 			};
 			name = Debug;
 		};
@@ -479,7 +479,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwoFHey.app/Contents/MacOS/TwoFHey";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/2FHey.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/2FHey";
 			};
 			name = Release;
 		};
