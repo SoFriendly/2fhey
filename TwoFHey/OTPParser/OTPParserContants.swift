@@ -7,8 +7,8 @@ protocol OTParserConfig {
 }
 
 struct OTPParserConstants {
-    static let googleOTPRegex = try! NSRegularExpression(pattern: #"\b([A-Z0-9]{5})\b"#)
-    
+    static let googleOTPRegex = try! NSRegularExpression(pattern: #"\b(G-[A-Z0-9]{5})\b"#)
+
     static let endingCharacters: Set<Character> = [",", ".", "!", " ", "，", "。"]
     
     static let knownServices = [
@@ -275,9 +275,13 @@ struct OTPParserConstants {
     struct CodeMatchingRegularExpressions {
         static let standardFourToEight = try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)
         static let dashedThreeAndThree = try! NSRegularExpression(pattern: #"\b(\d{3}[- ]\d{3})\b"#)
-        static let alphanumericWordContainingDigits = try! NSRegularExpression(pattern: #"\b([a-zA-Z]*\d+[a-zA-Z]*)\b"#)
-        static let customIgnoreDotZeroZero = try! NSRegularExpression(pattern: #"\b(\d{2,8}(?:\.00)?)\b"#)
+        static let alphanumericWordContainingDigits = try! NSRegularExpression(pattern: #"\b([a-zA-Z]*\d[a-zA-Z\d]{3,})\b"#, options: .caseInsensitive)
+
+        static let customIgnoreDotZeroZero = try! NSRegularExpression(pattern: #"\b(\d{4,8}(?:\.00)?)\b"#)
     }
+
+
+
 
     
 }
