@@ -10,13 +10,20 @@ public class ParserConfigManager: ObservableObject {
         config = loadLocalServiceConfig() ?? ParserConfigManager.DEFAULT_CONFIG
         print("Loaded config: \(String(describing: config))")
     }
+    
+    // Uncomment this out if you want to test codes locally
 
+//    private var configurationFilePath: URL? {
+//        let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL
+//        let filePath = documentsUrl.appendingPathComponent("2fheyConfiguration.json")
+//        print("Configuration file path: \(filePath)")
+//        return filePath
+//    }
+    
     private var configurationFilePath: URL? {
-        let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL
-        let filePath = documentsUrl.appendingPathComponent("2fheyConfiguration.json")
-        print("Configuration file path: \(filePath)")
-        return filePath
-    }
+            let documentsUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0] as NSURL
+            return documentsUrl.appendingPathComponent("2fheyConfiguration.json")
+        }
 
     private func loadLocalServiceConfig() -> OTPParserConfiguration? {
         print("Loading local service config")

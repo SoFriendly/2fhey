@@ -42,17 +42,16 @@ class MessageManager: ObservableObject {
     }
     
     private func loadMessagesAfterDate(_ date: Date) throws -> [Message] {
-
         var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
         homeDirectory.appendPathComponent("/Library/Messages/chat.db")
         let db = try Connection(homeDirectory.absoluteString)
         
         let textColumn = Expression<String?>("text")
-
         let guidColumn = Expression<String>("guid")
         let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
         let fromMeColumn = Expression<Bool>("is_from_me")
         let dateColumn = Expression<Int>("date")
+        let serviceColumn = Expression<String>("service")
         
         let ROWID = Expression<Int>("ROWID")
 
@@ -62,10 +61,10 @@ class MessageManager: ObservableObject {
         let messageHandleId = messageTable[Expression<Int>("handle_id")]
         
         let query = messageTable
-            .select(guidColumn, fromMeColumn, textColumn, cacheRoomnamesColumn, dateColumn, handleFrom)
+            .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
             .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-            .where(dateColumn > timeOffsetForDate(date))
-            .order(dateColumn.asc)
+            .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
+            .order(messageTable[dateColumn].asc)
 
         let mapRowIterator = try db.prepareRowIterator(query)
         let messages = try mapRowIterator.map { messageRow -> Message? in

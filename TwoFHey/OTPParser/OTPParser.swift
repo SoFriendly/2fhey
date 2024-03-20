@@ -70,6 +70,7 @@ public class TwoFHeyOTPParser: OTPParser {
             print("Message contains a phone number, ignoring...")
             return nil
         }
+        
 
         print("Lowercase Message: \(lowercaseMessage)")
         
@@ -149,6 +150,11 @@ public class TwoFHeyOTPParser: OTPParser {
         } else {
             nextChar = " " // Placeholder character if code is at the end of the string
         }
+        
+        if code.hasSuffix("am") || code.hasSuffix("pm") || code.hasSuffix("st") || code.hasSuffix("rd") || code.hasSuffix("th") || code.hasSuffix("nd") {
+                print("Invalid context for code: \(code)")
+                return false
+            }
         
         print("Prev Char: \(prevChar), Next Char: \(nextChar)")
         
