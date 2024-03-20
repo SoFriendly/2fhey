@@ -61,15 +61,16 @@ public class TwoFHeyOTPParser: OTPParser {
     public func parseMessage(_ message: String) -> ParsedOTP? {
         let lowercaseMessage = message.lowercased()
         // Check if the message contains a phone number pattern
-            let phoneNumberPattern = #"\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b"#
-            let phoneNumberRegex = try! NSRegularExpression(pattern: phoneNumberPattern)
-            let phoneNumberMatches = phoneNumberRegex.matches(in: message, options: [], range: NSRange(location: 0, length: message.utf16.count))
-            
-            // If a phone number pattern is found, return nil to ignore the message
-            if !phoneNumberMatches.isEmpty {
-                print("Message contains a phone number, ignoring...")
-                return nil
-            }
+        let phoneNumberPattern = #"(?:call\s+)?(\d{3}\.\d{3}\.\d{4})"#
+        let phoneNumberRegex = try! NSRegularExpression(pattern: phoneNumberPattern, options: [])
+        let phoneNumberMatches = phoneNumberRegex.matches(in: lowercaseMessage, options: [], range: NSRange(location: 0, length: lowercaseMessage.utf16.count))
+
+        // If a phone number pattern is found, return nil to ignore the message
+        if !phoneNumberMatches.isEmpty {
+            print("Message contains a phone number, ignoring...")
+            return nil
+        }
+
         print("Lowercase Message: \(lowercaseMessage)")
         
         if let googleOTP = OTPParserConstants.googleOTPRegex.firstCaptureGroupInString(message) {
