@@ -21,7 +21,7 @@ class TwoFHeyTests: XCTestCase {
     //
     func testResyCode() throws {
         let parser = TwoFHeyOTPParser(withConfig: ParserConfigManager.DEFAULT_CONFIG)
-        XCTAssertEqual(parser.parseMessage(#"123-456 is your Resy account verification code. This is not a booking confirmation."#), ParsedOTP(service: "resy", code: "123456"))
+        XCTAssertEqual(parser.parseMessage(#"123-456 is your Resy account verification code. This is not a booking confirmation."#), ParsedOTP(service: "resy", code: "123-456"))
     }
 
     func testValuesFromOldRepo() throws {
@@ -202,7 +202,7 @@ class TwoFHeyTests: XCTestCase {
 
         let parser = TwoFHeyOTPParser(withConfig: testConfig)
 
-        XCTAssertEqual(parser.parseMessage(message), Optional(ParsedOTP(service: nil, code: "46143020")))
+        XCTAssertEqual(parser.parseMessage(message), ParsedOTP(service: nil, code: "46143020"))
     }
 
     func testPerformanceExample() throws {

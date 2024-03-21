@@ -9,7 +9,7 @@ protocol OTParserConfig {
 struct OTPParserConstants {
     static let googleOTPRegex = try! NSRegularExpression(pattern: #"\b(G-[A-Z0-9]{5})\b"#)
 
-    static let endingCharacters: Set<Character> = [",", ".", "!", " ", "，", "。"]
+    static let endingCharacters: Set<Character> = [" ", ".", ",", ";", "!", "?", "\n", "\r"]
     
     static let knownServices = [
         "td ameritrade",
@@ -272,16 +272,27 @@ struct OTPParserConstants {
         #"【([\u4e00-\u9fa5\d\w]+)"#,
     ].map { regExp in try! NSRegularExpression(pattern: regExp) }
     
-    struct CodeMatchingRegularExpressions {
-        static let standardFourToEight = try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)
-        static let dashedThreeAndThree = try! NSRegularExpression(pattern: #"\b(\d{3}[- ]\d{3})\b"#)
-        static let alphanumericWordContainingDigits = try! NSRegularExpression(pattern: #"\b([a-zA-Z]*\d[a-zA-Z\d]{3,})\b"#, options: .caseInsensitive)
+    enum CodeMatchingRegularExpressions: CaseIterable {
+        case standardFourToEight
+        case dashedThreeAndThree
+        case alphanumericWordContainingDigits
+        case customIgnoreDotZeroZero
 
-        static let customIgnoreDotZeroZero = try! NSRegularExpression(pattern: #"\b(\d{4,8}(?:\.00)?)\b"#)
+        var regex: NSRegularExpression {
+            switch self {
+            case .standardFourToEight:
+                return try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)
+            case .dashedThreeAndThree:
+                return try! NSRegularExpression(pattern: #"\b(\d{3}[- ]\d{3})\b"#)
+            case .alphanumericWordContainingDigits:
+                return try! NSRegularExpression(pattern: #"\b([a-zA-Z]*\d[a-zA-Z\d]{3,})\b"#, options: .caseInsensitive)
+            case .customIgnoreDotZeroZero:
+                return try! NSRegularExpression(pattern: #"\b(\d{4,8}(?:\.00)?)\b"#)
+            }
+        }
+
+        static var allPatterns: [NSRegularExpression] {
+            return allCases.map { $0.regex }
+        }
     }
-
-
-
-
-    
 }

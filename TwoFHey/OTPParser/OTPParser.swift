@@ -60,74 +60,55 @@ public class TwoFHeyOTPParser: OTPParser {
     
     public func parseMessage(_ message: String) -> ParsedOTP? {
         let lowercaseMessage = message.lowercased()
+        print("Parsing message: \(lowercaseMessage)")
+
         // Check if the message contains a phone number pattern
         let phoneNumberPattern = #"(?:call\s+)?(\d{3}\.\d{3}\.\d{4})"#
         let phoneNumberRegex = try! NSRegularExpression(pattern: phoneNumberPattern, options: [])
         let phoneNumberMatches = phoneNumberRegex.matches(in: lowercaseMessage, options: [], range: NSRange(location: 0, length: lowercaseMessage.utf16.count))
 
-        // If a phone number pattern is found, return nil to ignore the message
         if !phoneNumberMatches.isEmpty {
             print("Message contains a phone number, ignoring...")
             return nil
         }
-        
 
         print("Lowercase Message: \(lowercaseMessage)")
-        
+
         if let googleOTP = OTPParserConstants.googleOTPRegex.firstCaptureGroupInString(message) {
             print("Google OTP found: \(googleOTP)")
             return ParsedOTP(service: "google", code: googleOTP)
         }
-        
+
         let service = inferServiceFromMessage(message)
         print("Inferred Service: \(service ?? "Unknown")")
-        
-        let standardRegExps: [NSRegularExpression] = [
-            OTPParserConstants.CodeMatchingRegularExpressions.standardFourToEight,
-            OTPParserConstants.CodeMatchingRegularExpressions.dashedThreeAndThree,
-            OTPParserConstants.CodeMatchingRegularExpressions.alphanumericWordContainingDigits,
-        ]
-        
+
         for customPattern in config.customPatterns {
             if let matchedCode = customPattern.matcherPattern.firstCaptureGroupInString(lowercaseMessage) {
-                print("Custom pattern matched. Service: \(customPattern.serviceName ?? "Unknown"), Code: \(matchedCode)")
+                print("Custom pattern matched. Service: \(customPattern.serviceName), Code: \(matchedCode)")
                 return ParsedOTP(service: customPattern.serviceName, code: matchedCode)
             }
         }
-        
-        for regex in standardRegExps {
+
+        for regex in OTPParserConstants.CodeMatchingRegularExpressions.allPatterns {
             let matches = regex.matchesInString(lowercaseMessage)
             for match in matches {
                 guard let code = match.firstCaptureGroupInString(lowercaseMessage) else { continue }
-                
+
                 print("Standard regex match. Service: \(service ?? "Unknown"), Code: \(code)")
-                
+
                 if isValidCodeInMessageContext(message: lowercaseMessage, code: code) {
+                    print("Code is valid in context. Returning ParsedOTP.")
                     return ParsedOTP(service: service, code: code.withNonDigitsRemoved ?? code)
                 } else {
                     print("Invalid context for code: \(code)")
                 }
             }
         }
-        
-        print("No OTP detected.")
-        
-        let matchedParser = CUSTOM_PARSERS.first { parser in
-            if let requiredName = parser.requiredServiceName, requiredName != service {
-                return false
-            }
-            
-            guard parser.canParseMessage(message), parser.parseMessage(message) != nil else { return false }
-            
-            return true
-        }
-        
-        if let matchedParser = matchedParser, let parsedCode = matchedParser.parseMessage(message) {
-            return parsedCode
-        }
-        
+
+        print("No OTP detected. Returning nil.")
         return nil
     }
+
     
     private func isValidCodeInMessageContext(message: String, code: String) -> Bool {
         guard !code.isEmpty,
