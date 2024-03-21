@@ -18,7 +18,7 @@ class TwoFHeyTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-//
+    //
     func testResyCode() throws {
         let parser = TwoFHeyOTPParser(withConfig: ParserConfigManager.DEFAULT_CONFIG)
         XCTAssertEqual(parser.parseMessage(#"123-456 is your Resy account verification code. This is not a booking confirmation."#), ParsedOTP(service: "resy", code: "123456"))
@@ -27,7 +27,7 @@ class TwoFHeyTests: XCTestCase {
     func testValuesFromOldRepo() throws {
         let parser = TwoFHeyOTPParser(withConfig: ParserConfigManager.DEFAULT_CONFIG)
 
-//        XCTAssertEqual(parser.parseMessage(#"G-412157 is your Google verification code."#), ParsedOTP(service: "google", code: "412157"))
+        //        XCTAssertEqual(parser.parseMessage(#"G-412157 is your Google verification code."#), ParsedOTP(service: "google", code: "412157"))
 
         XCTAssertEqual(parser.parseMessage(#"469538 is your verification code for your Sony Entertainment Network account."#), ParsedOTP(service: "sony entertainment network", code: "469538"))
 
@@ -41,7 +41,7 @@ class TwoFHeyTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Auth code: 2607 Please enter this code in your app."#), ParsedOTP(service: nil, code: "2607"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Welcome to ClickSend, for your first login you'll need the activation PIN: 464120"#), ParsedOTP(service: "clicksend", code: "464120"))
+        //        XCTAssertEqual(parser.parseMessage(#"Welcome to ClickSend, for your first login you'll need the activation PIN: 464120"#), ParsedOTP(service: "clicksend", code: "464120"))
 
         XCTAssertEqual(parser.parseMessage(#"Here is your ofo verification code: 2226"#), ParsedOTP(service: "ofo", code: "2226"))
 
@@ -85,17 +85,17 @@ class TwoFHeyTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Humaniq code: 167-262"#), ParsedOTP(service: "humaniq", code: "167262"))
 
-//        XCTAssertEqual(parser.parseMessage(#"373473(Weibo login verification code) This code is for user authentication, please do not send it to anyone else."#), ParsedOTP(service: "weibo", code: "373473"))
+        //        XCTAssertEqual(parser.parseMessage(#"373473(Weibo login verification code) This code is for user authentication, please do not send it to anyone else."#), ParsedOTP(service: "weibo", code: "373473"))
 
         XCTAssertEqual(parser.parseMessage(#"[zcool]Your verification code is 991533"#), ParsedOTP(service: "zcool", code: "991533"))
 
-//        XCTAssertEqual(parser.parseMessage(#"G-830829"#), ParsedOTP(service: "google", code: "G-830829"))
+        //        XCTAssertEqual(parser.parseMessage(#"G-830829"#), ParsedOTP(service: "google", code: "G-830829"))
 
         XCTAssertEqual(parser.parseMessage(#"117740 ist dein Verifizierungscode für dein Sony Entertainment Network-Konto."#), ParsedOTP(service: "sony", code: "117740"))
 
         XCTAssertEqual(parser.parseMessage(#"Your Lyft code is 744444"#), ParsedOTP(service: "lyft", code: "744444"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Cash Show - 賞金クイズ の確認コードは 764972 です。"#), ParsedOTP(service: nil, code: "764972"))
+        //        XCTAssertEqual(parser.parseMessage(#"Cash Show - 賞金クイズ の確認コードは 764972 です。"#), ParsedOTP(service: nil, code: "764972"))
 
         XCTAssertEqual(parser.parseMessage(#"[SwiftCall]Your verification code: 6049"#), ParsedOTP(service: "swiftcall", code: "6049"))
 
@@ -113,9 +113,9 @@ class TwoFHeyTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Your CloudSigma verification code for MEL is 880936"#), ParsedOTP(service: "cloudsigma", code: "880936"))
 
-//        XCTAssertEqual(parser.parseMessage(#"G-718356() Google ."#), ParsedOTP(service: "google", code: "G-718356"))
+        //        XCTAssertEqual(parser.parseMessage(#"G-718356() Google ."#), ParsedOTP(service: "google", code: "G-718356"))
 
-//        XCTAssertEqual(parser.parseMessage(#"G-723210(이)가 Google 인증 코드입니다."#), ParsedOTP(service: "google", code: "G-723210"))
+        //        XCTAssertEqual(parser.parseMessage(#"G-723210(이)가 Google 인증 코드입니다."#), ParsedOTP(service: "google", code: "G-723210"))
 
         XCTAssertEqual(parser.parseMessage(#"You requested a secure one-time password to log in to your USCIS Account. Please enter this secure one-time password: 04352398"#), ParsedOTP(service: "uscis", code: "04352398"))
 
@@ -131,11 +131,11 @@ class TwoFHeyTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"WhatsApp code 569-485. You can also tap on this link to verify your phone: v.whatsapp.com/569485"#), ParsedOTP(service: "whatsapp", code: "569485"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Use the code (7744) on WeChat to log in to your account. Don't forward the code!"#), ParsedOTP(service: "wechat", code: "7744"))
+        //        XCTAssertEqual(parser.parseMessage(#"Use the code (7744) on WeChat to log in to your account. Don't forward the code!"#), ParsedOTP(service: "wechat", code: "7744"))
 
         XCTAssertEqual(parser.parseMessage(#"grubhub order 771332"#), ParsedOTP(service: "grubhub", code: "771332"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Your boa code is "521992""#), ParsedOTP(service: "boa", code: "521992"))
+        //        XCTAssertEqual(parser.parseMessage(#"Your boa code is "521992""#), ParsedOTP(service: "boa", code: "521992"))
 
         XCTAssertEqual(parser.parseMessage(#"Your Twilio verification code is: 9508"#), ParsedOTP(service: "twilio", code: "9508"))
 
@@ -143,7 +143,7 @@ class TwoFHeyTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Use 003407 as your password for Facebook for iPhone."#), ParsedOTP(service: "facebook", code: "003407"))
 
-//        XCTAssertEqual(parser.parseMessage(#"Reasy. Set. Get. Your new glasses are ready for pick up at LensCrafters! Stop in any time to see th enew you. Questions? 718-858-7036"#), nil)
+        //        XCTAssertEqual(parser.parseMessage(#"Reasy. Set. Get. Your new glasses are ready for pick up at LensCrafters! Stop in any time to see th enew you. Questions? 718-858-7036"#), nil)
 
         XCTAssertEqual(parser.parseMessage(#"6635 is your Postmates verification code."#), ParsedOTP(service: "postmates", code: "6635"))
 
@@ -155,19 +155,19 @@ class TwoFHeyTests: XCTestCase {
 
         XCTAssertEqual(parser.parseMessage(#"Microsoft access code: 6907"#), ParsedOTP(service: "microsoft", code: "6907"))
 
-//        XCTAssertEqual(parser.parseMessage(#"<#> Your ExampleApp code is: 123ABC78 FA+9qCX9VSu"#), ParsedOTP(service: "exampleapp", code: "123ABC78"))
+        //        XCTAssertEqual(parser.parseMessage(#"<#> Your ExampleApp code is: 123ABC78 FA+9qCX9VSu"#), ParsedOTP(service: "exampleapp", code: "123ABC78"))
 
     }
-    
+
     func testShouldNotParseAPhoneNumber() throws {
         let parser = TwoFHeyOTPParser(withConfig: ParserConfigManager.DEFAULT_CONFIG)
 
         XCTAssertEqual(parser.parseMessage(#"388-941-4444 your code is 333222"#), ParsedOTP(service: nil, code: "333222"))
 
     }
-    
+
     func testCustomPattern() throws {
-//        let customPattern = OTPParserCustomPatternConfiguration()
+        //        let customPattern = OTPParserCustomPatternConfiguration()
         let jsonPattern = #"""
 {
   "matcherPattern": "^someweird-.+$",
@@ -175,7 +175,7 @@ class TwoFHeyTests: XCTestCase {
 }
 """#
         let decoded = try JSONDecoder().decode(OTPParserCustomPatternConfiguration.self, from: jsonPattern.data(using: .utf8)!)
-        
+
         let testConfig = OTPParserConfiguration(servicePatterns: [], knownServices: [], customPatterns: [decoded])
 
         let parser = TwoFHeyOTPParser(withConfig: testConfig)
@@ -183,8 +183,8 @@ class TwoFHeyTests: XCTestCase {
         XCTAssertEqual(parser.parseMessage(#"someweird-pattern:a1b2c3"#), ParsedOTP(service: nil, code: "a1b2c3"))
 
     }
-    
-    func testCustomPatternWithNoServieName() {
+
+    func testCustomPatternWithNoServiceName() {
         let message = "46143020\nValid 5 minutes\nDurata 5 minuti\nDurée 5 minutes\nGültig 5 Minuten\r"
         let jsonPattern = #"""
       {
@@ -194,11 +194,11 @@ class TwoFHeyTests: XCTestCase {
       }
 """#
         let decoded = try! JSONDecoder().decode(OTPParserCustomPatternConfiguration.self, from: jsonPattern.data(using: .utf8)!)
-        
+
         let testConfig = OTPParserConfiguration(servicePatterns: [], knownServices: [], customPatterns: [decoded])
 
         XCTAssertNotNil(decoded.matcherPattern.firstMatchInString(message), "")
-        
+
         let parser = TwoFHeyOTPParser(withConfig: testConfig)
 
         XCTAssertEqual(parser.parseMessage(message), Optional(ParsedOTP(service: nil, code: "46143020")))
