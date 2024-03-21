@@ -185,7 +185,7 @@ class TwoFHeyTests: XCTestCase {
     }
     
     func testCustomPatternWithNoServieName() {
-        let message = "46143020\nvalid 5 minutes\ndurata 5 minuti\ndurée 5 minutes\ngültig 5 minuten\r"
+        let message = "46143020\nValid 5 minutes\nDurata 5 minuti\nDurée 5 minutes\nGültig 5 Minuten\r"
         let jsonPattern = #"""
       {
          "serviceName":"no provider name",
@@ -201,7 +201,7 @@ class TwoFHeyTests: XCTestCase {
         
         let parser = TwoFHeyOTPParser(withConfig: testConfig)
 
-        XCTAssertEqual(parser.parseMessage(message), ParsedOTP(service: nil, code: "46143020"))
+        XCTAssertEqual(parser.parseMessage(message), Optional(ParsedOTP(service: nil, code: "46143020")))
     }
 
     func testPerformanceExample() throws {
