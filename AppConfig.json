@@ -325,6 +325,6 @@
          "serviceName": "myGov",
          "matcherPattern": "^myGov Security: Your security code is (\\d{6}).",
          "codeExtractorPattern": "(\\d{6})"
-      },   
+      }
    ]
 }
