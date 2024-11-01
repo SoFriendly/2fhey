@@ -320,6 +320,11 @@
          "serviceName": "Twitter",
          "matcherPattern": "Twitter login code: (\\d{6,9})",
          "codeExtractorPattern": "(\\d{6,9})"
+      },
+      {
+         "serviceName": "Churchill Mortgage",
+         "matcherPattern": "Enter the PIN provided below on the Passcode Verification page.\n PIN: (\\d{6})\n The PIN is valid for 60 minutes.",
+         "codeExtractorPattern": "(\\d{6})"
       }
    ]
 }
