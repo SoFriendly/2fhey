@@ -320,6 +320,11 @@
          "serviceName": "Twitter",
          "matcherPattern": "Twitter login code: (\\d{6,9})",
          "codeExtractorPattern": "(\\d{6,9})"
+      },
+      {
+	 "serviceName": "Revolut Business",
+  	 "matcherPattern": "in your Revolut Business app, use code: ",
+ 	 "codeExtractorPattern": "(\\d{3}-\\d{3})"
       }
    ]
 }
