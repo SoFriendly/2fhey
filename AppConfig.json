@@ -320,6 +320,11 @@
          "serviceName": "Twitter",
          "matcherPattern": "Twitter login code: (\\d{6,9})",
          "codeExtractorPattern": "(\\d{6,9})"
-      }
+      },
+      {
+         "serviceName": "BforBank",
+         "matcherPattern": "^BforBank :.+$",
+         "codeExtractorPattern": "code: (\\d{6})"
+      },
    ]
 }
