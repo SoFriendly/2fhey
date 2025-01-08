@@ -331,5 +331,10 @@
          "matcherPattern": "^BforBank :.+$",
          "codeExtractorPattern": "code: (\\d{6})"
       },
+      {
+         "serviceName": "idCAT Mobil",
+         "matcherPattern": "^@valid\\.aoc\\.cat #.+$",
+         "codeExtractorPattern": "^@valid\\.aoc\\.cat #(\\d{6})$"
+      },     
    ]
 }
