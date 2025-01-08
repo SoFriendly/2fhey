@@ -336,5 +336,10 @@
          "matcherPattern": "^@valid\\.aoc\\.cat #.+$",
          "codeExtractorPattern": "^@valid\\.aoc\\.cat #(\\d{6})$"
       },     
+      {
+         "serviceName": "Revolut Business",
+         "matcherPattern": "in your Revolut Business app, use code: ",
+         "codeExtractorPattern": "(\\d{3}-\\d{3})"
+      },
    ]
 }
