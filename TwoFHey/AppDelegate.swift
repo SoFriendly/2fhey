@@ -134,6 +134,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
         
         self.originalClipboardContents = message.1.copyToClipboard()
+        
+        if AppStateManager.shared.autoPasteEnabled && AppStateManager.shared.hasAccessibilityPermission() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let source = CGEventSource(stateID: .combinedSessionState)
+                let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 0x09, keyDown: true)
+                let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 0x09, keyDown: false)
+                keyDown?.flags = .maskCommand
+                keyUp?.flags = .maskCommand
+                keyDown?.post(tap: .cgAnnotatedSessionEventTap)
+                keyUp?.post(tap: .cgAnnotatedSessionEventTap)
+            }
+        }
+        
         restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
 
         window.makeKeyAndOrderFront(nil)
@@ -206,6 +219,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if 2FHey uses the same keyboard shortcuts as another app"
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
         settingsMenu.addItem(keyboardShortCutItem)
+
+        let autoPasteItem = NSMenuItem(title: "Auto-Paste Codes", action: #selector(AppDelegate.onPressAutoPaste), keyEquivalent: "")
+        autoPasteItem.toolTip = "Automatically paste codes into focused text field (requires accessibility permissions)"
+        autoPasteItem.state = AppStateManager.shared.autoPasteEnabled ? .on : .off
+        settingsMenu.addItem(autoPasteItem)
 
         let restoreContentsMenu = NSMenu()
         let delayTimes = [0, 5, 10, 15, 20]
@@ -302,6 +320,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             AppStateManager.shared.notificationPosition = newNotificationPosition
             refreshMenu()
         }
+    }
+    
+    @objc func onPressAutoPaste() {
+        AppStateManager.shared.autoPasteEnabled = !AppStateManager.shared.autoPasteEnabled
+        refreshMenu()
     }
     
     private func getAccessibilityPermission(prompt: Bool) -> Bool {
