@@ -50,6 +50,7 @@ class AppStateManager {
         static let restoreContentsDelayTimeKey = "com.sofriendly.2fhey.restoreContentsDelayTime"
         static let restoreContentsEnabledKey = "com.sofriendly.2fhey.restoreContentsEnabledKey"
         static let hasSetupKey = "com.sofriendly.2fhey.hasSetup"
+        static let autoPasteEnabledKey = "com.sofriendly.2fhey.autoPasteEnabled"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
@@ -99,6 +100,15 @@ class AppStateManager {
         }
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: Constants.globalShortcutEnabledKey)
+        }
+    }
+    
+    var autoPasteEnabled: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Constants.autoPasteEnabledKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.autoPasteEnabledKey)
         }
     }
     
