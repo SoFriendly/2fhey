@@ -341,5 +341,10 @@
          "matcherPattern": "in your Revolut Business app, use code: ",
          "codeExtractorPattern": "(\\d{3}-\\d{3})"
       },
+      {
+         "serviceName": "SoFi Money",
+         "matcherPattern": "^From: SoFi\\nNEVER share this code with anyone including SoFi agents\\. If anyone asks for this code, HANG UP and call 1 \\(844\\) 908-7634\\.\\nLogin Code: (\\d{6})$",
+         "codeExtractorPattern": "(\\d{6})"
+      }
    ]
 }
