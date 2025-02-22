@@ -227,6 +227,11 @@
    ],
    "customPatterns":[
       {
+         "serviceName": "CA DMV",
+         "matcherPattern": "Your CA DMV verification code is: \\d{6}",
+         "codeExtractorPattern": "(\\d{6})"
+      },
+      {
          "serviceName":"no provider name",
          "matcherPattern":"\\d{2,8}.+Valid",
          "codeExtractorPattern":"(\\d{2,8})"
@@ -316,7 +321,7 @@
          "matcherPattern": "Don't share this code with anyone\\. Fraudsters can use it to access your online account and place orders\\. The code is valid for 20 minutes\\. Your code is [0-9A-Z]{5}\\.",
          "codeExtractorPattern": "([0-9A-Z]{5})\\."
       },
-   {
+      {
          "serviceName": "Amex SafeKey",
          "matcherPattern": "Your Amex SafeKey One-Time Password for INR \\d+\\.\\d\\d is (\\d{6})\\. Valid for \\d+ mins for Card ending xxxxx\\. Never share this password\\.",
          "codeExtractorPattern": "(\\d{6})"
