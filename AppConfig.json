@@ -332,6 +332,11 @@
          "codeExtractorPattern": "(\\d{6,9})"
       },
       {
+         "serviceName": "myGov",
+         "matcherPattern": "^myGov Security: Your security code is (\\d{6}).",
+         "codeExtractorPattern": "(\\d{6})"
+      },
+     {
          "serviceName": "BforBank",
          "matcherPattern": "^BforBank :.+$",
          "codeExtractorPattern": "code: (\\d{6})"
