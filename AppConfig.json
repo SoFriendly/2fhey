@@ -345,6 +345,11 @@
          "serviceName": "SoFi Money",
          "matcherPattern": "^From: SoFi\\nNEVER share this code with anyone including SoFi agents\\. If anyone asks for this code, HANG UP and call 1 \\(844\\) 908-7634\\.\\nLogin Code: (\\d{6})$",
          "codeExtractorPattern": "(\\d{6})"
+      },
+      {
+         "serviceName": "Spirica",
+         "matcherPattern": "^Spirica$",
+         "codeExtractorPattern": "Code de confirmation : (\S{6})"
       }
    ]
 }
