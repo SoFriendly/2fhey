@@ -15,6 +15,7 @@ import Foundation
 import SQLite
 
 typealias MessageWithParsedOTP = (Message, ParsedOTP)
+typealias Expression = SQLite.Expression
 
 class MessageManager: ObservableObject {
     @Published var messages: [MessageWithParsedOTP] = []
