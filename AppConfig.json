@@ -1,5 +1,5 @@
 {
-   "knownServices":[
+   "knownServices": [
       "td ameritrade",
       "coinbase",
       "ally",
@@ -111,7 +111,7 @@
       "fanduel",
       "cart"
    ],
-   "servicePatterns":[
+   "servicePatterns": [
       "\\bfor\\s+your\\s+([\\w\\d ]{2,64})\\s+account\\b",
       "\\bon\\s+your\\s+([\\w\\d ]{2,64})\\s+account\\b",
       "\\bas\\s+your\\s+([\\w\\d ]{2,64})\\s+account\\b",
@@ -225,7 +225,7 @@
       "\\b([\\w\\d]{3,64})\\s+pin\\b",
       "【([\\u4e00-\\u9fa5\\d\\w]+)"
    ],
-   "customPatterns":[
+   "customPatterns": [
       {
          "serviceName": "CA DMV",
          "matcherPattern": "Your CA DMV verification code is: \\d{6}",
@@ -237,81 +237,81 @@
          "codeExtractorPattern":"(\\d{2,8})"
       },
       {
-         "serviceName":"Chase",
-         "matcherPattern":"From: Chase\\nWe'll NEVER call you to ask for this code\\.\\nOne-Time Code:\\d{8}\\nOnly use this online\\. Code expires in 30 min\\.",
-         "codeExtractorPattern":"(\\d{8})"
+         "serviceName": "Chase",
+         "matcherPattern": "From: Chase\\nWe'll NEVER call you to ask for this code\\.\\nOne-Time Code:\\d{8}\\nOnly use this online\\. Code expires in 30 min\\.",
+         "codeExtractorPattern": "(\\d{8})"
       },
       {
-         "serviceName":"Chase",
-         "matcherPattern":"From: Chase  \\nWe'll NEVER call you to ask for this code\\.  \\nOne-Time Code:\\d{8}  \\nOnly use this online\\. Code expires in 30 min\\.",
-         "codeExtractorPattern":"(\\d{8})"
+         "serviceName": "Chase",
+         "matcherPattern": "From: Chase  \\nWe'll NEVER call you to ask for this code\\.  \\nOne-Time Code:\\d{8}  \\nOnly use this online\\. Code expires in 30 min\\.",
+         "codeExtractorPattern": "(\\d{8})"
       },
       {
-        "serviceName": "Taishin Bank One-Time Code",
-        "matcherPattern": "驗證碼為[\\d{4,8}]",
-        "codeExtractorPattern": "(\\d{4,8})"
+         "serviceName": "Taishin Bank One-Time Code",
+         "matcherPattern": "驗證碼為[\\d{4,8}]",
+         "codeExtractorPattern": "(\\d{4,8})"
       },
       {
-        "serviceName": "Taishin Bank One-Time Code",
-        "matcherPattern": "驗證密碼[\\d{4,8}]",
-        "codeExtractorPattern": "(\\d{4,8})"
+         "serviceName": "Taishin Bank One-Time Code",
+         "matcherPattern": "驗證密碼[\\d{4,8}]",
+         "codeExtractorPattern": "(\\d{4,8})"
       },
       {
-         "serviceName":"DigitalOcean",
-         "matcherPattern":"[\\w\\d]{6,6} is your DigitalOcean verification code\\.",
-         "codeExtractorPattern":"([\\w\\d]{6,6})"
+         "serviceName": "DigitalOcean",
+         "matcherPattern": "[\\w\\d]{6,6} is your DigitalOcean verification code\\.",
+         "codeExtractorPattern": "([\\w\\d]{6,6})"
       },
       {
-         "serviceName":"CN General",
-         "matcherPattern":"验证码([是为：:\\s]*)(\\d{4,8})",
-         "codeExtractorPattern":"(\\d{4,8})"
+         "serviceName": "CN General",
+         "matcherPattern": "验证码([是为：:\\s]*)(\\d{4,8})",
+         "codeExtractorPattern": "(\\d{4,8})"
       },
       {
-         "serviceName":"Geico",
-         "matcherPattern":"GEICO: Your verification code is: \\w{6}\\. It expires in 10 minutes\\. Please do not reply to this message\\.",
-         "codeExtractorPattern":": (\\w{6})."
+         "serviceName": "Geico",
+         "matcherPattern": "GEICO: Your verification code is: \\w{6}\\. It expires in 10 minutes\\. Please do not reply to this message\\.",
+         "codeExtractorPattern": ": (\\w{6})."
       },
       {
-         "serviceName":"Geico",
-         "matcherPattern":"GEICO: Your verification code is: \\w{6}\\. It expires in 10 minutes\\. Please do not share this code with anyone or reply to this message\\.",
-         "codeExtractorPattern":": (\\w{6})."
-     },
-      {
-         "serviceName":"DBS Bank",
-         "matcherPattern":"To approve, use [A-Z]{3}-([0-9]{6}) within",
-         "codeExtractorPattern":"([0-9]{6})"
-      },
-     {
-         "serviceName":"OneLogin",
-         "matcherPattern":"Security Code: \\w{6} \\n\\nSecurity code will expire in 2 minutes\\. If you did not request a security code, please contact your administrator\\.",
-         "codeExtractorPattern":"(\\w{6})"
-     },
-	 {
-         "serviceName":"USPS",
-         "matcherPattern":"USPS Account Services: your validation code is \\w{6}\\nMsg & data rates may apply\\nReply HELP for help\\nReply STOP to cancel",
-         "codeExtractorPattern":": (\\w{6})."
+         "serviceName": "Geico",
+         "matcherPattern": "GEICO: Your verification code is: \\w{6}\\. It expires in 10 minutes\\. Please do not share this code with anyone or reply to this message\\.",
+         "codeExtractorPattern": ": (\\w{6})."
       },
       {
-         "serviceName":"Google",
-         "matcherPattern":"G-\\d{6} is your Google verification code.",
-         "codeExtractorPattern":"(\\d{6})"
+         "serviceName": "DBS Bank",
+         "matcherPattern": "To approve, use [A-Z]{3}-([0-9]{6}) within",
+         "codeExtractorPattern": "([0-9]{6})"
       },
       {
-         "serviceName":"AOD",
-         "matcherPattern":"AOD FCU security code: \\d{6}[\\s\\S]+",
-         "codeExtractorPattern":"(\\d{6})"
+         "serviceName": "OneLogin",
+         "matcherPattern": "Security Code: \\w{6} \\n\\nSecurity code will expire in 2 minutes\\. If you did not request a security code, please contact your administrator\\.",
+         "codeExtractorPattern": "(\\w{6})"
       },
       {
-         "serviceName":"MIGov",
-         "matcherPattern":"Your passcode is \\n\\d{4}-\\d{6}\\n\\nThe passcode will expire in 5 minutes.\\nThank you.",
-         "codeExtractorPattern":"\\d{4}-(\\d{6})"
+         "serviceName": "USPS",
+         "matcherPattern": "USPS Account Services: your validation code is \\w{6}\\nMsg & data rates may apply\\nReply HELP for help\\nReply STOP to cancel",
+         "codeExtractorPattern": ": (\\w{6})."
       },
-     {
-         "serviceName":"MPC",
-         "matcherPattern":"Dear [\\s\\S]+,\n\nYour security code is: \\d{5,6}\n\nThis code expires in 15 minutes, so please complete this step as soon as possible.",
-         "codeExtractorPattern":"(\\d{5,6})"
+      {
+         "serviceName": "Google",
+         "matcherPattern": "G-\\d{6} is your Google verification code.",
+         "codeExtractorPattern": "(\\d{6})"
       },
-     {
+      {
+         "serviceName": "AOD",
+         "matcherPattern": "AOD FCU security code: \\d{6}[\\s\\S]+",
+         "codeExtractorPattern": "(\\d{6})"
+      },
+      {
+         "serviceName": "MIGov",
+         "matcherPattern": "Your passcode is \\n\\d{4}-\\d{6}\\n\\nThe passcode will expire in 5 minutes.\\nThank you.",
+         "codeExtractorPattern": "\\d{4}-(\\d{6})"
+      },
+      {
+         "serviceName": "MPC",
+         "matcherPattern": "Dear [\\s\\S]+,\n\nYour security code is: \\d{5,6}\n\nThis code expires in 15 minutes, so please complete this step as soon as possible.",
+         "codeExtractorPattern": "(\\d{5,6})"
+      },
+      {
          "serviceName": "pf-bank",
          "matcherPattern": "^[0-9]{8}\nValid 5 minutes\nDurata 5 minuti\nDurée 5 minutes\nGültig 5 Minuten$",
          "codeExtractorPattern": "^[0-9]{8}"
@@ -345,13 +345,18 @@
          "serviceName": "idCAT Mobil",
          "matcherPattern": "^@valid\\.aoc\\.cat #.+$",
          "codeExtractorPattern": "^@valid\\.aoc\\.cat #(\\d{6})$"
-      },     
+      },
       {
          "serviceName": "Revolut Business",
          "matcherPattern": "in your Revolut Business app, use code: ",
          "codeExtractorPattern": "(\\d{3}-\\d{3})"
       },
       {
+         "serviceName": "FNZ Bank Finvesto smsTAN",
+         "matcherPattern": "^Die.+ist:.+$",
+         "codeExtractorPattern": "^Die.+ist: ((\\d|\\D){6})$"
+      },
+     {
          "serviceName": "SoFi Money",
          "matcherPattern": "^From: SoFi\\nNEVER share this code with anyone including SoFi agents\\. If anyone asks for this code, HANG UP and call 1 \\(844\\) 908-7634\\.\\nLogin Code: (\\d{6})$",
          "codeExtractorPattern": "(\\d{6})"
