@@ -227,9 +227,14 @@
    ],
    "customPatterns": [
       {
-         "serviceName": "no provider name",
-         "matcherPattern": "\\d{2,8}.+Valid",
-         "codeExtractorPattern": "(\\d{2,8})"
+         "serviceName": "CA DMV",
+         "matcherPattern": "Your CA DMV verification code is: \\d{6}",
+         "codeExtractorPattern": "(\\d{6})"
+      },
+      {
+         "serviceName":"no provider name",
+         "matcherPattern":"\\d{2,8}.+Valid",
+         "codeExtractorPattern":"(\\d{2,8})"
       },
       {
          "serviceName": "Chase",
@@ -327,6 +332,11 @@
          "codeExtractorPattern": "(\\d{6,9})"
       },
       {
+         "serviceName": "myGov",
+         "matcherPattern": "^myGov Security: Your security code is (\\d{6}).",
+         "codeExtractorPattern": "(\\d{6})"
+      },
+     {
          "serviceName": "BforBank",
          "matcherPattern": "^BforBank :.+$",
          "codeExtractorPattern": "code: (\\d{6})"
@@ -345,6 +355,16 @@
          "serviceName": "FNZ Bank Finvesto smsTAN",
          "matcherPattern": "^Die.+ist:.+$",
          "codeExtractorPattern": "^Die.+ist: ((\\d|\\D){6})$"
+      },
+     {
+         "serviceName": "SoFi Money",
+         "matcherPattern": "^From: SoFi\\nNEVER share this code with anyone including SoFi agents\\. If anyone asks for this code, HANG UP and call 1 \\(844\\) 908-7634\\.\\nLogin Code: (\\d{6})$",
+         "codeExtractorPattern": "(\\d{6})"
+      },
+      {
+         "serviceName": "Spirica",
+         "matcherPattern": "^Spirica$",
+         "codeExtractorPattern": "Code de confirmation : (\S{6})"
       }
    ]
 }
