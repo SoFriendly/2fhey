@@ -372,9 +372,14 @@
          "codeExtractorPattern": "Code de confirmation : (\S{6})"
       },
       {
-        "serviceName": "Aeroplan",
-        "matcherPattern": "Aeroplan[®] verification code",
-        "codeExtractorPattern": "Code:\\s*(\\d{6})"
-      }
+  "serviceName": "Aeroplan",
+  "matcherPattern": "Aeroplan[®] verification code",
+  "codeExtractorPattern": "Code:\\s*(\\d{6})"
+},
+{
+  "serviceName": "EE",
+  "matcherPattern": "Here's your PIN to sign in securely:",
+  "codeExtractorPattern": "(\\d{6})"
+}
    ]
 }
