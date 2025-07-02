@@ -370,6 +370,11 @@
          "serviceName": "Spirica",
          "matcherPattern": "^Spirica$",
          "codeExtractorPattern": "Code de confirmation : (\S{6})"
+      },
+      {
+         "serviceName": "EE",
+         "matcherPattern": "Here's your PIN to sign in securely:",
+         "codeExtractorPattern": "(\\d{6})"
       }
    ]
 }
