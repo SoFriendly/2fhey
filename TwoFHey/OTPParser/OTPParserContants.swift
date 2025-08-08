@@ -121,11 +121,14 @@ struct OTPParserConstants {
         "amex",
         "sia",
         "fanduel",
-        "cart"
+        "cart",
+        "fortuneo"
       ]
     
     static let authWords: Set<String> = [
         "your",
+        "ton",
+        "votre",
         "auth",
         "login",
         "activation",
