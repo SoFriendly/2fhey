@@ -369,7 +369,7 @@
       {
          "serviceName": "Spirica",
          "matcherPattern": "^Spirica$",
-         "codeExtractorPattern": "Code de confirmation : (\S{6})"
+         "codeExtractorPattern": "Code de confirmation : (\\S{6})"
       },
       {
   "serviceName": "Aeroplan",
