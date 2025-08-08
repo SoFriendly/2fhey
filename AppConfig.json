@@ -109,7 +109,8 @@
       "amex",
       "sia",
       "fanduel",
-      "cart"
+      "cart",
+      "fortuneo"
    ],
    "servicePatterns": [
       "\\bfor\\s+your\\s+([\\w\\d ]{2,64})\\s+account\\b",
@@ -226,6 +227,11 @@
       "【([\\u4e00-\\u9fa5\\d\\w]+)"
    ],
    "customPatterns": [
+      {
+         "serviceName": "Fortuneo",
+         "matcherPattern": "\\b(\\d{6}) est votre code fortuneo pour",
+         "codeExtractorPattern": "(\\d{6})"
+      },
       {
          "serviceName": "CA DMV",
          "matcherPattern": "Your CA DMV verification code is: \\d{6}",
