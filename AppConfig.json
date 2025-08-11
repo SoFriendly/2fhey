@@ -386,6 +386,11 @@
   "serviceName": "EE",
   "matcherPattern": "Here's your PIN to sign in securely:",
   "codeExtractorPattern": "(\\d{6})"
-}
+},
+  {
+  "serviceName": "Cater Allen",
+  "matcherPattern": "OTP to MAKE A NEW PAYMENT of[\s\S]*?Please call us if this wasn't you\. NEVER share this code, not even with Cater Allen staff",
+  "codeExtractorPattern": "(\d{6})$"
+}    
    ]
 }
