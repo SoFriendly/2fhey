@@ -70,15 +70,12 @@ class SimpleOTPParser: OTPParser {
 
         // Try to load from cached files first
         let cacheURL = getCacheDirectory()
-        let cachedFiles = Self.languageFiles.compactMap { fileName -> URL? in
-            let fileURL = cacheURL.appendingPathComponent(fileName)
-            return FileManager.default.fileExists(atPath: fileURL.path) ? fileURL : nil
-        }
-
         var loadedFromCache = false
-        if !cachedFiles.isEmpty {
-            for fileURL in cachedFiles {
-                if let (keywords, patterns) = loadLanguageFile(from: fileURL) {
+
+        for fileName in Self.languageFiles {
+            let cacheFileURL = cacheURL.appendingPathComponent(fileName)
+            if FileManager.default.fileExists(atPath: cacheFileURL.path) {
+                if let (keywords, patterns) = loadLanguageFile(from: cacheFileURL) {
                     allKeywords.formUnion(keywords)
                     allPatterns.append(contentsOf: patterns)
                     loadedFromCache = true
@@ -88,19 +85,22 @@ class SimpleOTPParser: OTPParser {
 
         // Fall back to bundled files if cache is empty
         if !loadedFromCache {
-            if let keywordsURL = Bundle.main.url(forResource: "OTPKeywords", withExtension: nil) {
-                do {
-                    let fileURLs = try FileManager.default.contentsOfDirectory(at: keywordsURL, includingPropertiesForKeys: nil)
-                    let jsonFiles = fileURLs.filter { $0.pathExtension == "json" }
+            for fileName in Self.languageFiles {
+                let resourceName = fileName.replacingOccurrences(of: ".json", with: "")
 
-                    for fileURL in jsonFiles {
-                        if let (keywords, patterns) = loadLanguageFile(from: fileURL) {
-                            allKeywords.formUnion(keywords)
-                            allPatterns.append(contentsOf: patterns)
-                        }
+                // Try subdirectory first (folder reference)
+                var fileURL = Bundle.main.url(forResource: resourceName, withExtension: "json", subdirectory: "OTPKeywords")
+
+                // If not found, try root level (group)
+                if fileURL == nil {
+                    fileURL = Bundle.main.url(forResource: resourceName, withExtension: "json")
+                }
+
+                if let fileURL = fileURL {
+                    if let (keywords, patterns) = loadLanguageFile(from: fileURL) {
+                        allKeywords.formUnion(keywords)
+                        allPatterns.append(contentsOf: patterns)
                     }
-                } catch {
-                    // Silently fail - this is expected if OTPKeywords not in bundle
                 }
             }
         }

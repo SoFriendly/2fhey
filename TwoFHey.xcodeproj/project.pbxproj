@@ -3,18 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0F4964342E9FE42F009D1F5E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964332E9FE42F009D1F5E /* OnboardingView.swift */; };
 		0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */; };
-		0F5480222EA014AB007E020A /* pt.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F54801F2EA014AB007E020A /* pt.json */; };
-		0F5480232EA014AB007E020A /* fr.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F54801E2EA014AB007E020A /* fr.json */; };
-		0F5480242EA014AB007E020A /* es.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F54801D2EA014AB007E020A /* es.json */; };
-		0F5480252EA014AB007E020A /* en.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F54801C2EA014AB007E020A /* en.json */; };
-		0F5480262EA014AB007E020A /* de.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F54801B2EA014AB007E020A /* de.json */; };
-		0F5480272EA014AB007E020A /* zh.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F5480202EA014AB007E020A /* zh.json */; };
 		6547376E29B8973800523B18 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6547376D29B8973800523B18 /* Permission.swift */; };
 		D4123A7628261377002C3C42 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7528261377002C3C42 /* UIConstants.swift */; };
 		D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */; };
@@ -68,12 +62,6 @@
 /* Begin PBXFileReference section */
 		0F4964332E9FE42F009D1F5E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOTPParser.swift; sourceTree = "<group>"; };
-		0F54801B2EA014AB007E020A /* de.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = de.json; sourceTree = "<group>"; };
-		0F54801C2EA014AB007E020A /* en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en.json; sourceTree = "<group>"; };
-		0F54801D2EA014AB007E020A /* es.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = es.json; sourceTree = "<group>"; };
-		0F54801E2EA014AB007E020A /* fr.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fr.json; sourceTree = "<group>"; };
-		0F54801F2EA014AB007E020A /* pt.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pt.json; sourceTree = "<group>"; };
-		0F5480202EA014AB007E020A /* zh.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zh.json; sourceTree = "<group>"; };
 		6547376D29B8973800523B18 /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
 		D4123A7528261377002C3C42 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwoFHeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +92,10 @@
 		D4F5CAC22817725100A39E6D /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0FCFDDCB2EA0330500A5181B /* OTPKeywords */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = OTPKeywords; path = TwoFHey/OTPKeywords; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		D4123A792826EF3B002C3C42 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -133,20 +125,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0F5480212EA014AB007E020A /* OTPKeywords */ = {
-			isa = PBXGroup;
-			children = (
-				0F54801B2EA014AB007E020A /* de.json */,
-				0F54801C2EA014AB007E020A /* en.json */,
-				0F54801D2EA014AB007E020A /* es.json */,
-				0F54801E2EA014AB007E020A /* fr.json */,
-				0F54801F2EA014AB007E020A /* pt.json */,
-				0F5480202EA014AB007E020A /* zh.json */,
-			);
-			name = OTPKeywords;
-			path = TwoFHey/OTPKeywords;
-			sourceTree = "<group>";
-		};
 		D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,7 +166,7 @@
 		D4F5CA932817688800A39E6D = {
 			isa = PBXGroup;
 			children = (
-				0F5480212EA014AB007E020A /* OTPKeywords */,
+				0FCFDDCB2EA0330500A5181B /* OTPKeywords */,
 				D4F5CA9E2817688800A39E6D /* TwoFHey */,
 				D433132D281F630400AC5343 /* AutoLauncher */,
 				D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */,
@@ -308,6 +286,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				0FCFDDCB2EA0330500A5181B /* OTPKeywords */,
+			);
 			name = TwoFHey;
 			packageProductDependencies = (
 				D4331326281F5D3500AC5343 /* SQLite */,
@@ -383,12 +364,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F5480222EA014AB007E020A /* pt.json in Resources */,
-				0F5480232EA014AB007E020A /* fr.json in Resources */,
-				0F5480242EA014AB007E020A /* es.json in Resources */,
-				0F5480252EA014AB007E020A /* en.json in Resources */,
-				0F5480262EA014AB007E020A /* de.json in Resources */,
-				0F5480272EA014AB007E020A /* zh.json in Resources */,
 				D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
