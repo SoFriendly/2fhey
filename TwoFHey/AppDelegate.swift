@@ -91,21 +91,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func initMessageManager() {
-        let configManager = ParserConfigManager()
-        configManager.$config.sink(receiveValue: { [weak self] config in
-            guard let config = config else { return }
-            let otpParser = TwoFHeyOTPParser(withConfig: config)
-            self?.messageManager?.otpParser = otpParser
-        }).store(in: &cancellable)
-        self.configManager = configManager
-            
-        let otpParser = TwoFHeyOTPParser(withConfig: configManager.config ?? ParserConfigManager.DEFAULT_CONFIG)
-
+        // Using SimpleOTPParser - no config needed, uses keyword-based detection
+        let otpParser = SimpleOTPParser()
         messageManager = MessageManager(withOTPParser: otpParser)
-        
+
         startListeningForMesssages()
-        
-        configManager.downloadLatestServiceConfig()
     }
     
     func startListeningForMesssages() {
