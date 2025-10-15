@@ -158,6 +158,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         // Always copy to clipboard regardless of overlay setting
         self.originalClipboardContents = message.1.copyToClipboard()
 
+        // Mark message as read if enabled
+        messageManager?.markMessageAsRead(guid: message.0.guid)
+
         if AppStateManager.shared.autoPasteEnabled && AppStateManager.shared.hasAccessibilityPermission() {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 let source = CGEventSource(stateID: .combinedSessionState)
@@ -265,6 +268,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         autoPasteItem.toolTip = "Automatically paste codes into focused text field (requires accessibility permissions)"
         autoPasteItem.state = AppStateManager.shared.autoPasteEnabled ? .on : .off
         settingsMenu.addItem(autoPasteItem)
+
+        let markAsReadItem = NSMenuItem(title: "Mark Messages as Read", action: #selector(AppDelegate.onPressMarkAsRead), keyEquivalent: "")
+        markAsReadItem.toolTip = "Automatically mark OTP messages as read in iMessage after copying the code"
+        markAsReadItem.state = AppStateManager.shared.markAsReadEnabled ? .on : .off
+        settingsMenu.addItem(markAsReadItem)
 
         let restoreContentsMenu = NSMenu()
         let delayTimes = [0, 5, 10, 15, 20]
@@ -403,6 +411,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     @objc func onPressUseNativeNotifications() {
         AppStateManager.shared.useNativeNotifications = !AppStateManager.shared.useNativeNotifications
+        refreshMenu()
+    }
+
+    @objc func onPressMarkAsRead() {
+        AppStateManager.shared.markAsReadEnabled = !AppStateManager.shared.markAsReadEnabled
         refreshMenu()
     }
 

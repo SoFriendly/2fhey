@@ -53,6 +53,7 @@ class AppStateManager {
         static let autoPasteEnabledKey = "com.sofriendly.2fhey.autoPasteEnabled"
         static let showNotificationOverlayKey = "com.sofriendly.2fhey.showNotificationOverlay"
         static let useNativeNotificationsKey = "com.sofriendly.2fhey.useNativeNotifications"
+        static let markAsReadEnabledKey = "com.sofriendly.2fhey.markAsReadEnabled"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
@@ -134,6 +135,16 @@ class AppStateManager {
         }
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: Constants.useNativeNotificationsKey)
+        }
+    }
+
+    var markAsReadEnabled: Bool {
+        get {
+            // Default to false (don't mark as read)
+            return UserDefaults.standard.bool(forKey: Constants.markAsReadEnabledKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.markAsReadEnabledKey)
         }
     }
 

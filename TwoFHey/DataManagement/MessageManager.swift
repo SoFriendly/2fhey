@@ -165,4 +165,26 @@ class MessageManager: ObservableObject {
             messageBody.contains("¥")
         )
     }
+
+    func markMessageAsRead(guid: String) {
+        guard AppStateManager.shared.markAsReadEnabled else { return }
+        guard AppStateManager.shared.hasFullDiscAccess() == .authorized else { return }
+
+        do {
+            var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+            homeDirectory.appendPathComponent("/Library/Messages/chat.db")
+            let db = try Connection(homeDirectory.absoluteString)
+
+            let messageTable = Table("message")
+            let guidColumn = Expression<String>("guid")
+            let isReadColumn = Expression<Bool>("is_read")
+
+            let message = messageTable.filter(guidColumn == guid)
+
+            try db.run(message.update(isReadColumn <- true))
+            print("✅ Marked message as read: \(guid)")
+        } catch {
+            print("⚠️ Failed to mark message as read: \(error)")
+        }
+    }
 }
