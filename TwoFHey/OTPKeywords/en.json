@@ -20,5 +20,12 @@
     "password",
     "one-time"
   ],
-  "patterns": []
+  "patterns": [
+    "code[\\s:]+([\\d\\s-]{4,8})",
+    "verification[\\s:]+([\\d\\s-]{4,8})",
+    "authentication[\\s:]+([\\d\\s-]{4,8})",
+    "otp[\\s:]+([\\d\\s-]{4,8})",
+    "pin[\\s:]+([\\d\\s-]{4,8})",
+    "passcode[\\s:]+([\\d\\s-]{4,8})"
+  ]
 }

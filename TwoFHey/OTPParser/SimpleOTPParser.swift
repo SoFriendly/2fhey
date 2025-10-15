@@ -15,6 +15,21 @@ class SimpleOTPParser: OTPParser {
         let patterns: [String]
     }
 
+    // Structure for custom service patterns
+    private struct CustomPattern {
+        let service: String
+        let regex: NSRegularExpression
+    }
+
+    private struct CustomPatternsFile: Codable {
+        let customPatterns: [CustomPatternEntry]
+    }
+
+    private struct CustomPatternEntry: Codable {
+        let service: String
+        let pattern: String
+    }
+
     // GitHub repository URL for language files
     private static let githubBaseURL = "https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords"
 
@@ -26,6 +41,9 @@ class SimpleOTPParser: OTPParser {
 
     // Language-specific patterns for extracting codes (loaded from all language files)
     private var languagePatterns: [NSRegularExpression]
+
+    // Custom service-specific patterns (highest priority)
+    private var customPatterns: [CustomPattern]
 
     // Common words to ignore when extracting service names
     private static let commonWords: Set<String> = [
@@ -53,9 +71,11 @@ class SimpleOTPParser: OTPParser {
         // Initialize with empty collections
         self.otpKeywords = Set<String>()
         self.languagePatterns = []
+        self.customPatterns = []
 
         // Load from cache or bundle synchronously (for immediate availability)
         loadLanguageFiles()
+        loadCustomPatterns()
 
         // Update from GitHub in background
         Task {
@@ -129,6 +149,58 @@ class SimpleOTPParser: OTPParser {
         }
     }
 
+    // Load custom service-specific patterns
+    private func loadCustomPatterns() {
+        var patterns: [CustomPattern] = []
+
+        // Try to load from cached file first
+        let cacheURL = getCacheDirectory()
+        let cacheFileURL = cacheURL.appendingPathComponent("custom-patterns.json")
+
+        var loadedFromCache = false
+        if FileManager.default.fileExists(atPath: cacheFileURL.path) {
+            if let loadedPatterns = loadCustomPatternsFile(from: cacheFileURL) {
+                patterns = loadedPatterns
+                loadedFromCache = true
+            }
+        }
+
+        // Fall back to bundled file if cache is empty
+        if !loadedFromCache {
+            // Try subdirectory first (folder reference)
+            var fileURL = Bundle.main.url(forResource: "custom-patterns", withExtension: "json", subdirectory: "OTPKeywords")
+
+            // If not found, try root level (group)
+            if fileURL == nil {
+                fileURL = Bundle.main.url(forResource: "custom-patterns", withExtension: "json")
+            }
+
+            if let fileURL = fileURL, let loadedPatterns = loadCustomPatternsFile(from: fileURL) {
+                patterns = loadedPatterns
+            }
+        }
+
+        self.customPatterns = patterns
+    }
+
+    // Load custom patterns from a file URL
+    private func loadCustomPatternsFile(from url: URL) -> [CustomPattern]? {
+        do {
+            let data = try Data(contentsOf: url)
+            let customPatternsFile = try JSONDecoder().decode(CustomPatternsFile.self, from: data)
+
+            var patterns: [CustomPattern] = []
+            for entry in customPatternsFile.customPatterns {
+                if let regex = try? NSRegularExpression(pattern: entry.pattern) {
+                    patterns.append(CustomPattern(service: entry.service, regex: regex))
+                }
+            }
+            return patterns
+        } catch {
+            return nil
+        }
+    }
+
     // Get cache directory for language files
     private func getCacheDirectory() -> URL {
         let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
@@ -140,7 +212,7 @@ class SimpleOTPParser: OTPParser {
         return otpCacheDir
     }
 
-    // Update language files from GitHub
+    // Update language files and custom patterns from GitHub
     private func updateLanguageFilesFromGitHub() async {
         var updatedKeywords = Set<String>()
         var updatedPatterns: [NSRegularExpression] = []
@@ -148,6 +220,7 @@ class SimpleOTPParser: OTPParser {
 
         let cacheDir = getCacheDirectory()
 
+        // Update language files
         for fileName in Self.languageFiles {
             let urlString = "\(Self.githubBaseURL)/\(fileName)"
             guard let url = URL(string: urlString) else { continue }
@@ -181,12 +254,57 @@ class SimpleOTPParser: OTPParser {
             self.otpKeywords = updatedKeywords
             self.languagePatterns = updatedPatterns
         }
+
+        // Update custom patterns file
+        let customPatternsURLString = "\(Self.githubBaseURL)/custom-patterns.json"
+        if let url = URL(string: customPatternsURLString) {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+
+                // Validate the JSON before saving
+                let customPatternsFile = try JSONDecoder().decode(CustomPatternsFile.self, from: data)
+
+                // Save to cache
+                let cacheFileURL = cacheDir.appendingPathComponent("custom-patterns.json")
+                try data.write(to: cacheFileURL)
+
+                // Build patterns array
+                var patterns: [CustomPattern] = []
+                for entry in customPatternsFile.customPatterns {
+                    if let regex = try? NSRegularExpression(pattern: entry.pattern) {
+                        patterns.append(CustomPattern(service: entry.service, regex: regex))
+                    }
+                }
+
+                // Update in-memory custom patterns
+                self.customPatterns = patterns
+            } catch {
+                // Silently fail - network errors are expected
+            }
+        }
     }
 
     func parseMessage(_ message: String) -> ParsedOTP? {
         let lowercased = message.lowercased()
 
-        // First check: Does this message contain OTP-related keywords?
+        // Priority 1: Check custom service-specific patterns first (highest confidence)
+        for customPattern in customPatterns {
+            if let match = customPattern.regex.firstMatch(in: message, range: NSRange(message.startIndex..., in: message)) {
+                // Find the first non-empty capture group (the code)
+                for i in 1..<match.numberOfRanges {
+                    if let range = Range(match.range(at: i), in: message) {
+                        var code = String(message[range])
+                        // Clean up the code (remove all whitespace, dashes, and newlines - keep only alphanumeric)
+                        code = code.components(separatedBy: CharacterSet.alphanumerics.inverted).joined()
+                        if !code.isEmpty && code.count >= 4 && code.count <= 10 {
+                            return ParsedOTP(service: customPattern.service.lowercased(), code: code)
+                        }
+                    }
+                }
+            }
+        }
+
+        // Priority 2: Check if message contains OTP-related keywords
         let containsOTPKeyword = otpKeywords.contains { keyword in
             lowercased.contains(keyword)
         }
@@ -195,7 +313,7 @@ class SimpleOTPParser: OTPParser {
             return nil
         }
 
-        // Special case: Google's G-XXXXXX format
+        // Priority 3: Google's special G-XXXXXX format
         if let googleCode = extractGoogleCode(from: message) {
             return ParsedOTP(service: "google", code: googleCode)
         }
@@ -221,15 +339,15 @@ class SimpleOTPParser: OTPParser {
     private func extractPotentialCodes(from message: String) -> [String] {
         var codes: [String] = []
 
-        // Pattern 0: Language-specific patterns (highest priority, loaded from language files)
+        // Pattern 0: Language-specific patterns (high priority, loaded from language files)
         // These are context-specific patterns like "验证码：123456" or "code: 123456"
         for pattern in languagePatterns {
             if let match = pattern.firstMatch(in: message, range: NSRange(message.startIndex..., in: message)),
                match.numberOfRanges > 1,
                let range = Range(match.range(at: 1), in: message) {
                 var code = String(message[range])
-                // Clean up the code (remove spaces and dashes)
-                code = code.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "")
+                // Clean up the code (remove all whitespace, dashes, and newlines - keep only alphanumeric)
+                code = code.components(separatedBy: CharacterSet.alphanumerics.inverted).joined()
                 codes.append(code)
                 // Return early - language-specific patterns are very reliable
                 return codes
@@ -250,17 +368,24 @@ class SimpleOTPParser: OTPParser {
         let spacedMatches = spacedPattern.matches(in: message, range: NSRange(message.startIndex..., in: message))
         for match in spacedMatches {
             if let range = Range(match.range(at: 1), in: message) {
-                let code = String(message[range]).replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "")
+                let code = String(message[range]).components(separatedBy: CharacterSet.alphanumerics.inverted).joined()
                 codes.append(code)
             }
         }
 
         // Pattern 3: Alphanumeric codes (letters + numbers, 4-8 chars, must contain at least one digit)
-        let alphanumericPattern = try! NSRegularExpression(pattern: #"\b([A-Za-z]*\d[A-Za-z0-9]{3,7})\b"#)
+        // Matches codes like: ABC123, A1B2C3, 123ABC, AB1CD, etc.
+        let alphanumericPattern = try! NSRegularExpression(pattern: #"\b([A-Za-z0-9]*\d[A-Za-z0-9]*)\b"#)
         let alphanumericMatches = alphanumericPattern.matches(in: message, range: NSRange(message.startIndex..., in: message))
         for match in alphanumericMatches {
             if let range = Range(match.range(at: 1), in: message) {
-                codes.append(String(message[range]))
+                let code = String(message[range])
+                // Only accept if 4-8 characters and contains both letters and numbers (true mixed alphanumeric)
+                if code.count >= 4 && code.count <= 8 &&
+                   code.contains(where: { $0.isLetter }) &&
+                   code.contains(where: { $0.isNumber }) {
+                    codes.append(code)
+                }
             }
         }
 

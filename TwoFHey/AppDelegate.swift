@@ -311,10 +311,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             ("Bank", "Your verification code is 789012"),
             ("Generic 6-digit", "Your code: 456789"),
             ("Amazon", "123456 is your Amazon OTP. Do not share it with anyone."),
+            ("Verification code pattern", "Verification code: 9913\nSharing the verification code exposes you to fraud"),
             ("Chinese (Zhihu)", "【知乎】你的验证码是 700185，此验证码用于登录知乎或重置密码。10 分钟内有效。"),
             ("Chinese (JD)", "【京东】验证码：548393，您正在新设备上登录。请确认本人操作，切勿泄露给他人，京东工作人员不会索取此验证码。"),
             ("Chinese (Bilibili)", "【哔哩哔哩】778604为本次登录验证的手机验证码，请在5分钟内完成验证。为保证账号安全，请勿泄漏此验证码"),
             ("Chipotle", "Your verification code is 975654. This code will only be valid for 5 minutes."),
+            ("Chase (custom)", "From: Chase\nWe'll NEVER call you to ask for this code.\nOne-Time Code:12345678\nOnly use this online. Code expires in 30 min."),
+            ("Geico (custom)", "GEICO: Your verification code is: ABC123. It expires in 10 minutes. Please do not reply to this message."),
+            ("Twitter (custom)", "Twitter login code: 987654321"),
+            ("Vodafone (custom)", "Don't share this code with anyone. Fraudsters can use it to access your online account. The code is valid for 20 minutes. Your code is AB12C."),
         ]
 
         testMessages.forEach { (name, message) in

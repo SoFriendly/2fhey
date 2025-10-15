@@ -56,13 +56,14 @@ If you use a service that isn't automatically recognized, you can add it to the 
 
 The app uses a three-tier loading strategy:
 
-1. **First launch:** Loads from bundled language files (immediate availability)
+1. **First launch:** Loads from bundled language files and custom patterns (immediate availability)
 2. **Subsequent launches:** Loads from cached files (fast)
 3. **Background update:** Fetches latest from GitHub on each app launch
 
-Language files are fetched from:
+Files are fetched from:
 ```
 https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords/{language}.json
+https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords/custom-patterns.json
 ```
 
 ### Adding a New Language
@@ -90,6 +91,29 @@ To add support for a new language:
 
 4. All users will receive the new language support on their next app launch (no binary update required!)
 
+### Adding Custom Service Patterns
+
+For services with unique OTP formats (like Chase, Geico, etc.), you can add patterns to `TwoFHey/OTPKeywords/custom-patterns.json`:
+
+```json
+{
+  "customPatterns": [
+    {
+      "service": "YourService",
+      "pattern": "YourService code: (\\d{6})"
+    }
+  ]
+}
+```
+
+**Pattern tips:**
+- Use capture groups `()` to extract the code
+- First capture group will be used as the OTP code
+- Service name is automatically associated with the pattern
+- Patterns are checked first (highest priority)
+
+Custom patterns are also updated remotely from GitHub on app launch.
+
 ### Language File Format
 
 Each language file contains:
@@ -105,7 +129,7 @@ Each language file contains:
 
 ### Cache Location
 
-Downloaded language files are cached at: `~/Library/Caches/OTPKeywords/`
+Downloaded language files and custom patterns are cached at: `~/Library/Caches/OTPKeywords/`
 
 ### Offline Support
 

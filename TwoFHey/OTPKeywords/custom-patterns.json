@@ -1,0 +1,108 @@
+{
+  "customPatterns": [
+    {
+      "service": "Fortuneo",
+      "pattern": "\\b(\\d{6}) est votre code fortuneo pour"
+    },
+    {
+      "service": "CA DMV",
+      "pattern": "Your CA DMV verification code is: (\\d{6})"
+    },
+    {
+      "service": "Chase",
+      "pattern": "One-Time Code:(\\d{8})"
+    },
+    {
+      "service": "DigitalOcean",
+      "pattern": "([\\w\\d]{6}) is your DigitalOcean verification code"
+    },
+    {
+      "service": "Geico",
+      "pattern": "GEICO: Your verification code is: (\\w{6})"
+    },
+    {
+      "service": "DBS Bank",
+      "pattern": "use [A-Z]{3}-([0-9]{6}) within"
+    },
+    {
+      "service": "OneLogin",
+      "pattern": "Security Code: (\\w{6})"
+    },
+    {
+      "service": "USPS",
+      "pattern": "USPS Account Services: your validation code is (\\w{6})"
+    },
+    {
+      "service": "AOD FCU",
+      "pattern": "AOD FCU security code: (\\d{6})"
+    },
+    {
+      "service": "MIGov",
+      "pattern": "Your passcode is[\\s\\n]+(\\d{4})-(\\d{6})"
+    },
+    {
+      "service": "MPC",
+      "pattern": "Your security code is: (\\d{5,6})"
+    },
+    {
+      "service": "pf-bank",
+      "pattern": "^([0-9]{8})[\\s\\n]+Valid 5 minutes"
+    },
+    {
+      "service": "Vodafone",
+      "pattern": "Your code is ([0-9A-Z]{5})\\."
+    },
+    {
+      "service": "Amex SafeKey",
+      "pattern": "Your Amex SafeKey One-Time Password[\\s\\S]+is (\\d{6})\\."
+    },
+    {
+      "service": "Twitter",
+      "pattern": "Twitter login code: (\\d{6,9})"
+    },
+    {
+      "service": "Churchill Mortgage",
+      "pattern": "PIN: (\\d{6})"
+    },
+    {
+      "service": "myGov",
+      "pattern": "myGov Security: Your security code is (\\d{6})"
+    },
+    {
+      "service": "BforBank",
+      "pattern": "BforBank[\\s\\S]+code: (\\d{6})"
+    },
+    {
+      "service": "idCAT Mobil",
+      "pattern": "@valid\\.aoc\\.cat #(\\d{6})"
+    },
+    {
+      "service": "Revolut Business",
+      "pattern": "use code: (\\d{3}-\\d{3})"
+    },
+    {
+      "service": "FNZ Bank Finvesto",
+      "pattern": "ist: ((?:\\d|\\D){6})$"
+    },
+    {
+      "service": "SoFi Money",
+      "pattern": "Login Code: (\\d{6})"
+    },
+    {
+      "service": "Spirica",
+      "pattern": "Code de confirmation : (\\S{6})"
+    },
+    {
+      "service": "Aeroplan",
+      "pattern": "Aeroplan[®]? verification code[\\s\\S]+Code:\\s*(\\d{6})"
+    },
+    {
+      "service": "EE",
+      "pattern": "Here's your PIN to sign in securely:[\\s\\S]+(\\d{6})"
+    },
+    {
+      "service": "Cater Allen",
+      "pattern": "NEVER share this code[\\s\\S]+(\\d{6})$"
+    }
+  ]
+}
