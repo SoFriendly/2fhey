@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -92,6 +92,10 @@
 		D4F5CAC22817725100A39E6D /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0FCFDDCB2EA0330500A5181B /* OTPKeywords */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = OTPKeywords; path = TwoFHey/OTPKeywords; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		D4123A792826EF3B002C3C42 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -162,6 +166,7 @@
 		D4F5CA932817688800A39E6D = {
 			isa = PBXGroup;
 			children = (
+				0FCFDDCB2EA0330500A5181B /* OTPKeywords */,
 				D4F5CA9E2817688800A39E6D /* TwoFHey */,
 				D433132D281F630400AC5343 /* AutoLauncher */,
 				D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */,
@@ -280,6 +285,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0FCFDDCB2EA0330500A5181B /* OTPKeywords */,
 			);
 			name = TwoFHey;
 			packageProductDependencies = (
@@ -672,7 +680,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -707,7 +715,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;

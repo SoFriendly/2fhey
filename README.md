@@ -32,7 +32,7 @@ The app automatically detects codes in various formats:
 
 ## Installation
 
-1. Download the latest release
+1. Download from [2fhey.com](https://2fhey.com) (via Gumroad)
 2. Move to Applications folder
 3. Launch and grant required permissions:
    - **Full Disk Access** - to read Messages database
@@ -47,6 +47,71 @@ The app automatically detects codes in various formats:
 ## Custom Services
 
 If you use a service that isn't automatically recognized, you can add it to the known services list by creating a PR to update `OTPParserConstants.knownServices` in `TwoFHey/OTPParser/OTPParserContants.swift`.
+
+## Multi-Language Support
+
+2FHey supports OTP detection in multiple languages including English, French, Spanish, Portuguese, German, and Chinese. The language files are automatically updated from GitHub without requiring a new app release.
+
+### How It Works
+
+The app uses a three-tier loading strategy:
+
+1. **First launch:** Loads from bundled language files (immediate availability)
+2. **Subsequent launches:** Loads from cached files (fast)
+3. **Background update:** Fetches latest from GitHub on each app launch
+
+Language files are fetched from:
+```
+https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords/{language}.json
+```
+
+### Adding a New Language
+
+To add support for a new language:
+
+1. Create a new JSON file in `TwoFHey/OTPKeywords/` with the following structure:
+   ```json
+   {
+     "keywords": [
+       "code",
+       "verification",
+       "verify"
+     ],
+     "patterns": [
+       "code[\\s:]+([\\d\\s-]{4,8})",
+       "verification[\\s:]+([\\d\\s-]{4,8})"
+     ]
+   }
+   ```
+
+2. Add the filename to the `languageFiles` array in `SimpleOTPParser.swift:22`
+
+3. Submit a pull request
+
+4. All users will receive the new language support on their next app launch (no binary update required!)
+
+### Language File Format
+
+Each language file contains:
+
+- **keywords**: An array of words that indicate an OTP message (e.g., "code", "verification", "vérification")
+  - All keywords from all languages are merged and checked together
+  - This allows detection of multilingual messages
+
+- **patterns**: An array of regex patterns for language-specific code extraction
+  - These are high-priority patterns like `"验证码：123456"` or `"code: 123456"`
+  - Pattern captures should extract just the numeric code in capture group 1
+  - Patterns are checked before generic digit extraction
+
+### Cache Location
+
+Downloaded language files are cached at: `~/Library/Caches/OTPKeywords/`
+
+### Offline Support
+
+If GitHub is unreachable, the app automatically falls back to:
+1. Cached files from previous downloads
+2. Bundled files included in the app
 
 ## Development Notes
 

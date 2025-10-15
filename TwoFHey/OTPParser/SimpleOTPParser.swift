@@ -9,22 +9,36 @@ import Foundation
 
 class SimpleOTPParser: OTPParser {
 
-    // Keywords that indicate this is likely an OTP message
-    private static let otpKeywords: Set<String> = [
-        "code", "verification", "verify", "otp", "pin",
-        "authentication", "authenticate", "auth",
-        "security", "2fa", "two-factor", "2-factor",
-        "confirmation", "confirm", "activate", "activation",
-        "passcode", "password", "one-time",
-        // Chinese keywords
-        "验证码", "驗證碼", "动态码", "校验码", "确认码"
-    ]
+    // Structure to decode language files
+    private struct LanguageFile: Codable {
+        let keywords: [String]
+        let patterns: [String]
+    }
+
+    // GitHub repository URL for language files
+    private static let githubBaseURL = "https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords"
+
+    // Language files to load
+    private static let languageFiles = ["en.json", "fr.json", "zh.json", "es.json", "de.json", "pt.json"]
+
+    // Keywords that indicate this is likely an OTP message (loaded from all language files)
+    private var otpKeywords: Set<String>
+
+    // Language-specific patterns for extracting codes (loaded from all language files)
+    private var languagePatterns: [NSRegularExpression]
 
     // Common words to ignore when extracting service names
     private static let commonWords: Set<String> = [
+        // English
         "your", "the", "a", "an", "is", "this", "that",
         "here", "use", "enter", "please", "do", "not",
-        "share", "will", "be", "valid", "only", "sent"
+        "share", "will", "be", "valid", "only", "sent",
+        // French
+        "ton", "tu", "vous", "votre", "le", "la", "un", "une", "des",
+        "ce", "son", "sa", "de", "du", "lui", "ici", "utiliser", "utilisez",
+        "entrer", "entrez", "svp", "merci", "s'il-vous-plaît", "s'il vous plait",
+        "ne", "pas", "uniquement", "seulement", "partager", "partagez",
+        "va", "sera", "être"
     ]
 
     // Patterns to ignore (these are not OTP messages)
@@ -35,16 +49,149 @@ class SimpleOTPParser: OTPParser {
         try! NSRegularExpression(pattern: #"\b\d+\s*(st|nd|rd|th)\b"#, options: .caseInsensitive), // Dates
     ]
 
+    init() {
+        // Initialize with empty collections
+        self.otpKeywords = Set<String>()
+        self.languagePatterns = []
+
+        // Load from cache or bundle synchronously (for immediate availability)
+        loadLanguageFiles()
+
+        // Update from GitHub in background
+        Task {
+            await updateLanguageFilesFromGitHub()
+        }
+    }
+
+    // Load language files from cache or bundle
+    private func loadLanguageFiles() {
+        var allKeywords = Set<String>()
+        var allPatterns: [NSRegularExpression] = []
+
+        // Try to load from cached files first
+        let cacheURL = getCacheDirectory()
+        var loadedFromCache = false
+
+        for fileName in Self.languageFiles {
+            let cacheFileURL = cacheURL.appendingPathComponent(fileName)
+            if FileManager.default.fileExists(atPath: cacheFileURL.path) {
+                if let (keywords, patterns) = loadLanguageFile(from: cacheFileURL) {
+                    allKeywords.formUnion(keywords)
+                    allPatterns.append(contentsOf: patterns)
+                    loadedFromCache = true
+                }
+            }
+        }
+
+        // Fall back to bundled files if cache is empty
+        if !loadedFromCache {
+            for fileName in Self.languageFiles {
+                let resourceName = fileName.replacingOccurrences(of: ".json", with: "")
+
+                // Try subdirectory first (folder reference)
+                var fileURL = Bundle.main.url(forResource: resourceName, withExtension: "json", subdirectory: "OTPKeywords")
+
+                // If not found, try root level (group)
+                if fileURL == nil {
+                    fileURL = Bundle.main.url(forResource: resourceName, withExtension: "json")
+                }
+
+                if let fileURL = fileURL {
+                    if let (keywords, patterns) = loadLanguageFile(from: fileURL) {
+                        allKeywords.formUnion(keywords)
+                        allPatterns.append(contentsOf: patterns)
+                    }
+                }
+            }
+        }
+
+        self.otpKeywords = allKeywords
+        self.languagePatterns = allPatterns
+    }
+
+    // Load a single language file and return keywords and patterns
+    private func loadLanguageFile(from url: URL) -> (keywords: Set<String>, patterns: [NSRegularExpression])? {
+        do {
+            let data = try Data(contentsOf: url)
+            let languageFile = try JSONDecoder().decode(LanguageFile.self, from: data)
+
+            var patterns: [NSRegularExpression] = []
+            for patternString in languageFile.patterns {
+                if let regex = try? NSRegularExpression(pattern: patternString) {
+                    patterns.append(regex)
+                }
+            }
+
+            return (Set(languageFile.keywords), patterns)
+        } catch {
+            // Silently fail - avoid spamming logs
+            return nil
+        }
+    }
+
+    // Get cache directory for language files
+    private func getCacheDirectory() -> URL {
+        let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        let otpCacheDir = cacheDir.appendingPathComponent("OTPKeywords")
+
+        // Create directory if it doesn't exist
+        try? FileManager.default.createDirectory(at: otpCacheDir, withIntermediateDirectories: true)
+
+        return otpCacheDir
+    }
+
+    // Update language files from GitHub
+    private func updateLanguageFilesFromGitHub() async {
+        var updatedKeywords = Set<String>()
+        var updatedPatterns: [NSRegularExpression] = []
+        var updatedAny = false
+
+        let cacheDir = getCacheDirectory()
+
+        for fileName in Self.languageFiles {
+            let urlString = "\(Self.githubBaseURL)/\(fileName)"
+            guard let url = URL(string: urlString) else { continue }
+
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+
+                // Validate the JSON before saving
+                let languageFile = try JSONDecoder().decode(LanguageFile.self, from: data)
+
+                // Save to cache
+                let cacheFileURL = cacheDir.appendingPathComponent(fileName)
+                try data.write(to: cacheFileURL)
+
+                // Merge keywords and patterns
+                updatedKeywords.formUnion(languageFile.keywords)
+                for patternString in languageFile.patterns {
+                    if let regex = try? NSRegularExpression(pattern: patternString) {
+                        updatedPatterns.append(regex)
+                    }
+                }
+
+                updatedAny = true
+            } catch {
+                // Silently fail - network errors are expected
+            }
+        }
+
+        // Update the in-memory collections if we successfully downloaded any files
+        if updatedAny {
+            self.otpKeywords = updatedKeywords
+            self.languagePatterns = updatedPatterns
+        }
+    }
+
     func parseMessage(_ message: String) -> ParsedOTP? {
         let lowercased = message.lowercased()
 
         // First check: Does this message contain OTP-related keywords?
-        let containsOTPKeyword = Self.otpKeywords.contains { keyword in
+        let containsOTPKeyword = otpKeywords.contains { keyword in
             lowercased.contains(keyword)
         }
 
         guard containsOTPKeyword else {
-            print("No OTP keywords found in message")
             return nil
         }
 
@@ -64,11 +211,9 @@ class SimpleOTPParser: OTPParser {
         // If we found valid codes, return the first one
         if let code = validCodes.first {
             let service = extractService(from: lowercased)
-            print("✅ Found OTP code: \(code), service: \(service ?? "unknown")")
             return ParsedOTP(service: service, code: code)
         }
 
-        print("No valid OTP codes found")
         return nil
     }
 
@@ -76,22 +221,17 @@ class SimpleOTPParser: OTPParser {
     private func extractPotentialCodes(from message: String) -> [String] {
         var codes: [String] = []
 
-        // Pattern 0: Chinese verification code patterns (highest priority for Chinese messages)
-        // Patterns like: 验证码：123456, 验证码是 123456, 验证码为123456, etc.
-        let chineseCodePatterns = [
-            #"验证码[：:是为]\s*(\d{4,8})"#,  // Simplified Chinese
-            #"驗證碼[：:是為]\s*(\d{4,8})"#,  // Traditional Chinese
-            #"动态码[：:是为]\s*(\d{4,8})"#,
-            #"校验码[：:是为]\s*(\d{4,8})"#,
-            #"确认码[：:是为]\s*(\d{4,8})"#
-        ]
-
-        for patternString in chineseCodePatterns {
-            if let pattern = try? NSRegularExpression(pattern: patternString),
-               let match = pattern.firstMatch(in: message, range: NSRange(message.startIndex..., in: message)),
+        // Pattern 0: Language-specific patterns (highest priority, loaded from language files)
+        // These are context-specific patterns like "验证码：123456" or "code: 123456"
+        for pattern in languagePatterns {
+            if let match = pattern.firstMatch(in: message, range: NSRange(message.startIndex..., in: message)),
+               match.numberOfRanges > 1,
                let range = Range(match.range(at: 1), in: message) {
-                codes.append(String(message[range]))
-                // Return early - Chinese patterns are very specific and reliable
+                var code = String(message[range])
+                // Clean up the code (remove spaces and dashes)
+                code = code.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "-", with: "")
+                codes.append(code)
+                // Return early - language-specific patterns are very reliable
                 return codes
             }
         }
@@ -161,7 +301,6 @@ class SimpleOTPParser: OTPParser {
                 if let range = Range(match.range, in: message) {
                     let matchedText = String(message[range])
                     if matchedText.contains(code) {
-                        print("Ignoring code '\(code)' - matches ignore pattern")
                         return true
                     }
                 }
@@ -173,7 +312,6 @@ class SimpleOTPParser: OTPParser {
         if lowercased.hasSuffix("am") || lowercased.hasSuffix("pm") ||
            lowercased.hasSuffix("st") || lowercased.hasSuffix("nd") ||
            lowercased.hasSuffix("rd") || lowercased.hasSuffix("th") {
-            print("Ignoring code '\(code)' - time/date suffix")
             return true
         }
 
@@ -233,7 +371,7 @@ class SimpleOTPParser: OTPParser {
     private func isValidServiceName(_ service: String) -> Bool {
         let trimmed = service.trimmingCharacters(in: .whitespaces).lowercased()
         return trimmed.count > 2 &&
-               !Self.otpKeywords.contains(trimmed) &&
+               !otpKeywords.contains(trimmed) &&
                !Self.commonWords.contains(trimmed)
     }
 }
