@@ -18,6 +18,13 @@ class SimpleOTPParser: OTPParser {
         "passcode", "password", "one-time"
     ]
 
+    // Common words to ignore when extracting service names
+    private static let commonWords: Set<String> = [
+        "your", "the", "a", "an", "is", "this", "that",
+        "here", "use", "enter", "please", "do", "not",
+        "share", "will", "be", "valid", "only", "sent"
+    ]
+
     // Patterns to ignore (these are not OTP messages)
     private static let ignorePatterns: [NSRegularExpression] = [
         try! NSRegularExpression(pattern: #"\b(\d{3})[.\-](\d{3})[.\-](\d{4})\b"#), // Phone numbers
@@ -153,7 +160,14 @@ class SimpleOTPParser: OTPParser {
 
     // Try to extract service name from the message (best effort)
     private func extractService(from lowercased: String) -> String? {
-        // Method 1: Check at start of message for brackets or "Welcome to"
+        // Method 1: Check for known services FIRST (most reliable)
+        for service in OTPParserConstants.knownServices {
+            if lowercased.contains(service) {
+                return service
+            }
+        }
+
+        // Method 2: Check at start of message for brackets or "Welcome to"
         // e.g., "[Amazon]", "(Google)", "Welcome to Apple"
         let startPatterns = [
             #"^\[([^\]\d]{3,})\]"#,  // [ServiceName]
@@ -166,16 +180,16 @@ class SimpleOTPParser: OTPParser {
                let match = pattern.firstMatch(in: lowercased, range: NSRange(lowercased.startIndex..., in: lowercased)),
                let range = Range(match.range(at: 1), in: lowercased) {
                 let service = String(lowercased[range]).trimmingCharacters(in: .whitespaces)
-                if !Self.otpKeywords.contains(service) && service.count > 2 {
+                if isValidServiceName(service) {
                     return service
                 }
             }
         }
 
-        // Method 2: Look for "from [service]" or "[service] verification/code"
+        // Method 3: Look for "from [service]" or "verification/code for/from [service]"
+        // Note: We removed the "[service] verification/code" pattern as it's too prone to false positives
         let simplePatterns = [
             #"from\s+([a-z0-9 ]+?)(?:\s|$)"#,
-            #"([a-z0-9 ]+?)\s+(?:verification|code|otp|pin)"#,
             #"(?:verification|code|otp|pin)\s+(?:for|from)\s+([a-z0-9 ]+?)(?:\s|$)"#,
         ]
 
@@ -184,20 +198,20 @@ class SimpleOTPParser: OTPParser {
                let match = pattern.firstMatch(in: lowercased, range: NSRange(lowercased.startIndex..., in: lowercased)),
                let range = Range(match.range(at: 1), in: lowercased) {
                 let service = String(lowercased[range]).trimmingCharacters(in: .whitespaces)
-                // Make sure it's not a common word
-                if !Self.otpKeywords.contains(service) && service.count > 2 {
+                if isValidServiceName(service) {
                     return service
                 }
             }
         }
 
-        // Method 3: Check for known services
-        for service in OTPParserConstants.knownServices {
-            if lowercased.contains(service) {
-                return service
-            }
-        }
-
         return nil
+    }
+
+    // Validate that a string is a valid service name (not a common word or keyword)
+    private func isValidServiceName(_ service: String) -> Bool {
+        let trimmed = service.trimmingCharacters(in: .whitespaces).lowercased()
+        return trimmed.count > 2 &&
+               !Self.otpKeywords.contains(trimmed) &&
+               !Self.commonWords.contains(trimmed)
     }
 }

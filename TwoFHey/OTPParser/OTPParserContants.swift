@@ -49,6 +49,7 @@ struct OTPParserConstants {
         "delivery.com",
         "eat24",
         "foodler",
+        "chipotle",
         "amazon",
         "tencent",
         "alibaba",
@@ -116,7 +117,32 @@ struct OTPParserConstants {
         "sia",
         "fanduel",
         "cart",
-        "fortuneo"
+        "fortuneo",
+        // Additional services from custom patterns
+        "ca dmv",
+        "chase",
+        "taishin bank",
+        "digitalocean",
+        "geico",
+        "dbs bank",
+        "onelogin",
+        "usps",
+        "aod",
+        "migov",
+        "mpc",
+        "pf-bank",
+        "vodafone",
+        "amex safekey",
+        "churchill mortgage",
+        "mygov",
+        "bforbank",
+        "idcat mobil",
+        "revolut",
+        "fnz bank",
+        "sofi",
+        "spirica",
+        "aeroplan",
+        "ee"
       ]
     
     static let authWords: Set<String> = [
