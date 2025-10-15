@@ -58,7 +58,8 @@ class MessageManager: ObservableObject {
         let query = messageTable
             .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
             .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-            .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
+            .where(messageTable[dateColumn] > timeOffsetForDate(date))  // Removed SMS filter to include iMessage
+            // Original: .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
             .order(messageTable[dateColumn].asc)
 
         let mapRowIterator = try db.prepareRowIterator(query)
@@ -131,7 +132,7 @@ class MessageManager: ObservableObject {
     private func findPossibleOTPMessagesAfterDate(_ date: Date) throws -> [MessageWithParsedOTP] {
         let messagesFromDB = try loadMessagesAfterDate(date)
         let filteredMessages = messagesFromDB
-            .filter { !$0.fromMe }
+            // .filter { !$0.fromMe }  // Commented out to allow testing with messages sent to yourself
             .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
             .filter { !processedGuids.contains($0.guid) }
         
