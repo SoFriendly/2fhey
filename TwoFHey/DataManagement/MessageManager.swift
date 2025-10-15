@@ -96,6 +96,25 @@ class MessageManager: ObservableObject {
         processedGuids = []
         startListening()
     }
+
+    // Test/Debug method to inject fake messages
+    func injectTestMessage(_ text: String) {
+        let testMessage = Message(
+            guid: UUID().uuidString,
+            text: text,
+            handle: "+15555551234",
+            group: nil,
+            fromMe: false
+        )
+
+        guard let parsedOTP = otpParser.parseMessage(text) else {
+            print("❌ Failed to parse test message: \(text)")
+            return
+        }
+
+        print("✅ Parsed test message: \(parsedOTP.code) from \(parsedOTP.service ?? "unknown")")
+        messages.append((testMessage, parsedOTP))
+    }
     
     @objc func syncMessages() {
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }

@@ -249,7 +249,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let settingsItem = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
         settingsItem.submenu = settingsMenu
         statusBarMenu.addItem(settingsItem)
-        
+
+        // Debug menu (only in Debug builds)
+        #if DEBUG
+        statusBarMenu.addItem(NSMenuItem.separator())
+        let debugMenu = NSMenu()
+
+        let testMessages = [
+            ("Google", "G-123456 is your Google verification code."),
+            ("Apple", "Your Apple ID Code is: 654321. Don't share it with anyone."),
+            ("Bank", "Your verification code is 789012"),
+            ("Generic 6-digit", "Your code: 456789"),
+            ("Amazon", "123456 is your Amazon OTP. Do not share it with anyone."),
+        ]
+
+        testMessages.forEach { (name, message) in
+            let item = NSMenuItem(title: "Test: \(name)", action: #selector(AppDelegate.injectTestMessage), keyEquivalent: "")
+            item.representedObject = message
+            debugMenu.addItem(item)
+        }
+
+        let debugItem = NSMenuItem(title: "🐛 Debug", action: nil, keyEquivalent: "")
+        debugItem.submenu = debugMenu
+        statusBarMenu.addItem(debugItem)
+        #endif
+
         statusBarMenu.addItem(
             withTitle: "Quit 2FHey",
             action: #selector(AppDelegate.quit),
@@ -324,6 +348,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func onPressAutoPaste() {
         AppStateManager.shared.autoPasteEnabled = !AppStateManager.shared.autoPasteEnabled
         refreshMenu()
+    }
+
+    @objc func injectTestMessage(_ sender: NSMenuItem) {
+        guard let message = sender.representedObject as? String else { return }
+        print("🧪 Injecting test message: \(message)")
+        messageManager?.injectTestMessage(message)
     }
 
     @objc func quit() {
