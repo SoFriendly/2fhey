@@ -29,9 +29,16 @@ class SimpleOTPParser: OTPParser {
 
     // Common words to ignore when extracting service names
     private static let commonWords: Set<String> = [
+        // English
         "your", "the", "a", "an", "is", "this", "that",
         "here", "use", "enter", "please", "do", "not",
-        "share", "will", "be", "valid", "only", "sent"
+        "share", "will", "be", "valid", "only", "sent",
+        // French
+        "ton", "tu", "vous", "votre", "le", "la", "un", "une", "des",
+        "ce", "son", "sa", "de", "du", "lui", "ici", "utiliser", "utilisez",
+        "entrer", "entrez", "svp", "merci", "s'il-vous-plaît", "s'il vous plait",
+        "ne", "pas", "uniquement", "seulement", "partager", "partagez",
+        "va", "sera", "être"
     ]
 
     // Patterns to ignore (these are not OTP messages)
@@ -70,7 +77,6 @@ class SimpleOTPParser: OTPParser {
 
         var loadedFromCache = false
         if !cachedFiles.isEmpty {
-            print("Loading language files from cache...")
             for fileURL in cachedFiles {
                 if let (keywords, patterns) = loadLanguageFile(from: fileURL) {
                     allKeywords.formUnion(keywords)
@@ -82,7 +88,6 @@ class SimpleOTPParser: OTPParser {
 
         // Fall back to bundled files if cache is empty
         if !loadedFromCache {
-            print("Loading language files from bundle...")
             if let keywordsURL = Bundle.main.url(forResource: "OTPKeywords", withExtension: nil) {
                 do {
                     let fileURLs = try FileManager.default.contentsOfDirectory(at: keywordsURL, includingPropertiesForKeys: nil)
@@ -95,14 +100,13 @@ class SimpleOTPParser: OTPParser {
                         }
                     }
                 } catch {
-                    print("Failed to load OTPKeywords directory: \(error)")
+                    // Silently fail - this is expected if OTPKeywords not in bundle
                 }
             }
         }
 
         self.otpKeywords = allKeywords
         self.languagePatterns = allPatterns
-        print("Loaded \(allKeywords.count) keywords and \(allPatterns.count) patterns")
     }
 
     // Load a single language file and return keywords and patterns
@@ -120,7 +124,7 @@ class SimpleOTPParser: OTPParser {
 
             return (Set(languageFile.keywords), patterns)
         } catch {
-            print("Failed to load language file \(url.lastPathComponent): \(error)")
+            // Silently fail - avoid spamming logs
             return nil
         }
     }
@@ -138,7 +142,6 @@ class SimpleOTPParser: OTPParser {
 
     // Update language files from GitHub
     private func updateLanguageFilesFromGitHub() async {
-        print("Updating language files from GitHub...")
         var updatedKeywords = Set<String>()
         var updatedPatterns: [NSRegularExpression] = []
         var updatedAny = false
@@ -168,9 +171,8 @@ class SimpleOTPParser: OTPParser {
                 }
 
                 updatedAny = true
-                print("✅ Updated \(fileName) from GitHub")
             } catch {
-                print("Failed to update \(fileName) from GitHub: \(error)")
+                // Silently fail - network errors are expected
             }
         }
 
@@ -178,7 +180,6 @@ class SimpleOTPParser: OTPParser {
         if updatedAny {
             self.otpKeywords = updatedKeywords
             self.languagePatterns = updatedPatterns
-            print("Updated language files: \(updatedKeywords.count) keywords, \(updatedPatterns.count) patterns")
         }
     }
 
@@ -191,7 +192,6 @@ class SimpleOTPParser: OTPParser {
         }
 
         guard containsOTPKeyword else {
-            print("No OTP keywords found in message")
             return nil
         }
 
@@ -211,11 +211,9 @@ class SimpleOTPParser: OTPParser {
         // If we found valid codes, return the first one
         if let code = validCodes.first {
             let service = extractService(from: lowercased)
-            print("✅ Found OTP code: \(code), service: \(service ?? "unknown")")
             return ParsedOTP(service: service, code: code)
         }
 
-        print("No valid OTP codes found")
         return nil
     }
 
@@ -303,7 +301,6 @@ class SimpleOTPParser: OTPParser {
                 if let range = Range(match.range, in: message) {
                     let matchedText = String(message[range])
                     if matchedText.contains(code) {
-                        print("Ignoring code '\(code)' - matches ignore pattern")
                         return true
                     }
                 }
@@ -315,7 +312,6 @@ class SimpleOTPParser: OTPParser {
         if lowercased.hasSuffix("am") || lowercased.hasSuffix("pm") ||
            lowercased.hasSuffix("st") || lowercased.hasSuffix("nd") ||
            lowercased.hasSuffix("rd") || lowercased.hasSuffix("th") {
-            print("Ignoring code '\(code)' - time/date suffix")
             return true
         }
 

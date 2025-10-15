@@ -32,7 +32,7 @@ The app automatically detects codes in various formats:
 
 ## Installation
 
-1. Download the latest release
+1. Download from [2fhey.com](https://2fhey.com) (via Gumroad)
 2. Move to Applications folder
 3. Launch and grant required permissions:
    - **Full Disk Access** - to read Messages database

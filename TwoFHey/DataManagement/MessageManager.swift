@@ -13,17 +13,16 @@ typealias Expression = SQLite.Expression
 
 class MessageManager: ObservableObject {
     @Published var messages: [MessageWithParsedOTP] = []
-    
-    private let checkTimeInterval: TimeInterval = 1
+
+    private let checkTimeInterval: TimeInterval = 2.0
     private var processedGuids: Set<String> = []
-    
+
     var otpParser: OTPParser
-    
+    var timer: Timer?
+
     init(withOTPParser otpParser: OTPParser) {
         self.otpParser = otpParser
     }
-    
-    var timer: Timer?
     
     private func timeOffsetForDate(_ date: Date) -> Int {
         var appleOffsetForDate = Int(date.timeIntervalSinceReferenceDate)
@@ -79,18 +78,17 @@ class MessageManager: ObservableObject {
     
     func startListening() {
         syncMessages()
-        
+
         timer = Timer.scheduledTimer(withTimeInterval: checkTimeInterval, repeats: true) { [weak self] _ in
             self?.syncMessages()
         }
     }
-    
+
     func stopListening() {
         timer?.invalidate()
-        
         timer = nil
     }
-    
+
     func reset() {
         stopListening()
         messages = []
@@ -182,9 +180,8 @@ class MessageManager: ObservableObject {
             let message = messageTable.filter(guidColumn == guid)
 
             try db.run(message.update(isReadColumn <- true))
-            print("✅ Marked message as read: \(guid)")
         } catch {
-            print("⚠️ Failed to mark message as read: \(error)")
+            // Silently fail - avoid log spam
         }
     }
 }
