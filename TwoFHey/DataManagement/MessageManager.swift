@@ -5,12 +5,6 @@
 //  Created by Drew Pomerleau on 4/22/22.
 //
 
-extension String {
-  var isBlank: Bool {
-    return allSatisfy({ $0.isWhitespace })
-  }
-}
-
 import Foundation
 import SQLite
 
@@ -64,7 +58,8 @@ class MessageManager: ObservableObject {
         let query = messageTable
             .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
             .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
-            .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
+            .where(messageTable[dateColumn] > timeOffsetForDate(date))  // Removed SMS filter to include iMessage
+            // Original: .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
             .order(messageTable[dateColumn].asc)
 
         let mapRowIterator = try db.prepareRowIterator(query)
@@ -102,23 +97,51 @@ class MessageManager: ObservableObject {
         processedGuids = []
         startListening()
     }
+
+    // Test/Debug method to inject fake messages
+    func injectTestMessage(_ text: String) {
+        let testMessage = Message(
+            guid: UUID().uuidString,
+            text: text,
+            handle: "+15555551234",
+            group: nil,
+            fromMe: false
+        )
+
+        guard let parsedOTP = otpParser.parseMessage(text) else {
+            print("❌ Failed to parse test message: \(text)")
+            return
+        }
+
+        print("✅ Parsed test message: \(parsedOTP.code) from \(parsedOTP.service ?? "unknown")")
+        messages.append((testMessage, parsedOTP))
+    }
     
     @objc func syncMessages() {
+        // Don't try to sync if we don't have Full Disk Access
+        guard AppStateManager.shared.hasFullDiscAccess() == .authorized else {
+            return
+        }
+
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }
-        
+
         do {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
             guard parsedOtps.count > 0 else { return }
             messages.append(contentsOf: parsedOtps)
         } catch let err {
-            print("ERR: \(err)")
+            // Only log unexpected errors (not permission denied)
+            let errorString = String(describing: err)
+            if !errorString.contains("authorization denied") {
+                print("ERR: \(err)")
+            }
         }
     }
     
     private func findPossibleOTPMessagesAfterDate(_ date: Date) throws -> [MessageWithParsedOTP] {
         let messagesFromDB = try loadMessagesAfterDate(date)
         let filteredMessages = messagesFromDB
-            .filter { !$0.fromMe }
+            // .filter { !$0.fromMe }  // Commented out to allow testing with messages sent to yourself
             .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
             .filter { !processedGuids.contains($0.guid) }
         
@@ -141,5 +164,27 @@ class MessageManager: ObservableObject {
             messageBody.contains("₹") ||
             messageBody.contains("¥")
         )
+    }
+
+    func markMessageAsRead(guid: String) {
+        guard AppStateManager.shared.markAsReadEnabled else { return }
+        guard AppStateManager.shared.hasFullDiscAccess() == .authorized else { return }
+
+        do {
+            var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+            homeDirectory.appendPathComponent("/Library/Messages/chat.db")
+            let db = try Connection(homeDirectory.absoluteString)
+
+            let messageTable = Table("message")
+            let guidColumn = Expression<String>("guid")
+            let isReadColumn = Expression<Bool>("is_read")
+
+            let message = messageTable.filter(guidColumn == guid)
+
+            try db.run(message.update(isReadColumn <- true))
+            print("✅ Marked message as read: \(guid)")
+        } catch {
+            print("⚠️ Failed to mark message as read: \(error)")
+        }
     }
 }

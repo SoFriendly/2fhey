@@ -1,11 +1,5 @@
 import Foundation
 
-protocol OTParserConfig {
-    var knownServices: [String] { get }
-    var authWords: Set<String> { get }
-    var servicePatterns: [String] { get }
-}
-
 struct OTPParserConstants {
     static let googleOTPRegex = try! NSRegularExpression(pattern: #"\b(G-[A-Z0-9]{5})\b"#)
 
@@ -55,6 +49,7 @@ struct OTPParserConstants {
         "delivery.com",
         "eat24",
         "foodler",
+        "chipotle",
         "amazon",
         "tencent",
         "alibaba",
@@ -122,7 +117,32 @@ struct OTPParserConstants {
         "sia",
         "fanduel",
         "cart",
-        "fortuneo"
+        "fortuneo",
+        // Additional services from custom patterns
+        "ca dmv",
+        "chase",
+        "taishin bank",
+        "digitalocean",
+        "geico",
+        "dbs bank",
+        "onelogin",
+        "usps",
+        "aod",
+        "migov",
+        "mpc",
+        "pf-bank",
+        "vodafone",
+        "amex safekey",
+        "churchill mortgage",
+        "mygov",
+        "bforbank",
+        "idcat mobil",
+        "revolut",
+        "fnz bank",
+        "sofi",
+        "spirica",
+        "aeroplan",
+        "ee"
       ]
     
     static let authWords: Set<String> = [
@@ -279,8 +299,6 @@ struct OTPParserConstants {
         static let standardFourToEight = try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)
         static let dashedThreeAndThree = try! NSRegularExpression(pattern: #"\b(\d{3}[- ]\d{3})\b"#)
         static let alphanumericWordContainingDigits = try! NSRegularExpression(pattern: #"\b([a-zA-Z]*\d[a-zA-Z\d]{3,})\b"#, options: .caseInsensitive)
-
-        static let customIgnoreDotZeroZero = try! NSRegularExpression(pattern: #"\b(\d{4,8}(?:\.00)?)\b"#)
     }
 
 

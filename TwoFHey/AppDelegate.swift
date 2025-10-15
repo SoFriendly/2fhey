@@ -4,6 +4,7 @@ import SwiftUI
 import ServiceManagement
 import HotKey
 import ApplicationServices
+import UserNotifications
 
 class OverlayWindow: NSWindow {
     init(line1: String?, line2: String?, position: NotificationPosition = .defaultValue) {
@@ -39,8 +40,8 @@ class OverlayWindow: NSWindow {
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
-    
+class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
+
     var messageManager: MessageManager?
     var configManager: ParserConfigManager?
     private var permissionsService = PermissionsService()
@@ -78,7 +79,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         initMessageManager()
         setupKeyboardListener()
-        
+        setupNotifications()
+
         if !AppStateManager.shared.hasSetup {
             AppStateManager.shared.shouldLaunchOnLogin = true
             AppStateManager.shared.globalShortcutEnabled = true
@@ -87,25 +89,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if AppStateManager.shared.hasFullDiscAccess() != .authorized || !AppStateManager.shared.hasAccessibilityPermission() {
             openOnboardingWindow()
         }
-        
-    }
-    
-    func initMessageManager() {
-        let configManager = ParserConfigManager()
-        configManager.$config.sink(receiveValue: { [weak self] config in
-            guard let config = config else { return }
-            let otpParser = TwoFHeyOTPParser(withConfig: config)
-            self?.messageManager?.otpParser = otpParser
-        }).store(in: &cancellable)
-        self.configManager = configManager
-            
-        let otpParser = TwoFHeyOTPParser(withConfig: configManager.config ?? ParserConfigManager.DEFAULT_CONFIG)
 
+    }
+
+    func setupNotifications() {
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+
+        // Request notification permissions
+        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permission: \(error)")
+            }
+        }
+    }
+
+    func sendNativeNotification(code: String, service: String?) {
+        let content = UNMutableNotificationContent()
+        content.title = "2FA Code Copied"
+        content.body = "\(code)\(service != nil ? " - \(service!)" : "")"
+        content.sound = .default
+
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error sending notification: \(error)")
+            }
+        }
+    }
+
+    // UNUserNotificationCenterDelegate - Show notifications even when app is in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
+    }
+
+    func initMessageManager() {
+        // Using SimpleOTPParser - no config needed, uses keyword-based detection
+        let otpParser = SimpleOTPParser()
         messageManager = MessageManager(withOTPParser: otpParser)
-        
+
         startListeningForMesssages()
-        
-        configManager.downloadLatestServiceConfig()
     }
     
     func startListeningForMesssages() {
@@ -128,13 +152,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             overlayWindow.close()
             self.overlayWindow = nil
         }
-        
+
         lastNotificationMessage = message.0
-        
-        let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
-        
+
+        // Always copy to clipboard regardless of overlay setting
         self.originalClipboardContents = message.1.copyToClipboard()
-        
+
+        // Mark message as read if enabled
+        messageManager?.markMessageAsRead(guid: message.0.guid)
+
         if AppStateManager.shared.autoPasteEnabled && AppStateManager.shared.hasAccessibilityPermission() {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 let source = CGEventSource(stateID: .combinedSessionState)
@@ -146,13 +172,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 keyUp?.post(tap: .cgAnnotatedSessionEventTap)
             }
         }
-        
+
         restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
 
-        window.makeKeyAndOrderFront(nil)
-        window.level = NSWindow.Level.statusBar
-        
-        overlayWindow = window
+        // Use native notifications or custom overlay based on setting
+        if AppStateManager.shared.useNativeNotifications {
+            sendNativeNotification(code: message.1.code, service: message.1.service)
+        } else if AppStateManager.shared.showNotificationOverlay {
+            let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
+            window.makeKeyAndOrderFront(nil)
+            window.level = NSWindow.Level.statusBar
+            overlayWindow = window
+        }
     }
 
     func refreshMenu() {
@@ -160,18 +191,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func createOnboardingWindow() -> NSWindow? {
-        let storyboard = NSStoryboard(name: "Main", bundle: Bundle(for: ViewControllerNative.self))
-        let myViewController =  storyboard.instantiateInitialController() as? NSWindowController
-        let window = myViewController?.window
-//        window?.titleVisibility = .hidden
-//        window?.titlebarAppearsTransparent = true
-//        window?.styleMask.insert(.fullSizeContentView)
-//
-//        window?.styleMask.remove(.closable)
-//        window?.styleMask.remove(.fullScreen)
-//        window?.styleMask.remove(.miniaturizable)
-//        window?.styleMask.remove(.resizable)
-
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 520),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        window.title = "Setup 2FHey"
+        window.contentView = NSHostingView(rootView: OnboardingView())
+        window.isReleasedWhenClosed = false
+        window.setFrameAutosaveName("OnboardingWindow")
+        window.minSize = NSSize(width: 600, height: 520)
         return window
     }
     
@@ -199,22 +229,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu.addItem(resyncItem)
         
         let settingsMenu = NSMenu()
-        
-        let notificationPositionMenu = NSMenu()
-        let positions = NotificationPosition.all
-        positions.forEach { position in
-            let item = NSMenuItem(title: position.name, action: #selector(AppDelegate.onPressNotificationPosition), keyEquivalent: "")
-            item.representedObject = position
-            item.state = AppStateManager.shared.notificationPosition == position ? .on : .off
-            notificationPositionMenu.addItem(item)
+
+        // Native Notifications toggle
+        let useNativeNotificationsItem = NSMenuItem(title: "Use Native Notifications", action: #selector(AppDelegate.onPressUseNativeNotifications), keyEquivalent: "")
+        useNativeNotificationsItem.toolTip = "Use macOS native notifications instead of custom overlay (follows Do Not Disturb settings)"
+        useNativeNotificationsItem.state = AppStateManager.shared.useNativeNotifications ? .on : .off
+        settingsMenu.addItem(useNativeNotificationsItem)
+
+        // Only show custom overlay settings if native notifications are disabled
+        if !AppStateManager.shared.useNativeNotifications {
+            let notificationPositionMenu = NSMenu()
+            let positions = NotificationPosition.all
+            positions.forEach { position in
+                let item = NSMenuItem(title: position.name, action: #selector(AppDelegate.onPressNotificationPosition), keyEquivalent: "")
+                item.representedObject = position
+                item.state = AppStateManager.shared.notificationPosition == position ? .on : .off
+                notificationPositionMenu.addItem(item)
+            }
+
+            let notificationPositionItem = NSMenuItem(title: "Notification Position", action: nil, keyEquivalent: "")
+            notificationPositionItem.toolTip = "Select where notifications will appear on the screen"
+            notificationPositionItem.state = .off
+            notificationPositionItem.submenu = notificationPositionMenu
+            settingsMenu.addItem(notificationPositionItem)
+
+            let showOverlayItem = NSMenuItem(title: "Show Notification Overlay", action: #selector(AppDelegate.onPressShowOverlay), keyEquivalent: "")
+            showOverlayItem.toolTip = "Show a notification overlay when a code is copied (disable for privacy during screen recordings)"
+            showOverlayItem.state = AppStateManager.shared.showNotificationOverlay ? .on : .off
+            settingsMenu.addItem(showOverlayItem)
         }
-        
-        let notificationPositionItem = NSMenuItem(title: "Notification Position", action: nil, keyEquivalent: "")
-        notificationPositionItem.toolTip = "Select where notifications will appear on the screen"
-        notificationPositionItem.state = .off
-        notificationPositionItem.submenu = notificationPositionMenu
-        settingsMenu.addItem(notificationPositionItem)
-        
+
         let keyboardShortCutItem = NSMenuItem(title: "Keyboard Shortcuts", action: #selector(AppDelegate.onPressKeyboardShortcuts), keyEquivalent: "")
         keyboardShortCutItem.toolTip = "Disable keyboard shortcuts if 2FHey uses the same keyboard shortcuts as another app"
         keyboardShortCutItem.state = AppStateManager.shared.globalShortcutEnabled ? .on : .off
@@ -224,6 +268,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         autoPasteItem.toolTip = "Automatically paste codes into focused text field (requires accessibility permissions)"
         autoPasteItem.state = AppStateManager.shared.autoPasteEnabled ? .on : .off
         settingsMenu.addItem(autoPasteItem)
+
+        let markAsReadItem = NSMenuItem(title: "Mark Messages as Read", action: #selector(AppDelegate.onPressMarkAsRead), keyEquivalent: "")
+        markAsReadItem.toolTip = "Automatically mark OTP messages as read in iMessage after copying the code"
+        markAsReadItem.state = AppStateManager.shared.markAsReadEnabled ? .on : .off
+        settingsMenu.addItem(markAsReadItem)
 
         let restoreContentsMenu = NSMenu()
         let delayTimes = [0, 5, 10, 15, 20]
@@ -250,7 +299,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let settingsItem = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
         settingsItem.submenu = settingsMenu
         statusBarMenu.addItem(settingsItem)
-        
+
+        // Debug menu (only in Debug builds)
+        #if DEBUG
+        statusBarMenu.addItem(NSMenuItem.separator())
+        let debugMenu = NSMenu()
+
+        let testMessages = [
+            ("Google", "G-123456 is your Google verification code."),
+            ("Apple", "Your Apple ID Code is: 654321. Don't share it with anyone."),
+            ("Bank", "Your verification code is 789012"),
+            ("Generic 6-digit", "Your code: 456789"),
+            ("Amazon", "123456 is your Amazon OTP. Do not share it with anyone."),
+            ("Chinese (Zhihu)", "【知乎】你的验证码是 700185，此验证码用于登录知乎或重置密码。10 分钟内有效。"),
+            ("Chinese (JD)", "【京东】验证码：548393，您正在新设备上登录。请确认本人操作，切勿泄露给他人，京东工作人员不会索取此验证码。"),
+            ("Chinese (Bilibili)", "【哔哩哔哩】778604为本次登录验证的手机验证码，请在5分钟内完成验证。为保证账号安全，请勿泄漏此验证码"),
+            ("Chipotle", "Your verification code is 975654. This code will only be valid for 5 minutes."),
+        ]
+
+        testMessages.forEach { (name, message) in
+            let item = NSMenuItem(title: "Test: \(name)", action: #selector(AppDelegate.injectTestMessage), keyEquivalent: "")
+            item.representedObject = message
+            debugMenu.addItem(item)
+        }
+
+        let debugItem = NSMenuItem(title: "🐛 Debug", action: nil, keyEquivalent: "")
+        debugItem.submenu = debugMenu
+        statusBarMenu.addItem(debugItem)
+        #endif
+
         statusBarMenu.addItem(
             withTitle: "Quit 2FHey",
             action: #selector(AppDelegate.quit),
@@ -326,13 +403,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppStateManager.shared.autoPasteEnabled = !AppStateManager.shared.autoPasteEnabled
         refreshMenu()
     }
-    
-    private func getAccessibilityPermission(prompt: Bool) -> Bool {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: prompt]
-        let status = AXIsProcessTrustedWithOptions(options)
-        return status
+
+    @objc func onPressShowOverlay() {
+        AppStateManager.shared.showNotificationOverlay = !AppStateManager.shared.showNotificationOverlay
+        refreshMenu()
     }
-    
+
+    @objc func onPressUseNativeNotifications() {
+        AppStateManager.shared.useNativeNotifications = !AppStateManager.shared.useNativeNotifications
+        refreshMenu()
+    }
+
+    @objc func onPressMarkAsRead() {
+        AppStateManager.shared.markAsReadEnabled = !AppStateManager.shared.markAsReadEnabled
+        refreshMenu()
+    }
+
+    @objc func injectTestMessage(_ sender: NSMenuItem) {
+        guard let message = sender.representedObject as? String else { return }
+        print("🧪 Injecting test message: \(message)")
+        messageManager?.injectTestMessage(message)
+    }
+
     @objc func quit() {
         NSApp.terminate(nil)
     }
@@ -355,16 +447,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let delayTimeInterval = DispatchTimeInterval.seconds(delaySeconds)
         DispatchQueue.main.asyncAfter(deadline: .now() + delayTimeInterval) {
             if (self.originalClipboardContents != nil) {
-                let window = OverlayWindow(line1: "Clipboard Restored", line2: nil)
-                self.overlayWindow = window
                 NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
                 self.originalClipboardContents = nil
+
+                // Only show overlay if custom overlay is enabled (not native notifications)
+                if !AppStateManager.shared.useNativeNotifications && AppStateManager.shared.showNotificationOverlay {
+                    let window = OverlayWindow(line1: "Clipboard Restored", line2: nil)
+                    self.overlayWindow = window
+                }
             }
         }
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
