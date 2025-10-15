@@ -31,11 +31,6 @@ struct OverlayView: View {
         }
         .padding(8)
         .cornerRadius(5)
-     
-
-        //.background(.black.opacity(0.6)) Isn't compatible with macOS 11
-        //.border(.black.opacity(0.5), width: 1)
-        
     }
 }
 

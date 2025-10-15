@@ -5,12 +5,6 @@
 //  Created by Drew Pomerleau on 4/22/22.
 //
 
-extension String {
-  var isBlank: Bool {
-    return allSatisfy({ $0.isWhitespace })
-  }
-}
-
 import Foundation
 import SQLite
 

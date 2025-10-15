@@ -160,18 +160,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func createOnboardingWindow() -> NSWindow? {
-        let storyboard = NSStoryboard(name: "Main", bundle: Bundle(for: ViewControllerNative.self))
-        let myViewController =  storyboard.instantiateInitialController() as? NSWindowController
-        let window = myViewController?.window
-//        window?.titleVisibility = .hidden
-//        window?.titlebarAppearsTransparent = true
-//        window?.styleMask.insert(.fullSizeContentView)
-//
-//        window?.styleMask.remove(.closable)
-//        window?.styleMask.remove(.fullScreen)
-//        window?.styleMask.remove(.miniaturizable)
-//        window?.styleMask.remove(.resizable)
-
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 520),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        window.title = "Setup 2FHey"
+        window.contentView = NSHostingView(rootView: OnboardingView())
+        window.isReleasedWhenClosed = false
+        window.setFrameAutosaveName("OnboardingWindow")
+        window.minSize = NSSize(width: 600, height: 520)
         return window
     }
     
@@ -326,13 +325,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppStateManager.shared.autoPasteEnabled = !AppStateManager.shared.autoPasteEnabled
         refreshMenu()
     }
-    
-    private func getAccessibilityPermission(prompt: Bool) -> Bool {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: prompt]
-        let status = AXIsProcessTrustedWithOptions(options)
-        return status
-    }
-    
+
     @objc func quit() {
         NSApp.terminate(nil)
     }
@@ -361,10 +354,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.originalClipboardContents = nil
             }
         }
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

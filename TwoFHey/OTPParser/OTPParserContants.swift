@@ -1,11 +1,5 @@
 import Foundation
 
-protocol OTParserConfig {
-    var knownServices: [String] { get }
-    var authWords: Set<String> { get }
-    var servicePatterns: [String] { get }
-}
-
 struct OTPParserConstants {
     static let googleOTPRegex = try! NSRegularExpression(pattern: #"\b(G-[A-Z0-9]{5})\b"#)
 
@@ -279,8 +273,6 @@ struct OTPParserConstants {
         static let standardFourToEight = try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)
         static let dashedThreeAndThree = try! NSRegularExpression(pattern: #"\b(\d{3}[- ]\d{3})\b"#)
         static let alphanumericWordContainingDigits = try! NSRegularExpression(pattern: #"\b([a-zA-Z]*\d[a-zA-Z\d]{3,})\b"#, options: .caseInsensitive)
-
-        static let customIgnoreDotZeroZero = try! NSRegularExpression(pattern: #"\b(\d{4,8}(?:\.00)?)\b"#)
     }
 
 
