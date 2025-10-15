@@ -118,14 +118,23 @@ class MessageManager: ObservableObject {
     }
     
     @objc func syncMessages() {
+        // Don't try to sync if we don't have Full Disk Access
+        guard AppStateManager.shared.hasFullDiscAccess() == .authorized else {
+            return
+        }
+
         guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }
-        
+
         do {
             let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
             guard parsedOtps.count > 0 else { return }
             messages.append(contentsOf: parsedOtps)
         } catch let err {
-            print("ERR: \(err)")
+            // Only log unexpected errors (not permission denied)
+            let errorString = String(describing: err)
+            if !errorString.contains("authorization denied") {
+                print("ERR: \(err)")
+            }
         }
     }
     

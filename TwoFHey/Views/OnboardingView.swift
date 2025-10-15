@@ -83,15 +83,12 @@ struct OnboardingView: View {
                 Spacer()
 
                 Button(action: {
-                    if viewModel.allPermissionsGranted {
-                        NSApplication.shared.keyWindow?.close()
-                    }
+                    NSApplication.shared.keyWindow?.close()
                 }) {
                     Text(viewModel.allPermissionsGranted ? "Done" : "Close")
                         .frame(minWidth: 80)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(!viewModel.allPermissionsGranted && viewModel.isFirstLaunch)
             }
             .padding(.horizontal, 30)
             .padding(.vertical, 20)
