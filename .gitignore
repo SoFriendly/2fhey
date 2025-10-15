@@ -216,3 +216,35 @@ xcuserdata/
 # UNKNOWN: recommended by others, but I can't discover what these files are
 #
 
+####
+# Additional common Xcode/Swift ignores
+#
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+
+# Xcode - Additional
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.cer
+*.p12
+*.mobileprovision
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection
+iOSInjectionProject/
+
+# macOS
+.AppleDouble
+.LSOverride
+._*
+

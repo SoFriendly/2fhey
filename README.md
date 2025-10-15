@@ -8,8 +8,8 @@ Automatically detect and copy verification codes from iMessage and SMS.
 - 📋 Auto-copy to clipboard
 - ⌨️ Optional auto-paste
 - 🔔 Desktop notifications
-- 🎯 Keyboard shortcuts
-- 🌐 Support for 100+ services
+- 🎯 Global keyboard shortcut (⇧⌘E) to resync messages
+- 🌐 Support for 145+ services
 
 ## How It Works
 
@@ -37,6 +37,12 @@ The app automatically detects codes in various formats:
 3. Launch and grant required permissions:
    - **Full Disk Access** - to read Messages database
    - **Accessibility** - for auto-paste and keyboard shortcuts
+
+## Keyboard Shortcuts
+
+- **⇧⌘E** (Shift + Command + E) - Resync messages and copy the latest OTP code to clipboard
+  - Useful if 2FHey missed a message or you need to retrieve a recent code again
+  - Can be disabled in Settings if it conflicts with other apps
 
 ## Custom Services
 

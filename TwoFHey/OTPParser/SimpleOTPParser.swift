@@ -15,7 +15,9 @@ class SimpleOTPParser: OTPParser {
         "authentication", "authenticate", "auth",
         "security", "2fa", "two-factor", "2-factor",
         "confirmation", "confirm", "activate", "activation",
-        "passcode", "password", "one-time"
+        "passcode", "password", "one-time",
+        // Chinese keywords
+        "验证码", "驗證碼", "动态码", "校验码", "确认码"
     ]
 
     // Common words to ignore when extracting service names
@@ -73,6 +75,26 @@ class SimpleOTPParser: OTPParser {
     // Extract potential OTP codes (4-8 digits, possibly with spaces or dashes)
     private func extractPotentialCodes(from message: String) -> [String] {
         var codes: [String] = []
+
+        // Pattern 0: Chinese verification code patterns (highest priority for Chinese messages)
+        // Patterns like: 验证码：123456, 验证码是 123456, 验证码为123456, etc.
+        let chineseCodePatterns = [
+            #"验证码[：:是为]\s*(\d{4,8})"#,  // Simplified Chinese
+            #"驗證碼[：:是為]\s*(\d{4,8})"#,  // Traditional Chinese
+            #"动态码[：:是为]\s*(\d{4,8})"#,
+            #"校验码[：:是为]\s*(\d{4,8})"#,
+            #"确认码[：:是为]\s*(\d{4,8})"#
+        ]
+
+        for patternString in chineseCodePatterns {
+            if let pattern = try? NSRegularExpression(pattern: patternString),
+               let match = pattern.firstMatch(in: message, range: NSRange(message.startIndex..., in: message)),
+               let range = Range(match.range(at: 1), in: message) {
+                codes.append(String(message[range]))
+                // Return early - Chinese patterns are very specific and reliable
+                return codes
+            }
+        }
 
         // Pattern 1: 4-8 consecutive digits
         let digitPattern = try! NSRegularExpression(pattern: #"\b(\d{4,8})\b"#)

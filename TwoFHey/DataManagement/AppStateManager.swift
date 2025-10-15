@@ -51,6 +51,7 @@ class AppStateManager {
         static let restoreContentsEnabledKey = "com.sofriendly.2fhey.restoreContentsEnabledKey"
         static let hasSetupKey = "com.sofriendly.2fhey.hasSetup"
         static let autoPasteEnabledKey = "com.sofriendly.2fhey.autoPasteEnabled"
+        static let showNotificationOverlayKey = "com.sofriendly.2fhey.showNotificationOverlay"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
@@ -109,6 +110,19 @@ class AppStateManager {
         }
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: Constants.autoPasteEnabledKey)
+        }
+    }
+
+    var showNotificationOverlay: Bool {
+        get {
+            // Default to true (show overlay) if not set
+            if UserDefaults.standard.object(forKey: Constants.showNotificationOverlayKey) == nil {
+                return true
+            }
+            return UserDefaults.standard.bool(forKey: Constants.showNotificationOverlayKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.showNotificationOverlayKey)
         }
     }
     

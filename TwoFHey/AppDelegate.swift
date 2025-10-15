@@ -118,13 +118,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             overlayWindow.close()
             self.overlayWindow = nil
         }
-        
+
         lastNotificationMessage = message.0
-        
-        let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
-        
+
+        // Always copy to clipboard regardless of overlay setting
         self.originalClipboardContents = message.1.copyToClipboard()
-        
+
         if AppStateManager.shared.autoPasteEnabled && AppStateManager.shared.hasAccessibilityPermission() {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 let source = CGEventSource(stateID: .combinedSessionState)
@@ -136,13 +135,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 keyUp?.post(tap: .cgAnnotatedSessionEventTap)
             }
         }
-        
+
         restoreClipboardContents(withDelay: AppStateManager.shared.restoreContentsDelayTime)
 
-        window.makeKeyAndOrderFront(nil)
-        window.level = NSWindow.Level.statusBar
-        
-        overlayWindow = window
+        // Only show overlay if setting is enabled
+        if AppStateManager.shared.showNotificationOverlay {
+            let window = OverlayWindow(line1: message.1.code, line2: "Copied to Clipboard")
+            window.makeKeyAndOrderFront(nil)
+            window.level = NSWindow.Level.statusBar
+            overlayWindow = window
+        }
     }
 
     func refreshMenu() {
@@ -214,6 +216,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         autoPasteItem.state = AppStateManager.shared.autoPasteEnabled ? .on : .off
         settingsMenu.addItem(autoPasteItem)
 
+        let showOverlayItem = NSMenuItem(title: "Show Notification Overlay", action: #selector(AppDelegate.onPressShowOverlay), keyEquivalent: "")
+        showOverlayItem.toolTip = "Show a notification overlay when a code is copied (disable for privacy during screen recordings)"
+        showOverlayItem.state = AppStateManager.shared.showNotificationOverlay ? .on : .off
+        settingsMenu.addItem(showOverlayItem)
+
         let restoreContentsMenu = NSMenu()
         let delayTimes = [0, 5, 10, 15, 20]
         delayTimes.forEach { delayTime in
@@ -251,6 +258,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             ("Bank", "Your verification code is 789012"),
             ("Generic 6-digit", "Your code: 456789"),
             ("Amazon", "123456 is your Amazon OTP. Do not share it with anyone."),
+            ("Chinese (Zhihu)", "【知乎】你的验证码是 700185，此验证码用于登录知乎或重置密码。10 分钟内有效。"),
+            ("Chinese (JD)", "【京东】验证码：548393，您正在新设备上登录。请确认本人操作，切勿泄露给他人，京东工作人员不会索取此验证码。"),
+            ("Chinese (Bilibili)", "【哔哩哔哩】778604为本次登录验证的手机验证码，请在5分钟内完成验证。为保证账号安全，请勿泄漏此验证码"),
+            ("Chipotle", "Your verification code is 975654. This code will only be valid for 5 minutes."),
         ]
 
         testMessages.forEach { (name, message) in
@@ -340,6 +351,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshMenu()
     }
 
+    @objc func onPressShowOverlay() {
+        AppStateManager.shared.showNotificationOverlay = !AppStateManager.shared.showNotificationOverlay
+        refreshMenu()
+    }
+
     @objc func injectTestMessage(_ sender: NSMenuItem) {
         guard let message = sender.representedObject as? String else { return }
         print("🧪 Injecting test message: \(message)")
@@ -368,10 +384,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let delayTimeInterval = DispatchTimeInterval.seconds(delaySeconds)
         DispatchQueue.main.asyncAfter(deadline: .now() + delayTimeInterval) {
             if (self.originalClipboardContents != nil) {
-                let window = OverlayWindow(line1: "Clipboard Restored", line2: nil)
-                self.overlayWindow = window
                 NSPasteboard.general.setString(self.originalClipboardContents!, forType: .string)
                 self.originalClipboardContents = nil
+
+                // Only show overlay if setting is enabled
+                if AppStateManager.shared.showNotificationOverlay {
+                    let window = OverlayWindow(line1: "Clipboard Restored", line2: nil)
+                    self.overlayWindow = window
+                }
             }
         }
     }
