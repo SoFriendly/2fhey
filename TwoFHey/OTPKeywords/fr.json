@@ -1,0 +1,22 @@
+{
+  "keywords": [
+    "code",
+    "vérification",
+    "verifier",
+    "authentification",
+    "authentifier",
+    "sécurité",
+    "confirmation",
+    "confirmer",
+    "activer",
+    "activation",
+    "mot de passe",
+    "usage unique",
+    "à usage unique"
+  ],
+  "patterns": [
+    "code[\\s:]+([\\d\\s-]{4,8})",
+    "vérification[\\s:]+([\\d\\s-]{4,8})",
+    "authentification[\\s:]+([\\d\\s-]{4,8})"
+  ]
+}
