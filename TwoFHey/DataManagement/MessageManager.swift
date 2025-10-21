@@ -45,55 +45,96 @@ class MessageManager: ObservableObject {
     private func parseAttributedBody(_ attributedBody: Data?) -> String? {
         guard let data = attributedBody else { return nil }
 
+        DebugLogger.shared.log("Attempting Method 1: NSKeyedUnarchiver with NSAttributedString", category: "PARSING")
         // Method 1: Try to unarchive as NSAttributedString (proper way)
-        if let attributedString = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSAttributedString.self, from: data) {
-            let text = attributedString.string
-            DebugLogger.shared.log("Successfully unarchived NSAttributedString", category: "PARSING", data: ["text_length": text.count, "text_preview": String(text.prefix(100))])
-            return text.isEmpty ? nil : text
+        do {
+            if let attributedString = try NSKeyedUnarchiver.unarchivedObject(ofClass: NSAttributedString.self, from: data) {
+                let text = attributedString.string
+                DebugLogger.shared.log("✅ Method 1 SUCCESS: NSAttributedString unarchived", category: "PARSING", data: ["text_length": text.count, "text_preview": String(text.prefix(100))])
+                return text.isEmpty ? nil : text
+            } else {
+                DebugLogger.shared.log("❌ Method 1 FAIL: Unarchived object is nil", category: "PARSING")
+            }
+        } catch {
+            DebugLogger.shared.log("❌ Method 1 FAIL: NSKeyedUnarchiver error", category: "PARSING", data: ["error": String(describing: error)])
         }
 
+        DebugLogger.shared.log("Attempting Method 2: Legacy NSKeyedUnarchiver", category: "PARSING")
         // Method 2: Try legacy unarchiver
-        if let attributedString = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? NSAttributedString {
-            let text = attributedString.string
-            DebugLogger.shared.log("Successfully unarchived with legacy method", category: "PARSING", data: ["text_length": text.count, "text_preview": String(text.prefix(100))])
-            return text.isEmpty ? nil : text
+        do {
+            if let attributedString = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? NSAttributedString {
+                let text = attributedString.string
+                DebugLogger.shared.log("✅ Method 2 SUCCESS: Legacy unarchiver worked", category: "PARSING", data: ["text_length": text.count, "text_preview": String(text.prefix(100))])
+                return text.isEmpty ? nil : text
+            } else {
+                DebugLogger.shared.log("❌ Method 2 FAIL: Object is not NSAttributedString", category: "PARSING")
+            }
+        } catch {
+            DebugLogger.shared.log("❌ Method 2 FAIL: Legacy unarchiver error", category: "PARSING", data: ["error": String(describing: error)])
         }
 
+        DebugLogger.shared.log("Attempting Method 3: StreamTyped/PropertyList decoding", category: "PARSING")
         // Method 3: Try to decode as streamtyped (iOS/macOS format)
-        // The data might be in a different encoding format
         if let decodedString = decodeStreamTypedData(data) {
-            DebugLogger.shared.log("Successfully decoded streamtyped data", category: "PARSING", data: ["text_length": decodedString.count, "text_preview": String(decodedString.prefix(100))])
+            DebugLogger.shared.log("✅ Method 3 SUCCESS: StreamTyped data decoded", category: "PARSING", data: ["text_length": decodedString.count, "text_preview": String(decodedString.prefix(100))])
             return decodedString
+        } else {
+            DebugLogger.shared.log("❌ Method 3 FAIL: StreamTyped decoding returned nil", category: "PARSING")
         }
 
-        // Method 4: Fallback to string scanning (original Raycast method)
-        // This works if the data happens to contain readable UTF-8 text
-        if var bodyString = String(data: data, encoding: .utf8) {
-            DebugLogger.shared.log("Attempting string scanning fallback", category: "PARSING")
+        DebugLogger.shared.log("Attempting Method 4: String scanning (Raycast method)", category: "PARSING")
+        // Method 4: String scanning - this is the method that works in Raycast
+        // attributedBody contains readable text with junk characters around it
+        // Pattern: ...junk...NSString[8 chars][ACTUAL MESSAGE][10 chars before]NSDictionary...junk...
 
-            guard let nsStringRange = bodyString.range(of: "NSString") else {
-                DebugLogger.shared.log("No NSString marker found in attributedBody", category: "PARSING")
-                return nil
-            }
+        // Try LOSSY UTF-8 conversion first - allows invalid UTF-8 bytes
+        var bodyString = String(data: data, encoding: .utf8)
 
-            // Skip 8 characters after "NSString"
-            let startIndex = bodyString.index(nsStringRange.upperBound, offsetBy: 8, limitedBy: bodyString.endIndex) ?? bodyString.endIndex
-            bodyString = String(bodyString[startIndex...])
-
-            // Look for "NSDictionary" and extract text before it (minus 10 characters)
-            if let nsDictionaryRange = bodyString.range(of: "NSDictionary") {
-                let endIndex = bodyString.index(nsDictionaryRange.lowerBound, offsetBy: -10, limitedBy: bodyString.startIndex) ?? nsDictionaryRange.lowerBound
-                bodyString = String(bodyString[..<endIndex])
-            }
-
-            let cleanedText = bodyString.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !cleanedText.isEmpty {
-                DebugLogger.shared.log("String scanning succeeded", category: "PARSING", data: ["text": cleanedText])
-                return cleanedText
-            }
+        if bodyString == nil {
+            DebugLogger.shared.log("UTF-8 failed, trying lossy ASCII", category: "PARSING")
+            // Try ASCII with lossy conversion - replaces invalid chars with �
+            bodyString = String(decoding: data, as: UTF8.self)
         }
 
-        DebugLogger.shared.log("All parsing methods failed for attributedBody", category: "PARSING", data: ["data_length": data.count])
+        guard var unwrappedBodyString = bodyString else {
+            DebugLogger.shared.log("❌ Method 4 FAIL: All string conversions failed", category: "PARSING")
+            return nil
+        }
+
+        DebugLogger.shared.log("String conversion succeeded, searching for NSString marker", category: "PARSING", data: ["string_length": unwrappedBodyString.count, "preview": String(unwrappedBodyString.prefix(100))])
+
+        guard let nsStringRange = unwrappedBodyString.range(of: "NSString") else {
+            DebugLogger.shared.log("❌ Method 4 FAIL: No NSString marker found", category: "PARSING")
+            return nil
+        }
+
+        DebugLogger.shared.log("Found NSString marker, extracting text", category: "PARSING")
+
+        // Skip 8 characters after "NSString"
+        let startIndex = unwrappedBodyString.index(nsStringRange.upperBound, offsetBy: 8, limitedBy: unwrappedBodyString.endIndex) ?? unwrappedBodyString.endIndex
+        unwrappedBodyString = String(unwrappedBodyString[startIndex...])
+
+        DebugLogger.shared.log("After NSString skip", category: "PARSING", data: ["remaining_length": unwrappedBodyString.count, "preview": String(unwrappedBodyString.prefix(100))])
+
+        // Look for "NSDictionary" and extract text before it (minus 10 characters)
+        if let nsDictionaryRange = unwrappedBodyString.range(of: "NSDictionary") {
+            let endIndex = unwrappedBodyString.index(nsDictionaryRange.lowerBound, offsetBy: -10, limitedBy: unwrappedBodyString.startIndex) ?? nsDictionaryRange.lowerBound
+            unwrappedBodyString = String(unwrappedBodyString[..<endIndex])
+            DebugLogger.shared.log("Found NSDictionary marker, extracted text", category: "PARSING", data: ["extracted_length": unwrappedBodyString.count])
+        } else {
+            DebugLogger.shared.log("No NSDictionary marker found, using all remaining text", category: "PARSING")
+        }
+
+        let cleanedText = unwrappedBodyString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !cleanedText.isEmpty {
+            DebugLogger.shared.log("✅ Method 4 SUCCESS: String scanning worked", category: "PARSING", data: ["text_length": cleanedText.count, "text": cleanedText])
+            return cleanedText
+        } else {
+            DebugLogger.shared.log("❌ Method 4 FAIL: Cleaned text is empty after trimming", category: "PARSING")
+            return nil
+        }
+
+        DebugLogger.shared.log("❌ ALL METHODS FAILED for attributedBody", category: "PARSING", data: ["data_length": data.count, "data_hex_preview": data.prefix(50).map { String(format: "%02x", $0) }.joined()])
         return nil
     }
 
