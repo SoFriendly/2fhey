@@ -54,6 +54,7 @@ class AppStateManager {
         static let showNotificationOverlayKey = "com.sofriendly.2fhey.showNotificationOverlay"
         static let useNativeNotificationsKey = "com.sofriendly.2fhey.useNativeNotifications"
         static let markAsReadEnabledKey = "com.sofriendly.2fhey.markAsReadEnabled"
+        static let debugLoggingEnabledKey = "com.sofriendly.2fhey.debugLoggingEnabled"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
@@ -189,6 +190,19 @@ class AppStateManager {
     var restoreContentsEnabled: Bool {
         get {
             return self.restoreContentsDelayTime > 0
+        }
+    }
+
+    var debugLoggingEnabled: Bool {
+        get {
+            // Default to false (don't log)
+            return UserDefaults.standard.bool(forKey: Constants.debugLoggingEnabledKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.debugLoggingEnabledKey)
+            if newValue {
+                DebugLogger.shared.log("Debug logging enabled", category: "SYSTEM")
+            }
         }
     }
 }

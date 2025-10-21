@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0F4964342E9FE42F009D1F5E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964332E9FE42F009D1F5E /* OnboardingView.swift */; };
 		0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */; };
+		0FB533F92EA81F1E00BD67DF /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */; };
 		6547376E29B8973800523B18 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6547376D29B8973800523B18 /* Permission.swift */; };
 		D4123A7628261377002C3C42 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7528261377002C3C42 /* UIConstants.swift */; };
 		D4123A7F2826EF3B002C3C42 /* TwoFHeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4123A7E2826EF3B002C3C42 /* TwoFHeyTests.swift */; };
@@ -62,6 +63,7 @@
 /* Begin PBXFileReference section */
 		0F4964332E9FE42F009D1F5E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOTPParser.swift; sourceTree = "<group>"; };
+		0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		6547376D29B8973800523B18 /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
 		D4123A7528261377002C3C42 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		D4123A7C2826EF3B002C3C42 /* TwoFHeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwoFHeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +158,7 @@
 		D479A3E52822B5A100915AAA /* DataManagement */ = {
 			isa = PBXGroup;
 			children = (
+				0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */,
 				D4F5CABD281768EC00A39E6D /* MessageManager.swift */,
 				D4F5CAC22817725100A39E6D /* AppStateManager.swift */,
 				D479A3E62822B7B300915AAA /* ParserConfigManager.swift */,
@@ -414,6 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */,
+				0FB533F92EA81F1E00BD67DF /* DebugLogger.swift in Sources */,
 				D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */,
 				D4123A7628261377002C3C42 /* UIConstants.swift in Sources */,
 				0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */,
@@ -680,7 +684,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -715,7 +719,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;

@@ -295,7 +295,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
         autoLaunchItem.state = AppStateManager.shared.shouldLaunchOnLogin ? .on : .off
         settingsMenu.addItem(autoLaunchItem)
-        
+
+        settingsMenu.addItem(NSMenuItem.separator())
+
+        let debugLoggingItem = NSMenuItem(title: "Debug Logging", action: #selector(AppDelegate.onPressDebugLogging), keyEquivalent: "")
+        debugLoggingItem.toolTip = "Enable debug logging to troubleshoot iMessage database issues. Logs are saved to ~/Documents/2FHey_Debug.log"
+        debugLoggingItem.state = AppStateManager.shared.debugLoggingEnabled ? .on : .off
+        settingsMenu.addItem(debugLoggingItem)
+
+        if AppStateManager.shared.debugLoggingEnabled {
+            let openLogItem = NSMenuItem(title: "Open Debug Log", action: #selector(AppDelegate.onPressOpenDebugLog), keyEquivalent: "")
+            openLogItem.toolTip = "Open the debug log file in Finder"
+            settingsMenu.addItem(openLogItem)
+
+            let clearLogItem = NSMenuItem(title: "Clear Debug Log", action: #selector(AppDelegate.onPressClearDebugLog), keyEquivalent: "")
+            clearLogItem.toolTip = "Clear the debug log file"
+            settingsMenu.addItem(clearLogItem)
+        }
+
         let settingsItem = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
         settingsItem.submenu = settingsMenu
         statusBarMenu.addItem(settingsItem)
@@ -422,6 +439,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     @objc func onPressMarkAsRead() {
         AppStateManager.shared.markAsReadEnabled = !AppStateManager.shared.markAsReadEnabled
         refreshMenu()
+    }
+
+    @objc func onPressDebugLogging() {
+        AppStateManager.shared.debugLoggingEnabled = !AppStateManager.shared.debugLoggingEnabled
+        refreshMenu()
+    }
+
+    @objc func onPressOpenDebugLog() {
+        if let logPath = DebugLogger.shared.getLogFilePath() {
+            NSWorkspace.shared.selectFile(logPath, inFileViewerRootedAtPath: "")
+        }
+    }
+
+    @objc func onPressClearDebugLog() {
+        DebugLogger.shared.clearLog()
+        DebugLogger.shared.log("Debug log cleared by user", category: "SYSTEM")
     }
 
     @objc func injectTestMessage(_ sender: NSMenuItem) {
