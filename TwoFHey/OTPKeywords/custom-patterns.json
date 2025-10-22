@@ -103,6 +103,10 @@
     {
       "service": "Cater Allen",
       "pattern": "NEVER share this code[\\s\\S]+(\\d{6})$"
+    },
+    {
+      "service": "Wealthfront",
+      "pattern": "(\\d{6})\\s+is your Wealthfront verification code"
     }
   ]
 }
