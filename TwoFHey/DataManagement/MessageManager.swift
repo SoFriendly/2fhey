@@ -14,11 +14,11 @@ typealias Expression = SQLite.Expression
 class MessageManager: ObservableObject {
     @Published var messages: [MessageWithParsedOTP] = []
 
-    private let checkTimeInterval: TimeInterval = 2.0
     private var processedGuids: Set<String> = []
 
     var otpParser: OTPParser
-    var timer: Timer?
+    private var walFileMonitor: DispatchSourceFileSystemObject?
+    private var walFileDescriptor: Int32 = -1
 
     init(withOTPParser otpParser: OTPParser) {
         self.otpParser = otpParser
@@ -285,15 +285,58 @@ class MessageManager: ObservableObject {
     
     func startListening() {
         syncMessages()
-
-        timer = Timer.scheduledTimer(withTimeInterval: checkTimeInterval, repeats: true) { [weak self] _ in
-            self?.syncMessages()
-        }
+        setupWALFileMonitor()
     }
 
     func stopListening() {
-        timer?.invalidate()
-        timer = nil
+        cleanupWALFileMonitor()
+    }
+
+    private func setupWALFileMonitor() {
+        var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+        homeDirectory.appendPathComponent("/Library/Messages/chat.db-wal")
+        let walPath = homeDirectory.path
+
+        walFileDescriptor = open(walPath, O_EVTONLY)
+        guard walFileDescriptor >= 0 else {
+            DebugLogger.shared.log("Failed to open WAL file for monitoring", category: "SYNC", data: ["path": walPath])
+            return
+        }
+
+        let queue = DispatchQueue.global(qos: .background)
+        guard let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: walFileDescriptor,
+            eventMask: [.write, .extend],
+            queue: queue
+        ) as? DispatchSourceFileSystemObject else {
+            close(walFileDescriptor)
+            walFileDescriptor = -1
+            return
+        }
+
+        source.setEventHandler { [weak self] in
+            DebugLogger.shared.log("WAL file changed, syncing messages", category: "SYNC")
+            DispatchQueue.main.async {
+                self?.syncMessages()
+            }
+        }
+
+        source.setCancelHandler { [weak self] in
+            if let fd = self?.walFileDescriptor, fd >= 0 {
+                close(fd)
+                self?.walFileDescriptor = -1
+            }
+        }
+
+        walFileMonitor = source
+        source.resume()
+
+        DebugLogger.shared.log("WAL file monitoring started", category: "SYNC", data: ["path": walPath])
+    }
+
+    private func cleanupWALFileMonitor() {
+        walFileMonitor?.cancel()
+        walFileMonitor = nil
     }
 
     func reset() {
@@ -301,6 +344,10 @@ class MessageManager: ObservableObject {
         messages = []
         processedGuids = []
         startListening()
+    }
+
+    deinit {
+        cleanupWALFileMonitor()
     }
 
     // Test/Debug method to inject fake messages
