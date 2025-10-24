@@ -107,6 +107,10 @@
     {
       "service": "Wealthfront",
       "pattern": "(\\d{6})\\s+is your Wealthfront verification code"
+    },
+      {
+      "service": "TAP",
+      "pattern": "(\\d{6})\\s+is is your TAP authentication code"
     }
   ]
 }
