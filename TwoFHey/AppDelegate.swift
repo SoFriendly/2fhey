@@ -43,6 +43,7 @@ class OverlayWindow: NSWindow {
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var messageManager: MessageManager?
+    var mailManager: MailManager?
     var configManager: ParserConfigManager?
     private var permissionsService = PermissionsService()
 
@@ -128,8 +129,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         // Using SimpleOTPParser - no config needed, uses keyword-based detection
         let otpParser = SimpleOTPParser()
         messageManager = MessageManager(withOTPParser: otpParser)
+        mailManager = MailManager(withOTPParser: otpParser)
 
         startListeningForMesssages()
+        startListeningForMail()
     }
     
     func startListeningForMesssages() {
@@ -138,13 +141,37 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             if let newestMessage = messages.last, newestMessage.0 != weakSelf.lastNotificationMessage && weakSelf.shouldShowNotificationOverlay {
                 weakSelf.showOverlayForMessage(newestMessage)
             }
-            
-            weakSelf.mostRecentMessages = messages.suffix(3)
+
+            weakSelf.updateRecentMessages()
             weakSelf.refreshMenu()
-            
+
             weakSelf.shouldShowNotificationOverlay = true
         }.store(in: &cancellable)
         messageManager?.startListening()
+    }
+
+    func startListeningForMail() {
+        mailManager?.$messages.sink { [weak self] emails in
+            guard let weakSelf = self else { return }
+            if let newestEmail = emails.last, newestEmail.0 != weakSelf.lastNotificationMessage && weakSelf.shouldShowNotificationOverlay {
+                weakSelf.showOverlayForMessage(newestEmail)
+            }
+
+            weakSelf.updateRecentMessages()
+            weakSelf.refreshMenu()
+
+            weakSelf.shouldShowNotificationOverlay = true
+        }.store(in: &cancellable)
+        mailManager?.startListening()
+    }
+
+    func updateRecentMessages() {
+        let smsMessages = messageManager?.messages ?? []
+        let emailMessages = mailManager?.messages ?? []
+
+        // Combine and sort by most recent (taking the last 3)
+        let allMessages = (smsMessages + emailMessages)
+        mostRecentMessages = Array(allMessages.suffix(3))
     }
 
     func showOverlayForMessage(_ message: MessageWithParsedOTP) {
@@ -192,7 +219,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     
     func createOnboardingWindow() -> NSWindow? {
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 600, height: 520),
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 600),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered,
             defer: false
@@ -201,14 +228,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         window.contentView = NSHostingView(rootView: OnboardingView())
         window.isReleasedWhenClosed = false
         window.setFrameAutosaveName("OnboardingWindow")
-        window.minSize = NSSize(width: 600, height: 520)
+        window.minSize = NSSize(width: 600, height: 600)
         return window
     }
     
     func createMenuForMessages() -> NSMenu {
         let statusBarMenu = NSMenu()
+        let hasFullDiskAccess = AppStateManager.shared.hasFullDiscAccess() == .authorized
+        let statusText = hasFullDiskAccess ? "🟢 Connected to iMessage & Mail" : "⚠️ Setup 2FHey"
+
         statusBarMenu.addItem(
-            withTitle: AppStateManager.shared.hasFullDiscAccess() == .authorized ? "🟢 Connected to iMessage" : "⚠️ Setup 2FHey",
+            withTitle: statusText,
             action: #selector(AppDelegate.onPressSetup),
             keyEquivalent: "")
 
@@ -216,8 +246,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
         statusBarMenu.addItem(withTitle: "Recent", action: nil, keyEquivalent: "")
         mostRecentMessages.enumerated().forEach { (index, row) in
-            let (_, parsedOtp) = row
-            let menuItem = NSMenuItem(title: "\(parsedOtp.code) - \(parsedOtp.service ?? "Unknown")", action: #selector(AppDelegate.onPressCode), keyEquivalent: "")
+            let (message, parsedOtp) = row
+            let source = message.handle.contains("@") ? "📧" : "💬"
+            let menuItem = NSMenuItem(title: "\(source) \(parsedOtp.code) - \(parsedOtp.service ?? "Unknown")", action: #selector(AppDelegate.onPressCode), keyEquivalent: "")
             menuItem.tag = index
             statusBarMenu.addItem(menuItem)
         }
@@ -345,6 +376,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             debugMenu.addItem(item)
         }
 
+        debugMenu.addItem(NSMenuItem.separator())
+
         let debugItem = NSMenuItem(title: "🐛 Debug", action: nil, keyEquivalent: "")
         debugItem.submenu = debugMenu
         statusBarMenu.addItem(debugItem)
@@ -383,6 +416,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         lastNotificationMessage = nil
         originalClipboardContents = nil
         messageManager?.reset()
+        mailManager?.reset()
     }
 
     @objc func onPressAutoLaunch() {

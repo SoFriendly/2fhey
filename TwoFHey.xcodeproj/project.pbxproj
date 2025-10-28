@@ -33,6 +33,7 @@
 		D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAB6281768C500A39E6D /* OverlayView.swift */; };
 		D4F5CABC281768E100A39E6D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CABB281768E100A39E6D /* Message.swift */; };
 		D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CABD281768EC00A39E6D /* MessageManager.swift */; };
+		AA11BB22CC33DD44EE55FF66 /* MailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB23CC33DD44EE55FF66 /* MailManager.swift */; };
 		D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F5CAC22817725100A39E6D /* AppStateManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		D4F5CAB6281768C500A39E6D /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		D4F5CABB281768E100A39E6D /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		D4F5CABD281768EC00A39E6D /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
+		AA11BB23CC33DD44EE55FF66 /* MailManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailManager.swift; sourceTree = "<group>"; };
 		D4F5CAC22817725100A39E6D /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,6 +162,7 @@
 			children = (
 				0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */,
 				D4F5CABD281768EC00A39E6D /* MessageManager.swift */,
+				AA11BB23CC33DD44EE55FF66 /* MailManager.swift */,
 				D4F5CAC22817725100A39E6D /* AppStateManager.swift */,
 				D479A3E62822B7B300915AAA /* ParserConfigManager.swift */,
 			);
@@ -417,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4F5CABE281768EC00A39E6D /* MessageManager.swift in Sources */,
+				AA11BB22CC33DD44EE55FF66 /* MailManager.swift in Sources */,
 				0FB533F92EA81F1E00BD67DF /* DebugLogger.swift in Sources */,
 				D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */,
 				D4123A7628261377002C3C42 /* UIConstants.swift in Sources */,
@@ -456,7 +460,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2H66PPM438;
+				DEVELOPMENT_TEAM = K863L9K6BU;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey.TwoFHeyTests;
@@ -476,7 +480,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2H66PPM438;
+				DEVELOPMENT_TEAM = K863L9K6BU;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey.TwoFHeyTests;
@@ -499,7 +503,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2H66PPM438;
+				DEVELOPMENT_TEAM = K863L9K6BU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoLauncher/Info.plist;
@@ -531,7 +535,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2H66PPM438;
+				DEVELOPMENT_TEAM = K863L9K6BU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AutoLauncher/Info.plist;
@@ -686,7 +690,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2H66PPM438;
+				DEVELOPMENT_TEAM = K863L9K6BU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TwoFHey/Info.plist;
@@ -721,7 +725,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2H66PPM438;
+				DEVELOPMENT_TEAM = K863L9K6BU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TwoFHey/Info.plist;

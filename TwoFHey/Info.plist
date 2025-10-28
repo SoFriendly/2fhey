@@ -4,6 +4,8 @@
 <dict>
 	<key>NSAccessibilityUsageDescription</key>
 	<string>Accessiblity needed to automate copying codes to clipboard</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>2FHey needs to access Apple Mail to automatically detect and copy verification codes from your emails.</string>
 	<key>LSUIElement</key>
 	<true/>
 </dict>

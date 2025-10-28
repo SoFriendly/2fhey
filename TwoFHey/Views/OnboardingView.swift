@@ -21,7 +21,7 @@ struct OnboardingView: View {
                 Text("Welcome to 2FHey")
                     .font(.system(size: 24, weight: .bold))
 
-                Text("Automatically copy verification codes from iMessage")
+                Text("Automatically copy verification codes from iMessage & Mail")
                     .font(.system(size: 13))
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -52,10 +52,22 @@ struct OnboardingView: View {
                 PermissionRow(
                     icon: "externaldrive.fill",
                     title: "Full Disk Access",
-                    description: "Required to read verification codes from Messages",
+                    description: "Required to read verification codes from Messages & Mail",
                     status: viewModel.hasFullDiskAccess ? .granted : .needed,
                     action: {
                         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!)
+                    }
+                )
+
+                // Mail Automation Permission
+                PermissionRow(
+                    icon: "envelope.fill",
+                    title: "Mail Automation",
+                    description: "Required to automatically detect verification codes from emails",
+                    status: viewModel.hasMailAutomation ? .granted : .needed,
+                    action: {
+                        // Request permission through AppStateManager
+                        AppStateManager.shared.requestMailAutomationPermission()
                     }
                 )
             }
@@ -167,12 +179,13 @@ enum PermissionStatus {
 class OnboardingViewModel: ObservableObject {
     @Published var hasAccessibility: Bool = false
     @Published var hasFullDiskAccess: Bool = false
+    @Published var hasMailAutomation: Bool = false
     @Published var isFirstLaunch: Bool = true
 
     private var timer: Timer?
 
     var allPermissionsGranted: Bool {
-        hasAccessibility && hasFullDiskAccess
+        hasAccessibility && hasFullDiskAccess && hasMailAutomation
     }
 
     init() {
@@ -195,6 +208,7 @@ class OnboardingViewModel: ObservableObject {
     private func checkPermissions() {
         hasAccessibility = AppStateManager.shared.hasAccessibilityPermission()
         hasFullDiskAccess = AppStateManager.shared.hasFullDiscAccess() == .authorized
+        hasMailAutomation = AppStateManager.shared.hasMailAutomationPermission()
     }
 }
 

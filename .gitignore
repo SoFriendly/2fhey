@@ -247,4 +247,5 @@ iOSInjectionProject/
 .AppleDouble
 .LSOverride
 ._*
-
+# Swift Build Server
+buildServer.json

@@ -11,17 +11,19 @@ class DebugLogger {
     static let shared = DebugLogger()
 
     private var logFileURL: URL?
-    private let dateFormatter: DateFormatter
     private let queue = DispatchQueue(label: "com.sofriendly.2fhey.debugLogger", qos: .utility)
 
     private init() {
-        dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-
         // Set up log file in Documents folder
         if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             logFileURL = documentsPath.appendingPathComponent("2FHey_Debug.log")
         }
+    }
+
+    private func formatTimestamp(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        return formatter.string(from: date)
     }
 
     /// Log a message to the debug log file
@@ -32,18 +34,16 @@ class DebugLogger {
     func log(_ message: String, category: String = "INFO", data: Any? = nil) {
         guard AppStateManager.shared.debugLoggingEnabled else { return }
 
-        queue.async { [weak self] in
-            guard let self = self, let logFileURL = self.logFileURL else { return }
+        guard let logFileURL = logFileURL else { return }
+        let timestamp = formatTimestamp(Date())
 
-            let timestamp = self.dateFormatter.string(from: Date())
-            var logEntry = "[\(timestamp)] [\(category)] \(message)"
+        var logEntry = "[\(timestamp)] [\(category)] \(message)"
+        if let data = data {
+            logEntry += "\n  Data: \(String(describing: data))"
+        }
+        logEntry += "\n"
 
-            if let data = data {
-                logEntry += "\n  Data: \(String(describing: data))"
-            }
-
-            logEntry += "\n"
-
+        queue.async {
             // Create file if it doesn't exist
             if !FileManager.default.fileExists(atPath: logFileURL.path) {
                 let header = "2FHey Debug Log\nStarted: \(timestamp)\n" + String(repeating: "=", count: 80) + "\n"
@@ -52,11 +52,11 @@ class DebugLogger {
 
             // Append to file
             if let fileHandle = try? FileHandle(forWritingTo: logFileURL) {
+                defer { fileHandle.closeFile() }
                 fileHandle.seekToEndOfFile()
                 if let data = logEntry.data(using: .utf8) {
                     fileHandle.write(data)
                 }
-                fileHandle.closeFile()
             }
 
             // Also print to console for development
@@ -107,11 +107,13 @@ class DebugLogger {
 
     /// Clear the log file
     func clearLog() {
-        queue.async { [weak self] in
-            guard let self = self, let logFileURL = self.logFileURL else { return }
+        // Capture values on calling thread to avoid race conditions
+        guard let logFileURL = logFileURL else { return }
+        let timestamp = formatTimestamp(Date())
+
+        queue.async {
             try? FileManager.default.removeItem(at: logFileURL)
 
-            let timestamp = self.dateFormatter.string(from: Date())
             let header = "2FHey Debug Log\nStarted: \(timestamp)\n" + String(repeating: "=", count: 80) + "\n"
             try? header.write(to: logFileURL, atomically: true, encoding: .utf8)
         }
