@@ -9,9 +9,18 @@ import Foundation
 import ServiceManagement
 import SwiftUI
 import ApplicationServices
+import AppleScriptObjC
 
 enum FullDiskAccessStatus {
     case authorized, denied, unknown
+}
+
+enum MailAutomationStatus {
+    case granted
+    case denied
+    case requiresConsent
+    case notRunning
+    case unknown(Int)
 }
 
 enum NotificationPosition: Int {
@@ -75,9 +84,107 @@ class AppStateManager {
     func hasAccessibilityPermission() -> Bool {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]
         let status = AXIsProcessTrustedWithOptions(options)
-    
+
         return status
     }
+
+    private func checkMailAutomationStatus() -> MailAutomationStatus {
+        return determineMailPermission(ask: false)
+    }
+
+    func hasMailAutomationPermission() -> Bool {
+        let status = checkMailAutomationStatus()
+
+        switch status {
+        case .granted:
+            DebugLogger.shared.log("Mail automation permission: GRANTED", category: "MAIL_PERMISSION")
+            return true
+        case .denied:
+            DebugLogger.shared.log("Mail automation permission: DENIED", category: "MAIL_PERMISSION")
+            return false
+        case .requiresConsent:
+            DebugLogger.shared.log("Mail automation permission: REQUIRES CONSENT", category: "MAIL_PERMISSION")
+            return false
+        case .notRunning:
+            DebugLogger.shared.log("Mail automation permission: Mail.app NOT RUNNING", category: "MAIL_PERMISSION")
+            return false
+        case .unknown(let code):
+            DebugLogger.shared.log("Mail automation permission: UNKNOWN", category: "MAIL_PERMISSION", data: ["statusCode": code])
+            return false
+        }
+    }
+
+    private func determineMailPermission(ask: Bool) -> MailAutomationStatus {
+        let errAEEventWouldRequireUserConsent = OSStatus(-1744)
+
+        guard var addressDesc = NSAppleEventDescriptor(bundleIdentifier: "com.apple.mail").aeDesc?.pointee else {
+            DebugLogger.shared.log("Failed to create Apple Event descriptor for Mail.app", category: "MAIL_PERMISSION")
+            return .unknown(-999)
+        }
+
+        let appleScriptPermission = AEDeterminePermissionToAutomateTarget(&addressDesc, typeWildCard, typeWildCard, ask)
+        AEDisposeDesc(&addressDesc)
+
+        switch appleScriptPermission {
+        case noErr:
+            return .granted
+        case OSStatus(errAEEventNotPermitted):
+            return .denied
+        case errAEEventWouldRequireUserConsent:
+            return .requiresConsent
+        case OSStatus(procNotFound):
+            return .notRunning
+        default:
+            return .unknown(Int(appleScriptPermission))
+        }
+    }
+
+    /// Requests Mail Automation permission and triggers the system permission dialog
+    /// This is the explicit action that shows the permission prompt to the user
+    func requestMailAutomationPermission() {
+        DebugLogger.shared.log("Requesting Mail automation permission...", category: "MAIL_PERMISSION")
+
+        let mailApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.mail").first
+        if mailApp == nil {
+            DebugLogger.shared.log("Mail.app not running, launching it...", category: "MAIL_PERMISSION")
+
+            // Use modern API to launch Mail.app
+            if let mailURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.mail") {
+                let configuration = NSWorkspace.OpenConfiguration()
+                configuration.activates = false
+
+                NSWorkspace.shared.openApplication(at: mailURL, configuration: configuration) { app, error in
+                    if let error = error {
+                        DebugLogger.shared.log("Failed to launch Mail.app", category: "MAIL_PERMISSION", data: ["error": error.localizedDescription])
+                    }
+                }
+
+                Thread.sleep(forTimeInterval: 1.5)
+            }
+        }
+
+        let status = determineMailPermission(ask: true)
+
+        switch status {
+        case .granted:
+            DebugLogger.shared.log("Mail automation permission GRANTED by user", category: "MAIL_PERMISSION")
+        case .denied:
+            DebugLogger.shared.log("Mail automation permission DENIED by user", category: "MAIL_PERMISSION")
+            // Open System Settings so user can manually grant permission
+            DispatchQueue.main.async {
+                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") {
+                    NSWorkspace.shared.open(url)
+                }
+            }
+        case .requiresConsent:
+            DebugLogger.shared.log("Mail automation permission requires user consent (dialog should have appeared)", category: "MAIL_PERMISSION")
+        case .notRunning:
+            DebugLogger.shared.log("Mail.app not running after launch attempt", category: "MAIL_PERMISSION")
+        case .unknown(let code):
+            DebugLogger.shared.log("Unknown permission status", category: "MAIL_PERMISSION", data: ["statusCode": code])
+        }
+    }
+
 
     var hasSetup: Bool {
         get {
