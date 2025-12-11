@@ -20,8 +20,6 @@
 		D4331344281F6B6700AC5343 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = D4331343281F6B6700AC5343 /* HotKey */; };
 		D479A3E02821E74500915AAA /* CustomOTPParsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3DF2821E74500915AAA /* CustomOTPParsers.swift */; };
 		D479A3E22821EE2600915AAA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3E12821EE2600915AAA /* Extensions.swift */; };
-		D479A3E42821FF9A00915AAA /* OTPParserConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3E32821FF9A00915AAA /* OTPParserConfiguration.swift */; };
-		D479A3E72822B7B300915AAA /* ParserConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479A3E62822B7B300915AAA /* ParserConfigManager.swift */; };
 		D4AF833B2825FE400034A7BE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41FABE428178CDB00B0F829 /* main.swift */; };
 		D4AF833D2825FFFA0034A7BE /* AutoLauncher.app in Copy Files */ = {isa = PBXBuildFile; fileRef = D433132C281F630400AC5343 /* AutoLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4AF833F2826018D0034A7BE /* Main.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4AF833E2826018D0034A7BE /* Main.xib */; };
@@ -77,8 +75,6 @@
 		D4331340281F655900AC5343 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		D479A3DF2821E74500915AAA /* CustomOTPParsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOTPParsers.swift; sourceTree = "<group>"; };
 		D479A3E12821EE2600915AAA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		D479A3E32821FF9A00915AAA /* OTPParserConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPParserConfiguration.swift; sourceTree = "<group>"; };
-		D479A3E62822B7B300915AAA /* ParserConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserConfigManager.swift; sourceTree = "<group>"; };
 		D4AF833C2825FEE70034A7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D4AF833E2826018D0034A7BE /* Main.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Main.xib; sourceTree = "<group>"; };
 		D4F5CA9C2817688800A39E6D /* 2FHey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2FHey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,7 +157,6 @@
 				0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */,
 				D4F5CABD281768EC00A39E6D /* MessageManager.swift */,
 				D4F5CAC22817725100A39E6D /* AppStateManager.swift */,
-				D479A3E62822B7B300915AAA /* ParserConfigManager.swift */,
 			);
 			path = DataManagement;
 			sourceTree = "<group>";
@@ -215,7 +210,6 @@
 				D4F5CAAF281768B000A39E6D /* OTPParserContants.swift */,
 				D479A3DF2821E74500915AAA /* CustomOTPParsers.swift */,
 				D479A3E12821EE2600915AAA /* Extensions.swift */,
-				D479A3E32821FF9A00915AAA /* OTPParserConfiguration.swift */,
 			);
 			path = OTPParser;
 			sourceTree = "<group>";
@@ -422,9 +416,7 @@
 				D4123A7628261377002C3C42 /* UIConstants.swift in Sources */,
 				0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */,
 				D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */,
-				D479A3E42821FF9A00915AAA /* OTPParserConfiguration.swift in Sources */,
 				D479A3E02821E74500915AAA /* CustomOTPParsers.swift in Sources */,
-				D479A3E72822B7B300915AAA /* ParserConfigManager.swift in Sources */,
 				D4F5CAB2281768B000A39E6D /* OTPParserContants.swift in Sources */,
 				D4AF833B2825FE400034A7BE /* main.swift in Sources */,
 				D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */,
@@ -684,7 +676,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -719,7 +711,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;

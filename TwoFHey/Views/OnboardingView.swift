@@ -167,7 +167,6 @@ enum PermissionStatus {
 class OnboardingViewModel: ObservableObject {
     @Published var hasAccessibility: Bool = false
     @Published var hasFullDiskAccess: Bool = false
-    @Published var isFirstLaunch: Bool = true
 
     private var timer: Timer?
 
@@ -177,7 +176,6 @@ class OnboardingViewModel: ObservableObject {
 
     init() {
         checkPermissions()
-        isFirstLaunch = !AppStateManager.shared.hasSetup
     }
 
     func startMonitoring() {

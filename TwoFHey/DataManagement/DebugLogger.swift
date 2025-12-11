@@ -64,12 +64,6 @@ class DebugLogger {
         }
     }
 
-    /// Log a database query
-    func logDatabaseQuery(_ query: String, parameters: [String: Any]? = nil) {
-        var message = "Executing database query"
-        log(message, category: "DATABASE", data: ["query": query, "parameters": parameters ?? [:]])
-    }
-
     /// Log raw attributedBody data for debugging
     func logAttributedBody(_ data: Data?, messageGuid: String) {
         guard let data = data else {

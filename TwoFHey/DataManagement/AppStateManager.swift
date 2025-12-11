@@ -7,7 +7,6 @@
 
 import Foundation
 import ServiceManagement
-import SwiftUI
 import ApplicationServices
 
 enum FullDiskAccessStatus {
@@ -48,7 +47,6 @@ class AppStateManager {
         static let globalShortcutEnabledKey = "com.sofriendly.2fhey.globalShortcutEnabled"
         static let notificationPositionKey = "com.sofriendly.2fhey.notificationPosition"
         static let restoreContentsDelayTimeKey = "com.sofriendly.2fhey.restoreContentsDelayTime"
-        static let restoreContentsEnabledKey = "com.sofriendly.2fhey.restoreContentsEnabledKey"
         static let hasSetupKey = "com.sofriendly.2fhey.hasSetup"
         static let autoPasteEnabledKey = "com.sofriendly.2fhey.autoPasteEnabled"
         static let showNotificationOverlayKey = "com.sofriendly.2fhey.showNotificationOverlay"
@@ -149,15 +147,6 @@ class AppStateManager {
         }
     }
 
-    func hasRequiredPermissions() -> Bool {
-        let fullDiskAccess = hasFullDiscAccess()
-        let accessibilityPermission = hasAccessibilityPermission()
-        
-        // Check if both permissions are authorized
-        return fullDiskAccess == .authorized && accessibilityPermission
-    }
-
-    
     var notificationPosition: NotificationPosition {
         get {
             if let storedRawValue = UserDefaults.standard.value(forKey: Constants.notificationPositionKey) as? Int {

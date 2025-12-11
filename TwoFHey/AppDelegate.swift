@@ -43,7 +43,6 @@ class OverlayWindow: NSWindow {
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var messageManager: MessageManager?
-    var configManager: ParserConfigManager?
     private var permissionsService = PermissionsService()
 
     var statusBarItem: NSStatusItem!
@@ -359,9 +358,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     
     func setupKeyboardListener() {
         if (AppStateManager.shared.restoreContentsEnabled) {
-            NSEvent.addGlobalMonitorForEvents(matching: [.keyDown, .systemDefined, .appKitDefined]) { (event) in
+            // Only monitor keyDown events (removed systemDefined and appKitDefined for efficiency)
+            NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
                 // If command + V pressed, race restoring the clipboard contents between this listener and the default delay interval
-                if (event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command && event.keyCode == 9) {
+                // Early exit if command key isn't pressed to reduce overhead
+                guard event.modifierFlags.contains(.command) else { return }
+                if event.keyCode == 9 {
                     self.restoreClipboardContents(withDelay: 5)
                 }
             }

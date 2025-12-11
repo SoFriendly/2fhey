@@ -9,6 +9,7 @@ import Foundation
 import SQLite
 
 struct Message: Equatable {
+    let rowId: Int
     let guid: String
     let text: String
     let handle: String

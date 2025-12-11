@@ -15,10 +15,13 @@ class MessageManager: ObservableObject {
     @Published var messages: [MessageWithParsedOTP] = []
 
     private var processedGuids: Set<String> = []
+    private var lastProcessedRowId: Int = 0
 
     var otpParser: OTPParser
     private var walFileMonitor: DispatchSourceFileSystemObject?
     private var walFileDescriptor: Int32 = -1
+    private var syncWorkItem: DispatchWorkItem?
+    private let syncDebounceInterval: TimeInterval = 0.3 // Wait 0.3 seconds to batch rapid writes while staying responsive
 
     init(withOTPParser otpParser: OTPParser) {
         self.otpParser = otpParser
@@ -205,7 +208,6 @@ class MessageManager: ObservableObject {
                 .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[attributedBodyColumn], messageTable[cacheRoomnamesColumn], messageTable[dateColumn], handleFrom, messageTable[serviceColumn])
                 .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
                 .where(messageTable[dateColumn] > timeOffsetForDate(date))  // Removed SMS filter to include iMessage
-                // Original: .where(messageTable[dateColumn] > timeOffsetForDate(date) && messageTable[serviceColumn] == "SMS")
                 .order(messageTable[dateColumn].asc)
             DebugLogger.shared.log("Using pre-macOS 26 query path", category: "DATABASE")
         }
@@ -262,6 +264,7 @@ class MessageManager: ObservableObject {
             }
 
             return Message(
+                rowId: messageRow[ROWID],
                 guid: messageRow[guidColumn],
                 text: messageText,
                 handle: handle,
@@ -282,10 +285,103 @@ class MessageManager: ObservableObject {
 
         return finalMessages
     }
-    
+
+    private func loadMessagesAfterRowId(_ rowId: Int) throws -> [Message] {
+        DebugLogger.shared.log("Starting loadMessagesAfterRowId", category: "DATABASE", data: ["rowId": rowId, "macOS_version": ProcessInfo.processInfo.operatingSystemVersionString])
+
+        var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+        homeDirectory.appendPathComponent("/Library/Messages/chat.db")
+
+        let db = try Connection(homeDirectory.absoluteString)
+
+        let textColumn = Expression<String?>("text")
+        let attributedBodyColumn = Expression<Data?>("attributedBody")
+        let guidColumn = Expression<String>("guid")
+        let cacheRoomnamesColumn = Expression<String?>("cache_roomnames")
+        let fromMeColumn = Expression<Bool>("is_from_me")
+        let ROWID = Expression<Int>("ROWID")
+
+        let handleTable = Table("handle")
+        let handleFrom = handleTable[Expression<String?>("id")]
+        let messageTable = Table("message")
+        let messageHandleId = messageTable[Expression<Int>("handle_id")]
+
+        // Query for messages with ROWID > lastProcessedRowId
+        // This is much more efficient than date-based queries and ignores typing indicators
+        let query = messageTable
+            .select(messageTable[guidColumn], messageTable[fromMeColumn], messageTable[textColumn], messageTable[attributedBodyColumn], messageTable[cacheRoomnamesColumn], messageTable[ROWID], handleFrom)
+            .join(.leftOuter, handleTable, on: messageHandleId == handleTable[ROWID])
+            .where(messageTable[ROWID] > rowId)
+            .order(messageTable[ROWID].asc)
+            .limit(100)  // Limit for safety
+
+        let mapRowIterator = try db.prepareRowIterator(query)
+        DebugLogger.shared.log("Executing ROWID-based query", category: "DATABASE", data: ["rowId_threshold": rowId])
+
+        var rowCount = 0
+        let messages = try mapRowIterator.map { messageRow -> Message? in
+            rowCount += 1
+            let guid = messageRow[guidColumn]
+
+            guard let handle = messageRow[handleFrom] else {
+                DebugLogger.shared.log("Skipped - no handle", category: "PARSING", data: ["guid": guid])
+                return nil
+            }
+
+            // Try to get text, fallback to parsing attributedBody if text is NULL
+            let text: String?
+            if let directText = messageRow[textColumn] {
+                text = directText
+            } else {
+                text = parseAttributedBody(messageRow[attributedBodyColumn])
+            }
+
+            guard let messageText = text else {
+                DebugLogger.shared.log("Skipped - no text available", category: "PARSING", data: ["guid": guid])
+                return nil
+            }
+
+            return Message(
+                rowId: messageRow[ROWID],
+                guid: messageRow[guidColumn],
+                text: messageText,
+                handle: handle,
+                group: messageRow[cacheRoomnamesColumn],
+                fromMe: messageRow[fromMeColumn])
+        }
+
+        let finalMessages = messages.compactMap { $0 }
+        DebugLogger.shared.log("ROWID query complete", category: "DATABASE", data: ["rows_scanned": rowCount, "messages_found": finalMessages.count])
+
+        return finalMessages
+    }
+
     func startListening() {
+        // Initialize lastProcessedRowId to current max ROWID to avoid processing old messages
+        initializeLastProcessedRowId()
         syncMessages()
         setupWALFileMonitor()
+    }
+
+    private func initializeLastProcessedRowId() {
+        guard AppStateManager.shared.hasFullDiscAccess() == .authorized else { return }
+
+        do {
+            var homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+            homeDirectory.appendPathComponent("/Library/Messages/chat.db")
+            let db = try Connection(homeDirectory.absoluteString)
+
+            let messageTable = Table("message")
+            let ROWID = Expression<Int>("ROWID")
+
+            // Get the highest ROWID to start monitoring from
+            if let maxRow = try db.pluck(messageTable.select(ROWID).order(ROWID.desc).limit(1)) {
+                lastProcessedRowId = maxRow[ROWID]
+                DebugLogger.shared.log("Initialized lastProcessedRowId", category: "SYNC", data: ["rowId": lastProcessedRowId])
+            }
+        } catch {
+            DebugLogger.shared.log("Failed to initialize lastProcessedRowId", category: "ERROR", data: ["error": String(describing: error)])
+        }
     }
 
     func stopListening() {
@@ -315,10 +411,21 @@ class MessageManager: ObservableObject {
         }
 
         source.setEventHandler { [weak self] in
-            DebugLogger.shared.log("WAL file changed, syncing messages", category: "SYNC")
-            DispatchQueue.main.async {
+            guard let self = self else { return }
+
+            // Cancel any pending sync
+            self.syncWorkItem?.cancel()
+
+            // Create new debounced sync work item
+            let workItem = DispatchWorkItem { [weak self] in
+                DebugLogger.shared.log("WAL file changed, syncing messages (debounced)", category: "SYNC")
                 self?.syncMessages()
             }
+
+            self.syncWorkItem = workItem
+
+            // Execute after debounce interval
+            DispatchQueue.main.asyncAfter(deadline: .now() + self.syncDebounceInterval, execute: workItem)
         }
 
         source.setCancelHandler { [weak self] in
@@ -340,19 +447,24 @@ class MessageManager: ObservableObject {
     }
 
     func reset() {
+        syncWorkItem?.cancel()
+        syncWorkItem = nil
         stopListening()
         messages = []
         processedGuids = []
+        lastProcessedRowId = 0
         startListening()
     }
 
     deinit {
+        syncWorkItem?.cancel()
         cleanupWALFileMonitor()
     }
 
     // Test/Debug method to inject fake messages
     func injectTestMessage(_ text: String) {
         let testMessage = Message(
+            rowId: 0,
             guid: UUID().uuidString,
             text: text,
             handle: "+15555551234",
@@ -376,12 +488,10 @@ class MessageManager: ObservableObject {
             return
         }
 
-        guard let modifiedDate = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) else { return }
-
-        DebugLogger.shared.log("Starting syncMessages", category: "SYNC", data: ["looking_back_to": modifiedDate])
+        DebugLogger.shared.log("Starting syncMessages", category: "SYNC", data: ["lastProcessedRowId": lastProcessedRowId])
 
         do {
-            let parsedOtps = try findPossibleOTPMessagesAfterDate(modifiedDate)
+            let parsedOtps = try findPossibleOTPMessagesAfterRowId(lastProcessedRowId)
             guard parsedOtps.count > 0 else {
                 DebugLogger.shared.log("No new OTP messages found", category: "SYNC")
                 return
@@ -398,17 +508,22 @@ class MessageManager: ObservableObject {
         }
     }
     
-    private func findPossibleOTPMessagesAfterDate(_ date: Date) throws -> [MessageWithParsedOTP] {
-        let messagesFromDB = try loadMessagesAfterDate(date)
+    private func findPossibleOTPMessagesAfterRowId(_ rowId: Int) throws -> [MessageWithParsedOTP] {
+        let messagesFromDB = try loadMessagesAfterRowId(rowId)
+
+        // Update lastProcessedRowId to the highest ROWID we've seen
+        if let maxRowId = messagesFromDB.map({ $0.rowId }).max() {
+            lastProcessedRowId = maxRowId
+        }
+
         let filteredMessages = messagesFromDB
-            // .filter { !$0.fromMe }  // Commented out to allow testing with messages sent to yourself
             .filter { !isInvalidMessageBodyValidPerCustomBlacklist($0.text) }
             .filter { !processedGuids.contains($0.guid) }
-        
+
         filteredMessages.forEach { message in
             processedGuids.insert(message.guid)
         }
-        
+
         return filteredMessages.compactMap { message in
             guard let parsedOTP = otpParser.parseMessage(message.text) else { return nil }
             return (message, parsedOTP)
