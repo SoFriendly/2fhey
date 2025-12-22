@@ -10,6 +10,7 @@
 		0F296FA22EF8BA7A00D82E5A /* PlatformSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F296FA12EF8BA7A00D82E5A /* PlatformSelectionView.swift */; };
 		0F296FA32EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F296FA02EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift */; };
 		0F296FA52EF8BA8600D82E5A /* GoogleMessagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F296FA42EF8BA8600D82E5A /* GoogleMessagesManager.swift */; };
+		0F296FB42EF8D0A000D82E5A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 0F296FB32EF8D0A000D82E5A /* AppIcon.icon */; };
 		0F4964342E9FE42F009D1F5E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964332E9FE42F009D1F5E /* OnboardingView.swift */; };
 		0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */; };
 		0FB533F92EA81F1E00BD67DF /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */; };
@@ -65,6 +66,7 @@
 		0F296FA02EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMessagesSetupView.swift; sourceTree = "<group>"; };
 		0F296FA12EF8BA7A00D82E5A /* PlatformSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSelectionView.swift; sourceTree = "<group>"; };
 		0F296FA42EF8BA8600D82E5A /* GoogleMessagesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMessagesManager.swift; sourceTree = "<group>"; };
+		0F296FB32EF8D0A000D82E5A /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		0F4964332E9FE42F009D1F5E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOTPParser.swift; sourceTree = "<group>"; };
 		0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				D4123A7D2826EF3B002C3C42 /* TwoFHeyTests */,
 				D4F5CA9D2817688800A39E6D /* Products */,
 				D41FABD628177D7F00B0F829 /* Frameworks */,
+				0F296FB32EF8D0A000D82E5A /* AppIcon.icon */,
 			);
 			sourceTree = "<group>";
 		};
@@ -377,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4F5CAA42817688900A39E6D /* Assets.xcassets in Resources */,
+				0F296FB42EF8D0A000D82E5A /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,7 +693,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -724,7 +728,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = TwoFHey/TwoFHey.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

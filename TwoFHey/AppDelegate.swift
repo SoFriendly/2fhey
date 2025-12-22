@@ -70,6 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let statusBar = NSStatusBar.system
         statusBarItem = statusBar.statusItem(withLength: NSStatusItem.squareLength)
         statusBarItem.button?.image = icon
+        statusBarItem.isVisible = true
 
         NSApp.activate(ignoringOtherApps: true)
 
@@ -267,9 +268,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         
         statusBarMenu.addItem(NSMenuItem.separator())
 
-        let resyncItem = NSMenuItem(title: "Resync", action: #selector(AppDelegate.resync), keyEquivalent: "")
-        resyncItem.toolTip = "Sometimes iMessage likes to sleep on the job. If 2FHey ever misses a message, use this option to sync recent messages and copy the latest code to your clipboard"
-        statusBarMenu.addItem(resyncItem)
+        // Only show Resync for iMessage (Google Messages doesn't have a database to resync from)
+        if AppStateManager.shared.messagingPlatform == .iMessage {
+            let resyncItem = NSMenuItem(title: "Resync", action: #selector(AppDelegate.resync), keyEquivalent: "")
+            resyncItem.toolTip = "Sometimes iMessage likes to sleep on the job. If 2FHey ever misses a message, use this option to sync recent messages and copy the latest code to your clipboard"
+            statusBarMenu.addItem(resyncItem)
+        }
         
         let settingsMenu = NSMenu()
 
@@ -341,6 +345,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
         autoLaunchItem.state = AppStateManager.shared.shouldLaunchOnLogin ? .on : .off
         settingsMenu.addItem(autoLaunchItem)
+
+        let hideMenuBarItem = NSMenuItem(title: "Hide Menu Bar Icon", action: #selector(AppDelegate.onPressHideMenuBar), keyEquivalent: "")
+        hideMenuBarItem.toolTip = "Hide the menu bar icon until the app is relaunched"
+        settingsMenu.addItem(hideMenuBarItem)
 
         settingsMenu.addItem(NSMenuItem.separator())
 
@@ -459,7 +467,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         AppStateManager.shared.shouldLaunchOnLogin = !AppStateManager.shared.shouldLaunchOnLogin
         refreshMenu()
     }
-    
+
+    @objc func onPressHideMenuBar() {
+        let alert = NSAlert()
+        alert.messageText = "Hide Menu Bar Icon?"
+        alert.informativeText = "The menu bar icon will be hidden until you quit and relaunch 2FHey. You can quit the app using Activity Monitor or by running 'killall 2FHey' in Terminal."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Hide Icon")
+        alert.addButton(withTitle: "Cancel")
+
+        if alert.runModal() == .alertFirstButtonReturn {
+            statusBarItem?.isVisible = false
+        }
+    }
+
     @objc func onPressKeyboardShortcuts() {
         AppStateManager.shared.globalShortcutEnabled = !AppStateManager.shared.globalShortcutEnabled
         refreshMenu()

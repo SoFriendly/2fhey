@@ -13,9 +13,53 @@ class GoogleMessagesManager: ObservableObject {
 
     private var processedIds: Set<String> = []
     private var otpParser: OTPParser
+    private let cacheKey = "com.sofriendly.2fhey.googleMessagesCache"
+    private let maxCachedMessages = 10
 
     init(withOTPParser otpParser: OTPParser) {
         self.otpParser = otpParser
+        loadCachedMessages()
+    }
+
+    // MARK: - Cache Management
+
+    private func loadCachedMessages() {
+        guard let data = UserDefaults.standard.data(forKey: cacheKey),
+              let cached = try? JSONDecoder().decode([CachedMessage].self, from: data) else {
+            return
+        }
+
+        // Convert cached messages back to MessageWithParsedOTP
+        for cachedMsg in cached {
+            processedIds.insert(cachedMsg.id)
+            let message = Message(
+                rowId: 0,
+                guid: cachedMsg.id,
+                text: cachedMsg.text,
+                handle: "Google Messages",
+                group: nil,
+                fromMe: false
+            )
+            let parsedOTP = ParsedOTP(service: cachedMsg.service, code: cachedMsg.code)
+            messages.append((message, parsedOTP))
+        }
+    }
+
+    private func saveCachedMessages() {
+        let cached = messages.suffix(maxCachedMessages).map { msg, otp in
+            CachedMessage(id: msg.guid, text: msg.text ?? "", code: otp.code, service: otp.service)
+        }
+
+        if let data = try? JSONEncoder().encode(cached) {
+            UserDefaults.standard.set(data, forKey: cacheKey)
+        }
+    }
+
+    private struct CachedMessage: Codable {
+        let id: String
+        let text: String
+        let code: String
+        let service: String?
     }
 
     func startListening() {
@@ -61,6 +105,7 @@ class GoogleMessagesManager: ObservableObject {
 
         DispatchQueue.main.async {
             self.messages.append((message, parsedOTP))
+            self.saveCachedMessages()
         }
 
         DebugLogger.shared.log("Parsed Google Messages OTP", category: "GOOGLE_MESSAGES", data: [
@@ -73,6 +118,7 @@ class GoogleMessagesManager: ObservableObject {
         stopListening()
         messages = []
         processedIds = []
+        UserDefaults.standard.removeObject(forKey: cacheKey)
         startListening()
     }
 

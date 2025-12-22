@@ -21,6 +21,7 @@ struct GoogleMessagesSetupView: View {
             VStack(spacing: 12) {
                 Image("logo")
                     .resizable()
+                    .interpolation(.high)
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 60)
 
