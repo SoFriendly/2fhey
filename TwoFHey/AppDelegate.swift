@@ -43,6 +43,7 @@ class OverlayWindow: NSWindow {
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var messageManager: MessageManager?
+    var googleMessagesManager: GoogleMessagesManager?
     private var permissionsService = PermissionsService()
 
     var statusBarItem: NSStatusItem!
@@ -85,8 +86,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             AppStateManager.shared.globalShortcutEnabled = true
             AppStateManager.shared.hasSetup = true
             openOnboardingWindow()
-        } else if AppStateManager.shared.hasFullDiscAccess() != .authorized || !AppStateManager.shared.hasAccessibilityPermission() {
-            openOnboardingWindow()
+        } else if AppStateManager.shared.messagingPlatform == .iMessage {
+            // Only check permissions for iMessage - Google Messages doesn't need Full Disk Access
+            if AppStateManager.shared.hasFullDiscAccess() != .authorized || !AppStateManager.shared.hasAccessibilityPermission() {
+                openOnboardingWindow()
+            }
         }
 
     }
@@ -126,24 +130,54 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     func initMessageManager() {
         // Using SimpleOTPParser - no config needed, uses keyword-based detection
         let otpParser = SimpleOTPParser()
-        messageManager = MessageManager(withOTPParser: otpParser)
 
-        startListeningForMesssages()
+        switch AppStateManager.shared.messagingPlatform {
+        case .iMessage:
+            // Stop Google Messages if running
+            googleMessagesManager?.stopListening()
+            googleMessagesManager = nil
+
+            messageManager = MessageManager(withOTPParser: otpParser)
+            startListeningForMessages()
+
+        case .googleMessages:
+            // Stop iMessage if running
+            messageManager?.stopListening()
+            messageManager = nil
+
+            googleMessagesManager = GoogleMessagesManager(withOTPParser: otpParser)
+            startListeningForGoogleMessages()
+        }
     }
     
-    func startListeningForMesssages() {
+    func startListeningForMessages() {
         messageManager?.$messages.sink { [weak self] messages in
             guard let weakSelf = self else { return }
             if let newestMessage = messages.last, newestMessage.0 != weakSelf.lastNotificationMessage && weakSelf.shouldShowNotificationOverlay {
                 weakSelf.showOverlayForMessage(newestMessage)
             }
-            
+
             weakSelf.mostRecentMessages = messages.suffix(3)
             weakSelf.refreshMenu()
-            
+
             weakSelf.shouldShowNotificationOverlay = true
         }.store(in: &cancellable)
         messageManager?.startListening()
+    }
+
+    func startListeningForGoogleMessages() {
+        googleMessagesManager?.$messages.sink { [weak self] messages in
+            guard let weakSelf = self else { return }
+            if let newestMessage = messages.last, newestMessage.0 != weakSelf.lastNotificationMessage && weakSelf.shouldShowNotificationOverlay {
+                weakSelf.showOverlayForMessage(newestMessage)
+            }
+
+            weakSelf.mostRecentMessages = messages.suffix(3)
+            weakSelf.refreshMenu()
+
+            weakSelf.shouldShowNotificationOverlay = true
+        }.store(in: &cancellable)
+        googleMessagesManager?.startListening()
     }
 
     func showOverlayForMessage(_ message: MessageWithParsedOTP) {
@@ -191,7 +225,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     
     func createOnboardingWindow() -> NSWindow? {
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 600, height: 520),
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 580),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered,
             defer: false
@@ -200,14 +234,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         window.contentView = NSHostingView(rootView: OnboardingView())
         window.isReleasedWhenClosed = false
         window.setFrameAutosaveName("OnboardingWindow")
-        window.minSize = NSSize(width: 600, height: 520)
+        window.minSize = NSSize(width: 600, height: 580)
         return window
     }
     
     func createMenuForMessages() -> NSMenu {
         let statusBarMenu = NSMenu()
+
+        // Show status based on current platform
+        let statusText: String
+        switch AppStateManager.shared.messagingPlatform {
+        case .iMessage:
+            statusText = AppStateManager.shared.hasFullDiscAccess() == .authorized ? "🟢 Connected to iMessage" : "⚠️ Setup 2FHey"
+        case .googleMessages:
+            statusText = AppStateManager.shared.isGoogleMessagesAppInstalled() ? "🟢 Connected to Google Messages" : "⚠️ Setup Google Messages"
+        }
+
         statusBarMenu.addItem(
-            withTitle: AppStateManager.shared.hasFullDiscAccess() == .authorized ? "🟢 Connected to iMessage" : "⚠️ Setup 2FHey",
+            withTitle: statusText,
             action: #selector(AppDelegate.onPressSetup),
             keyEquivalent: "")
 
@@ -268,10 +312,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         autoPasteItem.state = AppStateManager.shared.autoPasteEnabled ? .on : .off
         settingsMenu.addItem(autoPasteItem)
 
-        let markAsReadItem = NSMenuItem(title: "Mark Messages as Read", action: #selector(AppDelegate.onPressMarkAsRead), keyEquivalent: "")
-        markAsReadItem.toolTip = "Automatically mark OTP messages as read in iMessage after copying the code"
-        markAsReadItem.state = AppStateManager.shared.markAsReadEnabled ? .on : .off
-        settingsMenu.addItem(markAsReadItem)
+        // Only show "Mark as Read" for iMessage (not applicable for Google Messages)
+        if AppStateManager.shared.messagingPlatform == .iMessage {
+            let markAsReadItem = NSMenuItem(title: "Mark Messages as Read", action: #selector(AppDelegate.onPressMarkAsRead), keyEquivalent: "")
+            markAsReadItem.toolTip = "Automatically mark OTP messages as read in iMessage after copying the code"
+            markAsReadItem.state = AppStateManager.shared.markAsReadEnabled ? .on : .off
+            settingsMenu.addItem(markAsReadItem)
+        }
 
         let restoreContentsMenu = NSMenu()
         let delayTimes = [0, 5, 10, 15, 20]
@@ -294,6 +341,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let autoLaunchItem = NSMenuItem(title: "Open at Login", action: #selector(AppDelegate.onPressAutoLaunch), keyEquivalent: "")
         autoLaunchItem.state = AppStateManager.shared.shouldLaunchOnLogin ? .on : .off
         settingsMenu.addItem(autoLaunchItem)
+
+        settingsMenu.addItem(NSMenuItem.separator())
+
+        // Switch Platform option
+        let targetPlatformName = AppStateManager.shared.messagingPlatform == .iMessage ? "Google Messages" : "iMessage"
+        let switchPlatformItem = NSMenuItem(title: "Switch to \(targetPlatformName)", action: #selector(AppDelegate.onPressSwitchPlatform), keyEquivalent: "")
+        switchPlatformItem.toolTip = "Switch to \(targetPlatformName) for verification codes"
+        settingsMenu.addItem(switchPlatformItem)
 
         settingsMenu.addItem(NSMenuItem.separator())
 
@@ -384,7 +439,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         shouldShowNotificationOverlay = false
         lastNotificationMessage = nil
         originalClipboardContents = nil
-        messageManager?.reset()
+
+        // Reset the appropriate manager based on platform
+        switch AppStateManager.shared.messagingPlatform {
+        case .iMessage:
+            messageManager?.reset()
+        case .googleMessages:
+            googleMessagesManager?.reset()
+        }
+    }
+
+    @objc func onPressSwitchPlatform() {
+        // Reset hasSetup to trigger onboarding from platform selection
+        AppStateManager.shared.hasSetup = false
+        openOnboardingWindow()
     }
 
     @objc func onPressAutoLaunch() {
@@ -462,7 +530,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     @objc func injectTestMessage(_ sender: NSMenuItem) {
         guard let message = sender.representedObject as? String else { return }
         print("🧪 Injecting test message: \(message)")
-        messageManager?.injectTestMessage(message)
+
+        // Inject into the appropriate manager based on platform
+        switch AppStateManager.shared.messagingPlatform {
+        case .iMessage:
+            messageManager?.injectTestMessage(message)
+        case .googleMessages:
+            googleMessagesManager?.injectTestMessage(message)
+        }
     }
 
     @objc func quit() {

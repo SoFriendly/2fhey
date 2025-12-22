@@ -22,6 +22,8 @@
   ],
   "patterns": [
     "code[\\s:]+([\\d\\s-]{4,8})",
+    "code\\s+is\\s+([\\d\\s-]{4,8})",
+    "verification\\s+code\\s+is\\s+([\\d\\s-]{4,8})",
     "verification[\\s:]+([\\d\\s-]{4,8})",
     "authentication[\\s:]+([\\d\\s-]{4,8})",
     "otp[\\s:]+([\\d\\s-]{4,8})",

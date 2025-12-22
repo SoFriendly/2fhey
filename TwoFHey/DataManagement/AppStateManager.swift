@@ -13,6 +13,11 @@ enum FullDiskAccessStatus {
     case authorized, denied, unknown
 }
 
+enum MessagingPlatform: String {
+    case iMessage = "imessage"
+    case googleMessages = "googlemessages"
+}
+
 enum NotificationPosition: Int {
     case leftEdgeTop, leftEdgeBottom, rightEdgeTop, rightEdgeBottom
     
@@ -53,6 +58,8 @@ class AppStateManager {
         static let useNativeNotificationsKey = "com.sofriendly.2fhey.useNativeNotifications"
         static let markAsReadEnabledKey = "com.sofriendly.2fhey.markAsReadEnabled"
         static let debugLoggingEnabledKey = "com.sofriendly.2fhey.debugLoggingEnabled"
+        static let messagingPlatformKey = "com.sofriendly.2fhey.messagingPlatform"
+        static let googleMessagesAppInstalledKey = "com.sofriendly.2fhey.googleMessagesAppInstalled"
     }
     
     func hasFullDiscAccess() -> FullDiskAccessStatus {
@@ -193,5 +200,32 @@ class AppStateManager {
                 DebugLogger.shared.log("Debug logging enabled", category: "SYSTEM")
             }
         }
+    }
+
+    var messagingPlatform: MessagingPlatform {
+        get {
+            if let rawValue = UserDefaults.standard.string(forKey: Constants.messagingPlatformKey),
+               let platform = MessagingPlatform(rawValue: rawValue) {
+                return platform
+            }
+            return .iMessage // Default to iMessage
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue.rawValue, forKey: Constants.messagingPlatformKey)
+        }
+    }
+
+    var googleMessagesAppInstalled: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: Constants.googleMessagesAppInstalledKey)
+        }
+        set(newValue) {
+            UserDefaults.standard.set(newValue, forKey: Constants.googleMessagesAppInstalledKey)
+        }
+    }
+
+    func isGoogleMessagesAppInstalled() -> Bool {
+        let appPath = "/Applications/Google Messages.app"
+        return FileManager.default.fileExists(atPath: appPath)
     }
 }

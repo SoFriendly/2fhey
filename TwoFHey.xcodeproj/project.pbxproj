@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F296FA22EF8BA7A00D82E5A /* PlatformSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F296FA12EF8BA7A00D82E5A /* PlatformSelectionView.swift */; };
+		0F296FA32EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F296FA02EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift */; };
+		0F296FA52EF8BA8600D82E5A /* GoogleMessagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F296FA42EF8BA8600D82E5A /* GoogleMessagesManager.swift */; };
 		0F4964342E9FE42F009D1F5E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964332E9FE42F009D1F5E /* OnboardingView.swift */; };
 		0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */; };
 		0FB533F92EA81F1E00BD67DF /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */; };
@@ -59,6 +62,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F296FA02EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMessagesSetupView.swift; sourceTree = "<group>"; };
+		0F296FA12EF8BA7A00D82E5A /* PlatformSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSelectionView.swift; sourceTree = "<group>"; };
+		0F296FA42EF8BA8600D82E5A /* GoogleMessagesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMessagesManager.swift; sourceTree = "<group>"; };
 		0F4964332E9FE42F009D1F5E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		0F4964352E9FECAC009D1F5E /* SimpleOTPParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOTPParser.swift; sourceTree = "<group>"; };
 		0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
@@ -91,6 +97,8 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		0F296FA82EF8BAB200D82E5A /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		0F296FB02EF8CB4B00D82E5A /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = Resources; path = TwoFHey/Resources; sourceTree = "<group>"; };
 		0FCFDDCB2EA0330500A5181B /* OTPKeywords */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = OTPKeywords; path = TwoFHey/OTPKeywords; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -154,6 +162,7 @@
 		D479A3E52822B5A100915AAA /* DataManagement */ = {
 			isa = PBXGroup;
 			children = (
+				0F296FA42EF8BA8600D82E5A /* GoogleMessagesManager.swift */,
 				0FB533F82EA81F1E00BD67DF /* DebugLogger.swift */,
 				D4F5CABD281768EC00A39E6D /* MessageManager.swift */,
 				D4F5CAC22817725100A39E6D /* AppStateManager.swift */,
@@ -164,6 +173,7 @@
 		D4F5CA932817688800A39E6D = {
 			isa = PBXGroup;
 			children = (
+				0F296FB02EF8CB4B00D82E5A /* Resources */,
 				0FCFDDCB2EA0330500A5181B /* OTPKeywords */,
 				D4F5CA9E2817688800A39E6D /* TwoFHey */,
 				D433132D281F630400AC5343 /* AutoLauncher */,
@@ -186,6 +196,7 @@
 		D4F5CA9E2817688800A39E6D /* TwoFHey */ = {
 			isa = PBXGroup;
 			children = (
+				0F296FA82EF8BAB200D82E5A /* Services */,
 				D4AF833C2825FEE70034A7BE /* Info.plist */,
 				D479A3E52822B5A100915AAA /* DataManagement */,
 				D4F5CABA281768D800A39E6D /* Models */,
@@ -217,6 +228,8 @@
 		D4F5CAB5281768BE00A39E6D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0F296FA02EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift */,
+				0F296FA12EF8BA7A00D82E5A /* PlatformSelectionView.swift */,
 				0F4964332E9FE42F009D1F5E /* OnboardingView.swift */,
 				D4F5CAB6281768C500A39E6D /* OverlayView.swift */,
 			);
@@ -284,6 +297,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				0F296FA82EF8BAB200D82E5A /* Services */,
+				0F296FB02EF8CB4B00D82E5A /* Resources */,
 				0FCFDDCB2EA0330500A5181B /* OTPKeywords */,
 			);
 			name = TwoFHey;
@@ -415,8 +430,11 @@
 				D4F5CAB4281768B000A39E6D /* OTPParser.swift in Sources */,
 				D4123A7628261377002C3C42 /* UIConstants.swift in Sources */,
 				0F4964362E9FECAC009D1F5E /* SimpleOTPParser.swift in Sources */,
+				0F296FA52EF8BA8600D82E5A /* GoogleMessagesManager.swift in Sources */,
 				D4F5CAC32817725100A39E6D /* AppStateManager.swift in Sources */,
 				D479A3E02821E74500915AAA /* CustomOTPParsers.swift in Sources */,
+				0F296FA22EF8BA7A00D82E5A /* PlatformSelectionView.swift in Sources */,
+				0F296FA32EF8BA7A00D82E5A /* GoogleMessagesSetupView.swift in Sources */,
 				D4F5CAB2281768B000A39E6D /* OTPParserContants.swift in Sources */,
 				D4AF833B2825FE400034A7BE /* main.swift in Sources */,
 				D4F5CAB8281768C500A39E6D /* OverlayView.swift in Sources */,
@@ -676,7 +694,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -691,7 +709,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.4;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey;
 				PRODUCT_NAME = 2FHey;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -711,7 +729,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2H66PPM438;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -726,7 +744,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.4;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sofriendly.2fhey;
 				PRODUCT_NAME = 2FHey;
 				PROVISIONING_PROFILE_SPECIFIER = "";

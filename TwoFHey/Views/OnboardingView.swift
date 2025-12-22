@@ -5,9 +5,52 @@
 
 import SwiftUI
 
+enum OnboardingStep {
+    case platformSelection
+    case iMessagePermissions
+    case googleMessagesSetup
+}
+
 struct OnboardingView: View {
     @StateObject private var viewModel = OnboardingViewModel()
     @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        Group {
+            switch viewModel.currentStep {
+            case .platformSelection:
+                PlatformSelectionView(
+                    selectedPlatform: $viewModel.selectedPlatform,
+                    onContinue: {
+                        viewModel.proceedFromPlatformSelection()
+                    }
+                )
+            case .iMessagePermissions:
+                IMessagePermissionsView(viewModel: viewModel)
+            case .googleMessagesSetup:
+                GoogleMessagesSetupView(
+                    onComplete: {
+                        AppStateManager.shared.hasSetup = true
+                        AppStateManager.shared.messagingPlatform = .googleMessages
+                        NSApplication.shared.keyWindow?.close()
+                    },
+                    onBack: {
+                        viewModel.currentStep = .platformSelection
+                    }
+                )
+            }
+        }
+        .onAppear {
+            viewModel.startMonitoring()
+        }
+        .onDisappear {
+            viewModel.stopMonitoring()
+        }
+    }
+}
+
+struct IMessagePermissionsView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -66,6 +109,16 @@ struct OnboardingView: View {
 
             // Status and Action
             HStack {
+                Button(action: {
+                    viewModel.currentStep = .platformSelection
+                }) {
+                    Text("Back")
+                        .frame(minWidth: 80)
+                }
+                .buttonStyle(.bordered)
+
+                Spacer()
+
                 if viewModel.allPermissionsGranted {
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark.circle.fill")
@@ -83,6 +136,10 @@ struct OnboardingView: View {
                 Spacer()
 
                 Button(action: {
+                    if viewModel.allPermissionsGranted {
+                        AppStateManager.shared.hasSetup = true
+                        AppStateManager.shared.messagingPlatform = .iMessage
+                    }
                     NSApplication.shared.keyWindow?.close()
                 }) {
                     Text(viewModel.allPermissionsGranted ? "Done" : "Close")
@@ -93,13 +150,7 @@ struct OnboardingView: View {
             .padding(.horizontal, 30)
             .padding(.vertical, 20)
         }
-        .frame(minWidth: 600, minHeight: 500)
-        .onAppear {
-            viewModel.startMonitoring()
-        }
-        .onDisappear {
-            viewModel.stopMonitoring()
-        }
+        .frame(minWidth: 600, minHeight: 580)
     }
 }
 
@@ -165,6 +216,8 @@ enum PermissionStatus {
 }
 
 class OnboardingViewModel: ObservableObject {
+    @Published var currentStep: OnboardingStep = .platformSelection
+    @Published var selectedPlatform: MessagingPlatform = .iMessage
     @Published var hasAccessibility: Bool = false
     @Published var hasFullDiskAccess: Bool = false
 
@@ -175,7 +228,20 @@ class OnboardingViewModel: ObservableObject {
     }
 
     init() {
+        // Check if user already has a platform selected
+        if AppStateManager.shared.hasSetup {
+            selectedPlatform = AppStateManager.shared.messagingPlatform
+        }
         checkPermissions()
+    }
+
+    func proceedFromPlatformSelection() {
+        switch selectedPlatform {
+        case .iMessage:
+            currentStep = .iMessagePermissions
+        case .googleMessages:
+            currentStep = .googleMessagesSetup
+        }
     }
 
     func startMonitoring() {
