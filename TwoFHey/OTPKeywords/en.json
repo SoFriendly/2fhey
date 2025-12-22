@@ -21,6 +21,8 @@
     "one-time"
   ],
   "patterns": [
+    "(\\d{4,8})\\s+is\\s+your\\s+verification\\s+code",
+    "(\\d{4,8})\\s+is\\s+your\\s+\\w+\\s+code",
     "code[\\s:]+([\\d\\s-]{4,8})",
     "code\\s+is\\s+([\\d\\s-]{4,8})",
     "verification\\s+code\\s+is\\s+([\\d\\s-]{4,8})",
