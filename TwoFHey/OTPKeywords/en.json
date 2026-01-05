@@ -18,18 +18,31 @@
     "activation",
     "passcode",
     "password",
-    "one-time"
+    "one-time",
+    "validation"
   ],
   "patterns": [
-    "(\\d{4,8})\\s+is\\s+your\\s+verification\\s+code",
-    "(\\d{4,8})\\s+is\\s+your\\s+\\w+\\s+code",
-    "code[\\s:]+([\\d\\s-]{4,8})",
-    "code\\s+is\\s+([\\d\\s-]{4,8})",
-    "verification\\s+code\\s+is\\s+([\\d\\s-]{4,8})",
-    "verification[\\s:]+([\\d\\s-]{4,8})",
-    "authentication[\\s:]+([\\d\\s-]{4,8})",
-    "otp[\\s:]+([\\d\\s-]{4,8})",
-    "pin[\\s:]+([\\d\\s-]{4,8})",
-    "passcode[\\s:]+([\\d\\s-]{4,8})"
+    "([A-Za-z0-9]{4,8})\\s+is\\s+your\\s+verification\\s+code",
+    "([A-Za-z0-9]{4,8})\\s+is\\s+your\\s+[A-Za-z]+\\s+code",
+    "([A-Za-z0-9]{4,8})\\s+is\\s+your\\s+[A-Za-z]+\\s+verification\\s+code",
+    "([A-Za-z0-9]{4,8})\\s+is\\s+your\\s+[A-Za-z]+\\s+authentication\\s+code",
+    "use[,\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "code\\s+is[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "verification\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "verification\\s+code\\s+is[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "validation\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "validation\\s+code\\s+is[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "security\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "security\\s+code\\s+is[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "login\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "one-time\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "one-time\\s+password[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "authentication\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "authentication[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "otp[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "pin[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "passcode[\\s:]+([A-Za-z0-9\\s-]{4,10})",
+    "confirmation\\s+code[\\s:]+([A-Za-z0-9\\s-]{4,10})"
   ]
 }

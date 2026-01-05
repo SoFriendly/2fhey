@@ -385,20 +385,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let debugMenu = NSMenu()
 
         let testMessages = [
+            // Generic patterns (should work with en.json patterns)
             ("Google", "G-123456 is your Google verification code."),
             ("Apple", "Your Apple ID Code is: 654321. Don't share it with anyone."),
-            ("Bank", "Your verification code is 789012"),
-            ("Generic 6-digit", "Your code: 456789"),
             ("Amazon", "123456 is your Amazon OTP. Do not share it with anyone."),
-            ("Verification code pattern", "Verification code: 9913\nSharing the verification code exposes you to fraud"),
+            ("Generic code:", "Your code: 456789"),
+            ("Verification code is", "Your verification code is 789012"),
+            ("Security code", "Your security code is: 654321"),
+            ("Login code", "Your login code: 123456"),
+            ("One-time password", "Your one-time password is 987654"),
+            ("Validation code", "Your validation code is 456123"),
+            ("Confirmation code", "Your confirmation code: 789456"),
+            ("JAILATM (use pattern)", "Truist Alerts: To verify the JAILATM CO transaction on card 0323, use 582270. We won't contact you for this code."),
+            ("Link verification", "132637 is your Link verification code."),
+            ("Alphanumeric", "ABC123 is your verification code"),
+            ("Chase", "From: Chase\nWe'll NEVER call you to ask for this code.\nOne-Time Code:12345678\nOnly use this online. Code expires in 30 min."),
+            ("Geico alphanumeric", "GEICO: Your verification code is: ABC123. It expires in 10 minutes."),
+            ("Vodafone alphanumeric", "Your code is AB12C."),
+            // Chinese patterns
             ("Chinese (Zhihu)", "【知乎】你的验证码是 700185，此验证码用于登录知乎或重置密码。10 分钟内有效。"),
-            ("Chinese (JD)", "【京东】验证码：548393，您正在新设备上登录。请确认本人操作，切勿泄露给他人，京东工作人员不会索取此验证码。"),
-            ("Chinese (Bilibili)", "【哔哩哔哩】778604为本次登录验证的手机验证码，请在5分钟内完成验证。为保证账号安全，请勿泄漏此验证码"),
-            ("Chipotle", "Your verification code is 975654. This code will only be valid for 5 minutes."),
-            ("Chase (custom)", "From: Chase\nWe'll NEVER call you to ask for this code.\nOne-Time Code:12345678\nOnly use this online. Code expires in 30 min."),
-            ("Geico (custom)", "GEICO: Your verification code is: ABC123. It expires in 10 minutes. Please do not reply to this message."),
-            ("Twitter (custom)", "Twitter login code: 987654321"),
-            ("Vodafone (custom)", "Don't share this code with anyone. Fraudsters can use it to access your online account. The code is valid for 20 minutes. Your code is AB12C."),
+            ("Chinese (JD)", "【京东】验证码：548393，您正在新设备上登录。"),
+            // Custom patterns (exceptional cases only)
+            ("Custom: DBS Bank", "Please use SGD-123456 within 3 minutes to authorize this transaction."),
+            ("Custom: MIGov", "Your passcode is\n1234-567890"),
+            ("Custom: pf-bank", "12345678\nValid 5 minutes. Do not share."),
+            ("Custom: idCAT Mobil", "@valid.aoc.cat #654321"),
+            ("Custom: FNZ Finvesto", "Ihr Bestätigungscode ist: AB3C45"),
+            ("Custom: Cater Allen", "OTP to MAKE A NEW PAYMENT of GBP 9.94 to 560027 & 27613445. Call us if this wasn't you. NEVER share this code, not even with Cater Allen staff 699486"),
         ]
 
         testMessages.forEach { (name, message) in

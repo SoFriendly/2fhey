@@ -83,21 +83,43 @@ class GoogleMessagesManager: ObservableObject {
         guard !processedIds.contains(id) else { return }
         processedIds.insert(id)
 
-        // Combine title and body for parsing
-        let fullMessage = body.isEmpty ? title : "\(title)\n\(body)"
+        // For Google Messages, the title often contains the sender's phone number
+        // which can be mistaken for an OTP code (e.g., short codes like "787473").
+        // Priority: 1) Parse body only, 2) Parse body + title for context
 
-        guard !fullMessage.isEmpty else { return }
+        var parsedOTP: ParsedOTP?
+        var messageForDisplay: String
+
+        if !body.isEmpty {
+            // Try parsing the body first (contains the actual message)
+            parsedOTP = otpParser.parseMessage(body)
+            messageForDisplay = body
+
+            // If body parsing failed, try with title for additional context
+            // but put body first so its codes get priority
+            if parsedOTP == nil {
+                let fullMessage = "\(body)\n\(title)"
+                parsedOTP = otpParser.parseMessage(fullMessage)
+                messageForDisplay = fullMessage
+            }
+        } else {
+            // No body, use title only
+            parsedOTP = otpParser.parseMessage(title)
+            messageForDisplay = title
+        }
+
+        guard !messageForDisplay.isEmpty else { return }
 
         // Use OTP parser to extract code
-        guard let parsedOTP = otpParser.parseMessage(fullMessage) else {
-            DebugLogger.shared.log("No OTP found in notification", category: "GOOGLE_MESSAGES", data: ["message": String(fullMessage.prefix(100))])
+        guard let parsedOTP = parsedOTP else {
+            DebugLogger.shared.log("No OTP found in notification", category: "GOOGLE_MESSAGES", data: ["message": String(messageForDisplay.prefix(100))])
             return
         }
 
         let message = Message(
             rowId: 0,
             guid: id,
-            text: fullMessage,
+            text: messageForDisplay,
             handle: "Google Messages",
             group: nil,
             fromMe: false
