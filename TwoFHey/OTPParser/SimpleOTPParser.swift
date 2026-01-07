@@ -33,6 +33,9 @@ class SimpleOTPParser: OTPParser {
     // GitHub repository URL for language files
     private static let githubBaseURL = "https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords"
 
+    // Set to true to skip GitHub updates and use only bundled files (for testing local changes)
+    private static let skipGitHubUpdate = true
+
     // Language files to load
     private static let languageFiles = ["en.json", "fr.json", "zh.json", "es.json", "de.json", "pt.json"]
 
@@ -73,14 +76,27 @@ class SimpleOTPParser: OTPParser {
         self.languagePatterns = []
         self.customPatterns = []
 
+        // Clear cache when testing local files to ensure bundled files are used
+        if Self.skipGitHubUpdate {
+            clearCache()
+        }
+
         // Load from cache or bundle synchronously (for immediate availability)
         loadLanguageFiles()
         loadCustomPatterns()
 
-        // Update from GitHub in background
-        Task {
-            await updateLanguageFilesFromGitHub()
+        // Update from GitHub in background (unless disabled for testing)
+        if !Self.skipGitHubUpdate {
+            Task {
+                await updateLanguageFilesFromGitHub()
+            }
         }
+    }
+
+    // Clear cached files to force use of bundled files
+    private func clearCache() {
+        let cacheDir = getCacheDirectory()
+        try? FileManager.default.removeItem(at: cacheDir)
     }
 
     // Load language files from cache or bundle
@@ -348,9 +364,12 @@ class SimpleOTPParser: OTPParser {
                 var code = String(message[range])
                 // Clean up the code (remove all whitespace, dashes, and newlines - keep only alphanumeric)
                 code = code.components(separatedBy: CharacterSet.alphanumerics.inverted).joined()
-                codes.append(code)
-                // Return early - language-specific patterns are very reliable
-                return codes
+                // OTP codes must contain at least one digit to be valid
+                if code.contains(where: { $0.isNumber }) {
+                    codes.append(code)
+                    // Return early - language-specific patterns are very reliable
+                    return codes
+                }
             }
         }
 
