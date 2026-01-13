@@ -151,7 +151,7 @@ struct IMessagePermissionsView: View {
             .padding(.horizontal, 30)
             .padding(.vertical, 20)
         }
-        .frame(minWidth: 600, minHeight: 580)
+        .frame(minWidth: 600, minHeight: 500)
     }
 }
 

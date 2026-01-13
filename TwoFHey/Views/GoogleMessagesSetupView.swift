@@ -119,7 +119,7 @@ struct GoogleMessagesSetupView: View {
             .padding(.horizontal, 30)
             .padding(.vertical, 20)
         }
-        .frame(minWidth: 600, minHeight: 580)
+        .frame(minWidth: 600, minHeight: 500)
     }
 
     private var alreadyInstalledView: some View {
@@ -160,33 +160,16 @@ struct GoogleMessagesSetupView: View {
             Text("What will happen:")
                 .font(.system(size: 18, weight: .semibold))
 
-            Text("This installs a special version of Google Messages for Desktop that allows 2FHey to detect incoming verification codes.")
-                .font(.system(size: 12))
-                .foregroundColor(.secondary)
-                .padding(.bottom, 4)
-
             SetupStepRow(
                 number: 1,
-                title: "Download Google Messages App",
-                description: "We'll download the 2FHey-compatible desktop app"
+                title: "Install Google Messages",
+                description: "We'll install a 2FHey-compatible version to your Applications folder"
             )
 
             SetupStepRow(
                 number: 2,
-                title: "Install to Applications",
-                description: "The app will be installed to your Applications folder"
-            )
-
-            SetupStepRow(
-                number: 3,
                 title: "Pair with your phone",
                 description: "Scan a QR code with your Android phone to connect"
-            )
-
-            SetupStepRow(
-                number: 4,
-                title: "Receive verification codes",
-                description: "2FHey will automatically detect and copy codes"
             )
         }
     }

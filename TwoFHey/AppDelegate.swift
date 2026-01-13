@@ -226,7 +226,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     
     func createOnboardingWindow() -> NSWindow? {
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 600, height: 580),
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 500),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered,
             defer: false
@@ -235,7 +235,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         window.contentView = NSHostingView(rootView: OnboardingView())
         window.isReleasedWhenClosed = false
         window.setFrameAutosaveName("OnboardingWindow")
-        window.minSize = NSSize(width: 600, height: 580)
+        window.minSize = NSSize(width: 600, height: 500)
         return window
     }
     
