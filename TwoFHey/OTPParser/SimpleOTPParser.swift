@@ -334,8 +334,11 @@ class SimpleOTPParser: OTPParser {
             return ParsedOTP(service: "google", code: googleCode)
         }
 
-        // Extract all potential codes from the message
-        let potentialCodes = extractPotentialCodes(from: message)
+        // Strip URLs from message to prevent URL path components from being extracted as codes
+        let messageWithoutURLs = Self.stripURLs(from: message)
+
+        // Extract all potential codes from the URL-stripped message
+        let potentialCodes = extractPotentialCodes(from: messageWithoutURLs)
 
         // Filter out codes that match ignore patterns
         let validCodes = potentialCodes.filter { code in
@@ -349,6 +352,17 @@ class SimpleOTPParser: OTPParser {
         }
 
         return nil
+    }
+
+    // Strip URLs from message to prevent URL path components from being mistaken for OTP codes
+    private static let urlWithProtocolPattern = try! NSRegularExpression(pattern: #"https?://[^\s]+"#, options: .caseInsensitive)
+    private static let urlWithoutProtocolPattern = try! NSRegularExpression(pattern: #"[a-zA-Z0-9][-a-zA-Z0-9]*(?:\.[a-zA-Z0-9][-a-zA-Z0-9]*)+/[^\s]*"#, options: .caseInsensitive)
+
+    private static func stripURLs(from message: String) -> String {
+        var result = message
+        result = urlWithProtocolPattern.stringByReplacingMatches(in: result, range: NSRange(result.startIndex..., in: result), withTemplate: "")
+        result = urlWithoutProtocolPattern.stringByReplacingMatches(in: result, range: NSRange(result.startIndex..., in: result), withTemplate: "")
+        return result
     }
 
     // Extract potential OTP codes (4-8 digits, possibly with spaces or dashes)
