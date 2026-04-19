@@ -2,6 +2,8 @@
 
 Automatically detect and copy verification codes from iMessage and SMS.
 
+[![Fund contributors](https://img.shields.io/badge/%F0%9F%91%91_Fund_contributors-royalty.dev-BB953A?style=for-the-badge&labelColor=1a1a1a)](https://app.royalty.dev/SoFriendly/2fhey)
+
 ## Features
 
 - 🔐 Automatic OTP detection from messages
