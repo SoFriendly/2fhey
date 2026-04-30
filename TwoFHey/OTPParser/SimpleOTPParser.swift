@@ -37,7 +37,7 @@ class SimpleOTPParser: OTPParser {
     private static let skipGitHubUpdate = true
 
     // Language files to load
-    private static let languageFiles = ["en.json", "fr.json", "zh.json", "es.json", "de.json", "pt.json"]
+    private static let languageFiles = ["en.json", "fr.json", "zh.json", "es.json", "de.json", "pt.json", "he.json"]
 
     // Keywords that indicate this is likely an OTP message (loaded from all language files)
     private var otpKeywords: Set<String>
