@@ -177,11 +177,13 @@ final class OTPParser {
         }
 
         // 3. Everything below requires an OTP keyword somewhere in the message.
-        let lowercased = text.lowercased()
-        guard config.keywords.contains(where: lowercased.contains) else { return nil }
-
-        // URLs are stripped so their path segments can't be mistaken for codes.
+        // URLs are stripped first so their path segments can neither open the
+        // keyword gate nor be mistaken for codes.
         let searchText = Self.stripURLs(from: text)
+        let searchLowercased = searchText.lowercased()
+        guard config.keywords.contains(where: searchLowercased.contains) else { return nil }
+
+        let lowercased = text.lowercased()
         let guarded = NumberGuard(text: searchText, senderDigits: senderDigits)
         let service = extractService(from: lowercased, keywords: config.keywords)
 
