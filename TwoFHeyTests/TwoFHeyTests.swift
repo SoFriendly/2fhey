@@ -128,6 +128,13 @@ class OTPParserTests: XCTestCase {
         assertNoCode("Verify at https://example.com/session/12345678")
     }
 
+    func testKeywordInsideOrdinaryWordDoesNotEnableExtraction() {
+        // "auth" appears only inside "authoritarian".
+        assertNoCode("His authoritarian agenda is a threat. We won in 2024 and can win again. Give $15 today.")
+        // "pin" appears only inside "helping".
+        assertNoCode("Thanks for helping us grow. Our 2024 goal is on track.")
+    }
+
     func testMessagesWithoutKeywordsAreIgnored() {
         assertNoCode("Hey, meet me at 123456 Main St")
         assertNoCode("Running 15 minutes late, sorry!")
