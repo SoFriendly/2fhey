@@ -225,11 +225,16 @@ final class OTPParser {
     /// so only explicitly whitelisted custom patterns may return them.
     private static func isPlausibleCode(_ code: String, allowLongNumeric: Bool = false) -> Bool {
         guard code.count >= 4, code.count <= 10, code.contains(where: \.isNumber) else { return false }
+        guard !optOutFooters.contains(code.lowercased()) else { return false }
         if code.allSatisfy(\.isNumber) && !allowLongNumeric {
             return code.count <= 8
         }
         return true
     }
+
+    /// Constant opt-out footers on bulk texts. They are short and contain a digit,
+    /// so the alphanumeric fallback would otherwise return them as codes.
+    private static let optOutFooters: Set<String> = ["stop2end", "end2end"]
 
     private static let googlePattern = try! NSRegularExpression(pattern: #"\b(G-[A-Z0-9]{5,8})\b"#)
 
