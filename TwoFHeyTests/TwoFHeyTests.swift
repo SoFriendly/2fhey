@@ -135,6 +135,21 @@ class OTPParserTests: XCTestCase {
         assertNoCode("Thanks for helping us grow. Our 2024 goal is on track.")
     }
 
+    func testShortKeywordsStillMatchAsWholeWords() {
+        assertCode("Your PIN is 7391", "7391")
+        assertCode("Your PINs are 7391 and 8264", "7391")
+        assertCode("Your codes are 123456 and 654321", "123456")
+        assertCode("Use the auth code 246810 to log in.", "246810")
+        assertCode("Your OTP: 482913", "482913")
+        assertCode("Use 2FA code 135790 now", "135790")
+    }
+
+    func testCompoundKeywordsStillMatchInsideLongerWords() {
+        // German keywords are often the stem of a compound word.
+        assertCode("Ihr Sicherheitscode ist 123456", "123456")
+        assertCode("Ihr Verifizierungscode lautet 654321", "654321")
+    }
+
     func testMessagesWithoutKeywordsAreIgnored() {
         assertNoCode("Hey, meet me at 123456 Main St")
         assertNoCode("Running 15 minutes late, sorry!")
