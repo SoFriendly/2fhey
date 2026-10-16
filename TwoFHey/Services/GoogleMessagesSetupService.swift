@@ -5,6 +5,7 @@
 
 import Foundation
 import AppKit
+import CryptoKit
 
 enum GoogleMessagesSetupError: Error, LocalizedError {
     case downloadFailed
@@ -13,11 +14,14 @@ enum GoogleMessagesSetupError: Error, LocalizedError {
     case unmountFailed
     case appNotFoundInDMG
     case certificateGenerationFailed
+    case checksumMismatch
 
     var errorDescription: String? {
         switch self {
         case .downloadFailed:
             return "Failed to download Google Messages app"
+        case .checksumMismatch:
+            return "The downloaded Google Messages app did not match the expected checksum"
         case .mountFailed:
             return "Failed to mount the disk image"
         case .copyFailed:
@@ -47,9 +51,24 @@ enum GoogleMessagesSetupStep: Equatable {
 class GoogleMessagesSetupService: ObservableObject {
     static let shared = GoogleMessagesSetupService()
 
-    private let dmgURL = URL(string: "https://sofriendly.s3.amazonaws.com/Google-Messages.dmg")!
+    static let defaultDMGURL = URL(string: "https://sofriendly.s3.amazonaws.com/Google-Messages.dmg")!
+
+    /// SHA-256 of the DMG published at `defaultDMGURL`. The app inside is ad-hoc signed, so macOS
+    /// cannot vouch for it and this pin is the only integrity check before it lands in /Applications.
+    /// Publishing a new DMG means updating this value in the same change.
+    static let pinnedDMGSHA256 = "1216cfd06741c65447d2676811f87810d37b5983f62145e65fea4a7242ef1120"
+
+    private let dmgURL: URL
+    private let expectedSHA256: String
     private let appName = "Google Messages"
     private let applicationsPath = "/Applications"
+
+    /// The parameters are a test seam; the app uses `shared`.
+    init(dmgURL: URL = GoogleMessagesSetupService.defaultDMGURL,
+         expectedSHA256: String = GoogleMessagesSetupService.pinnedDMGSHA256) {
+        self.dmgURL = dmgURL
+        self.expectedSHA256 = expectedSHA256
+    }
 
     @Published var currentStep: GoogleMessagesSetupStep = .notStarted
     @Published var downloadProgress: Double = 0
@@ -121,11 +140,13 @@ class GoogleMessagesSetupService: ObservableObject {
         }
     }
 
-    private func downloadDMG() async throws -> String {
+    func downloadDMG() async throws -> String {
         let destinationPath = NSTemporaryDirectory() + "Google-Messages.dmg"
 
         // Remove existing file if present
         try? FileManager.default.removeItem(atPath: destinationPath)
+
+        let expectedSHA256 = self.expectedSHA256.lowercased()
 
         return try await withCheckedThrowingContinuation { continuation in
             let session = URLSession(configuration: .default)
@@ -142,8 +163,12 @@ class GoogleMessagesSetupService: ObservableObject {
 
                 do {
                     try FileManager.default.moveItem(at: tempURL, to: URL(fileURLWithPath: destinationPath))
+                    guard try GoogleMessagesSetupService.sha256Hex(ofFileAt: destinationPath) == expectedSHA256 else {
+                        throw GoogleMessagesSetupError.checksumMismatch
+                    }
                     continuation.resume(returning: destinationPath)
                 } catch {
+                    try? FileManager.default.removeItem(atPath: destinationPath)
                     continuation.resume(throwing: error)
                 }
             }
@@ -158,6 +183,11 @@ class GoogleMessagesSetupService: ObservableObject {
 
             downloadTask?.resume()
         }
+    }
+
+    private static func sha256Hex(ofFileAt path: String) throws -> String {
+        let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+        return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 
     private func mountDMG(at path: String) async throws -> String {
