@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Network
 @testable import _FHey
 
 class OTPParserTests: XCTestCase {
@@ -131,5 +132,138 @@ class OTPParserTests: XCTestCase {
     func testMessagesWithoutKeywordsAreIgnored() {
         assertNoCode("Hey, meet me at 123456 Main St")
         assertNoCode("Running 15 minutes late, sorry!")
+    }
+}
+
+// MARK: - NotificationServer
+
+/// The Google Messages bridge listens on a local port. Any web page the user opens can reach
+/// that port, so the server must refuse foreign origins and must not listen beyond loopback.
+final class NotificationServerTests: XCTestCase {
+    private static var nextPort: UInt16 = 28470
+
+    private var server: NotificationServer!
+    private var port: UInt16 = 0
+    private var received: [(title: String, body: String)] = []
+
+    override func setUp() {
+        super.setUp()
+        Self.nextPort += 1
+        port = Self.nextPort
+        received = []
+        server = NotificationServer(port: port, allowTLS: false)
+        server.onNotificationReceived = { [weak self] title, body, _ in
+            self?.received.append((title, body))
+        }
+        server.start()
+        Thread.sleep(forTimeInterval: 0.3)
+    }
+
+    override func tearDown() {
+        server.stop()
+        super.tearDown()
+    }
+
+    /// Sends one raw HTTP request to `host` and returns whatever comes back first.
+    private func send(_ request: String, host: String = "127.0.0.1", timeout: TimeInterval = 3) -> String? {
+        let connection = NWConnection(host: NWEndpoint.Host(host), port: NWEndpoint.Port(rawValue: port)!, using: .tcp)
+        let done = DispatchSemaphore(value: 0)
+        var response: String?
+        connection.stateUpdateHandler = { state in
+            switch state {
+            case .ready:
+                connection.send(content: request.data(using: .utf8), completion: .contentProcessed { _ in })
+                connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, _, _ in
+                    response = data.flatMap { String(data: $0, encoding: .utf8) }
+                    done.signal()
+                }
+            case .failed, .cancelled:
+                done.signal()
+            default:
+                break
+            }
+        }
+        connection.start(queue: .global())
+        _ = done.wait(timeout: .now() + timeout)
+        connection.cancel()
+        return response
+    }
+
+    private func post(origin: String?, body: String = #"{"title":"Bank","body":"Your code is 123456"}"#) -> String? {
+        var lines = ["POST /notification HTTP/1.1", "Host: 127.0.0.1:\(port)", "Content-Type: application/json"]
+        if let origin { lines.append("Origin: \(origin)") }
+        lines.append("Content-Length: \(body.utf8.count)")
+        return send(lines.joined(separator: "\r\n") + "\r\n\r\n" + body)
+    }
+
+    private func upgrade(origin: String?) -> String? {
+        var lines = ["GET / HTTP/1.1", "Host: 127.0.0.1:\(port)", "Upgrade: websocket", "Connection: Upgrade",
+                     "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==", "Sec-WebSocket-Version: 13"]
+        if let origin { lines.append("Origin: \(origin)") }
+        return send(lines.joined(separator: "\r\n") + "\r\n\r\n")
+    }
+
+    private func drainMainQueue() {
+        let flushed = expectation(description: "main queue flushed")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { flushed.fulfill() }
+        wait(for: [flushed], timeout: 2)
+    }
+
+    func testForeignOriginPostIsRejected() {
+        let response = post(origin: "https://evil.example")
+        XCTAssertTrue(response?.hasPrefix("HTTP/1.1 403") == true, "got: \(response ?? "nil")")
+        drainMainQueue()
+        XCTAssertTrue(received.isEmpty)
+    }
+
+    func testLookalikeOriginIsRejected() {
+        for origin in ["https://messages.google.com.evil.example", "http://messages.google.com", "null"] {
+            let response = post(origin: origin)
+            XCTAssertTrue(response?.hasPrefix("HTTP/1.1 403") == true, "\(origin) got: \(response ?? "nil")")
+        }
+        drainMainQueue()
+        XCTAssertTrue(received.isEmpty)
+    }
+
+    func testForeignOriginWebSocketUpgradeIsRejected() {
+        let response = upgrade(origin: "https://evil.example")
+        XCTAssertTrue(response?.hasPrefix("HTTP/1.1 403") == true, "got: \(response ?? "nil")")
+    }
+
+    func testGoogleMessagesOriginWebSocketUpgradeIsAccepted() {
+        let response = upgrade(origin: "https://messages.google.com")
+        XCTAssertTrue(response?.hasPrefix("HTTP/1.1 101") == true, "got: \(response ?? "nil")")
+    }
+
+    func testOriginlessPostStillWorksForCurlTesting() {
+        let response = post(origin: nil)
+        XCTAssertTrue(response?.hasPrefix("HTTP/1.1 200") == true, "got: \(response ?? "nil")")
+        drainMainQueue()
+        XCTAssertEqual(received.first?.title, "Bank")
+    }
+
+    func testResponsesCarryNoWildcardCORSHeader() {
+        let response = post(origin: nil) ?? ""
+        XCTAssertFalse(response.lowercased().contains("access-control-allow-origin"), response)
+    }
+
+    /// Reads the kernel's view of the listening socket, because dialing the machine's own LAN
+    /// address from the test host is blocked by macOS and would pass whatever the server does.
+    func testListensOnLoopbackOnly() throws {
+        let lsof = Process()
+        lsof.executableURL = URL(fileURLWithPath: "/usr/sbin/lsof")
+        lsof.arguments = ["-nP", "-iTCP:\(port)", "-sTCP:LISTEN", "-Fn"]
+        let pipe = Pipe()
+        lsof.standardOutput = pipe
+        try lsof.run()
+        lsof.waitUntilExit()
+        let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+
+        let addresses = output.split(separator: "\n").filter { $0.hasPrefix("n") }.map { String($0.dropFirst()) }
+        XCTAssertFalse(addresses.isEmpty, "nothing is listening on \(port)")
+        for address in addresses {
+            XCTAssertTrue(address.hasPrefix("127.0.0.1:") || address.hasPrefix("[::1]:"),
+                          "listening beyond loopback: \(address)")
+        }
     }
 }

@@ -14,20 +14,35 @@ import Security
 class NotificationServer {
     static let shared = NotificationServer()
 
-    private let port: UInt16 = 2847
+    private let port: UInt16
+    private let allowTLS: Bool
     private var listener: NWListener?
     private var connections: [NWConnection] = []
     private var webSocketConnections: Set<ObjectIdentifier> = []
 
+    /// The only web origin allowed to talk to this server. A browser attaches `Origin` to every
+    /// WebSocket handshake and cross-origin POST, so any other page is refused. Requests without
+    /// an `Origin` header (curl, local tools) are not browser traffic and pass through.
+    private static let allowedOrigin = "https://messages.google.com"
+
     var onNotificationReceived: ((_ title: String, _ body: String, _ id: String) -> Void)?
 
-    private init() {}
+    private init() {
+        port = 2847
+        allowTLS = true
+    }
+
+    /// Test seam: lets a test run its own server on a spare port without TLS.
+    init(port: UInt16, allowTLS: Bool) {
+        self.port = port
+        self.allowTLS = allowTLS
+    }
 
     func start() {
         do {
             // Try to set up TLS, fall back to plain TCP if it fails
             let parameters: NWParameters
-            if let tlsParams = createTLSParameters() {
+            if allowTLS, let tlsParams = createTLSParameters() {
                 parameters = tlsParams
                 DebugLogger.shared.log("Using TLS for WebSocket server", category: "WS_SERVER")
             } else {
@@ -35,8 +50,11 @@ class NotificationServer {
                 DebugLogger.shared.log("TLS setup failed, using plain TCP", category: "WS_SERVER")
             }
             parameters.allowLocalEndpointReuse = true
+            // Loopback only: the Google Messages page connects to 127.0.0.1, and nothing else
+            // on the network has any business talking to this server.
+            parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(.loopback), port: NWEndpoint.Port(rawValue: port)!)
 
-            listener = try NWListener(using: parameters, on: NWEndpoint.Port(rawValue: port)!)
+            listener = try NWListener(using: parameters)
 
             listener?.stateUpdateHandler = { [weak self] state in
                 switch state {
@@ -124,6 +142,12 @@ class NotificationServer {
             }
         }
 
+        if let origin = headers["origin"], origin != Self.allowedOrigin {
+            DebugLogger.shared.log("Rejected request from origin", category: "WS_SERVER", data: origin)
+            sendResponse(connection: connection, statusCode: 403, body: "Forbidden")
+            return
+        }
+
         // Check for WebSocket upgrade
         if headers["upgrade"]?.lowercased() == "websocket",
            let wsKey = headers["sec-websocket-key"] {
@@ -153,7 +177,8 @@ class NotificationServer {
             }
             sendResponse(connection: connection, statusCode: 200, body: "OK")
         } else if method == "OPTIONS" {
-            sendCORSResponse(connection: connection)
+            // The page uses a WebSocket, never CORS, so a preflight is never legitimate.
+            sendResponse(connection: connection, statusCode: 403, body: "Forbidden")
         } else if method == "GET" {
             // Could be WebSocket upgrade or regular GET
             sendResponse(connection: connection, statusCode: 200, body: "2FHey Notification Server")
@@ -291,28 +316,9 @@ class NotificationServer {
         HTTP/1.1 \(statusCode) \(statusText)\r
         Content-Type: text/plain\r
         Content-Length: \(body.count)\r
-        Access-Control-Allow-Origin: *\r
-        Access-Control-Allow-Methods: POST, OPTIONS\r
-        Access-Control-Allow-Headers: Content-Type\r
         Connection: close\r
         \r
         \(body)
-        """
-
-        connection.send(content: response.data(using: .utf8), completion: .contentProcessed { _ in
-            connection.cancel()
-        })
-    }
-
-    private func sendCORSResponse(connection: NWConnection) {
-        let response = """
-        HTTP/1.1 204 No Content\r
-        Access-Control-Allow-Origin: *\r
-        Access-Control-Allow-Methods: POST, OPTIONS\r
-        Access-Control-Allow-Headers: Content-Type\r
-        Connection: close\r
-        \r
-
         """
 
         connection.send(content: response.data(using: .utf8), completion: .contentProcessed { _ in
