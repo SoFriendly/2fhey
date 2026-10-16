@@ -133,3 +133,128 @@ class OTPParserTests: XCTestCase {
         assertNoCode("Running 15 minutes late, sorry!")
     }
 }
+
+// MARK: - Remote pattern updates
+
+/// Pattern files are fetched from GitHub at runtime and cached on disk, where they outlive the
+/// session. A file that is huge, or holds a regex that backtracks catastrophically, would freeze
+/// the app on every incoming message, so such a file must never reach the cache.
+final class RemotePatternTests: XCTestCase {
+    private final class StubProtocol: URLProtocol {
+        static var bodies: [String: Data] = [:]
+
+        override class func canInit(with request: URLRequest) -> Bool { true }
+        override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+        override func startLoading() {
+            let url = request.url!
+            let body = Self.bodies[url.lastPathComponent]
+            let response = HTTPURLResponse(url: url, statusCode: body == nil ? 404 : 200, httpVersion: nil, headerFields: nil)!
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            client?.urlProtocol(self, didLoad: body ?? Data())
+            client?.urlProtocolDidFinishLoading(self)
+        }
+
+        override func stopLoading() {}
+    }
+
+    private var cache: URL!
+    private var parser: OTPParser!
+
+    override func setUpWithError() throws {
+        cache = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        StubProtocol.bodies = [:]
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [StubProtocol.self]
+        parser = OTPParser(remoteBaseURL: URL(string: "https://patterns.test/OTPKeywords")!,
+                           cacheDirectory: cache,
+                           session: URLSession(configuration: configuration),
+                           refreshOnInit: false)
+    }
+
+    override func tearDown() {
+        try? FileManager.default.removeItem(at: cache)
+    }
+
+    private func languageFile(keywords: [String] = ["code"], patterns: [String] = [#"\b\d{6}\b"#]) -> Data {
+        try! JSONSerialization.data(withJSONObject: ["keywords": keywords, "patterns": patterns])
+    }
+
+    private func customFile(patterns: [String]) -> Data {
+        let entries = patterns.map { ["service": "Example", "pattern": $0] }
+        return try! JSONSerialization.data(withJSONObject: ["customPatterns": entries])
+    }
+
+    private func isCached(_ name: String) -> Bool {
+        FileManager.default.fileExists(atPath: cache.appendingPathComponent(name).path)
+    }
+
+    private func assertRejected(_ body: Data, as name: String = "en.json", _ message: String,
+                                file: StaticString = #filePath, line: UInt = #line) async {
+        StubProtocol.bodies[name] = body
+        await parser.refreshFromRemote()
+        XCTAssertFalse(isCached(name), message, file: file, line: line)
+    }
+
+    func testWellFormedUpdateIsCached() async {
+        StubProtocol.bodies["en.json"] = languageFile()
+        await parser.refreshFromRemote()
+        XCTAssertTrue(isCached("en.json"))
+    }
+
+    func testBundledFilesPassTheSameChecks() async throws {
+        let bundle = Bundle(for: OTPParser.self)
+        for name in ["en", "fr", "zh", "es", "de", "pt", "he", "custom-patterns"] {
+            let url = try XCTUnwrap(bundle.url(forResource: name, withExtension: "json", subdirectory: "OTPKeywords")
+                                    ?? bundle.url(forResource: name, withExtension: "json"), name)
+            StubProtocol.bodies["\(name).json"] = try Data(contentsOf: url)
+        }
+        await parser.refreshFromRemote()
+        for name in ["en", "fr", "zh", "es", "de", "pt", "he", "custom-patterns"] {
+            XCTAssertTrue(isCached("\(name).json"), "\(name).json was rejected")
+        }
+    }
+
+    func testOversizedFileIsRejected() async {
+        await assertRejected(languageFile(keywords: [String(repeating: "a", count: 200_000)]), "200 KB file was cached")
+    }
+
+    func testTooManyEntriesAreRejected() async {
+        await assertRejected(languageFile(patterns: Array(repeating: #"\d{6}"#, count: 500)), "500 patterns were cached")
+        await assertRejected(languageFile(keywords: Array(repeating: "code", count: 500)), "500 keywords were cached")
+    }
+
+    func testOverlongPatternIsRejected() async {
+        await assertRejected(languageFile(patterns: [String(repeating: "a", count: 2_000)]), "2,000 character pattern was cached")
+    }
+
+    func testCatastrophicBacktrackingPatternsAreRejected() async {
+        for pattern in ["(a+)+$", #"(\d+)*x"#, "(a|aa)+$", #"(?:\d{3,})+z"#, #"(.*a)+x"#] {
+            await assertRejected(languageFile(patterns: [pattern]), "\(pattern) was cached")
+            await assertRejected(customFile(patterns: [pattern]), as: "custom-patterns.json", "\(pattern) was cached as a custom pattern")
+        }
+    }
+
+    func testHarmlessLookalikesAreStillAccepted() async {
+        // An escaped parenthesis, a parenthesis inside a character class, and a group with a bounded repeat.
+        StubProtocol.bodies["en.json"] = languageFile(patterns: [#"code\)+ (\d{6})"#, #"[)]+(\d{6})"#, #"(\d{3}){2}"#])
+        await parser.refreshFromRemote()
+        XCTAssertTrue(isCached("en.json"))
+    }
+
+    func testOneBadFileDoesNotBlockTheGoodOnes() async {
+        StubProtocol.bodies["en.json"] = languageFile(patterns: ["(a+)+$"])
+        StubProtocol.bodies["fr.json"] = languageFile()
+        await parser.refreshFromRemote()
+        XCTAssertFalse(isCached("en.json"))
+        XCTAssertTrue(isCached("fr.json"))
+    }
+
+    func testRejectedUpdateLeavesThePreviousCachedCopyAlone() async throws {
+        let previous = languageFile(keywords: ["previous"])
+        try previous.write(to: cache.appendingPathComponent("en.json"))
+        StubProtocol.bodies["en.json"] = languageFile(patterns: ["(a+)+$"])
+        await parser.refreshFromRemote()
+        XCTAssertEqual(try Data(contentsOf: cache.appendingPathComponent("en.json")), previous)
+    }
+}

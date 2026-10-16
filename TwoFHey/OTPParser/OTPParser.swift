@@ -46,7 +46,11 @@ final class OTPParser {
 
     private static let languageFiles = ["en.json", "fr.json", "zh.json", "es.json", "de.json", "pt.json", "he.json"]
     private static let customPatternsFile = "custom-patterns.json"
-    private static let remoteBaseURL = "https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords"
+    static let defaultRemoteBaseURL = URL(string: "https://raw.githubusercontent.com/SoFriendly/2fhey/main/TwoFHey/OTPKeywords")!
+
+    private let remoteBaseURL: URL
+    private let cacheDirectory: URL
+    private let session: URLSession
 
     private let lock = NSLock()
     private var _configuration: Configuration
@@ -56,9 +60,17 @@ final class OTPParser {
         return _configuration
     }
 
-    init() {
-        Self.clearCacheIfAppVersionChanged()
-        _configuration = Self.loadConfiguration()
+    /// The parameters are a test seam; the app uses the defaults.
+    init(remoteBaseURL: URL = OTPParser.defaultRemoteBaseURL,
+         cacheDirectory: URL = OTPParser.defaultCacheDirectory(),
+         session: URLSession = .shared,
+         refreshOnInit: Bool = true) {
+        self.remoteBaseURL = remoteBaseURL
+        self.cacheDirectory = cacheDirectory
+        self.session = session
+        Self.clearCacheIfAppVersionChanged(in: cacheDirectory)
+        _configuration = Self.loadConfiguration(cacheDirectory: cacheDirectory)
+        guard refreshOnInit else { return }
         Task.detached(priority: .utility) { [weak self] in
             await self?.refreshFromRemote()
         }
@@ -66,31 +78,32 @@ final class OTPParser {
 
     /// A new build's bundled patterns must not be shadowed by files cached from
     /// an older version, so the cache is cleared on the first launch after an update.
-    private static func clearCacheIfAppVersionChanged() {
+    private static func clearCacheIfAppVersionChanged(in cacheDirectory: URL) {
         let version = [Bundle.main.infoDictionary?["CFBundleShortVersionString"],
                        Bundle.main.infoDictionary?["CFBundleVersion"]]
             .compactMap { $0 as? String }.joined(separator: "-")
-        let marker = cacheDirectory().appendingPathComponent("app-version.txt")
+        let marker = cacheDirectory.appendingPathComponent("app-version.txt")
         guard (try? String(contentsOf: marker, encoding: .utf8)) != version else { return }
-        try? FileManager.default.removeItem(at: cacheDirectory())
-        try? version.write(to: cacheDirectory().appendingPathComponent("app-version.txt"), atomically: true, encoding: .utf8)
+        try? FileManager.default.removeItem(at: cacheDirectory)
+        try? FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        try? version.write(to: marker, atomically: true, encoding: .utf8)
     }
 
     // MARK: - Pattern loading
 
     /// Loads each pattern file, preferring a cached copy downloaded from GitHub
     /// and falling back to the bundled copy.
-    private static func loadConfiguration() -> Configuration {
+    private static func loadConfiguration(cacheDirectory: URL) -> Configuration {
         var config = Configuration()
         for fileName in languageFiles {
-            guard let data = fileData(fileName),
+            guard let data = fileData(fileName, cacheDirectory: cacheDirectory),
                   let file = try? JSONDecoder().decode(LanguageFile.self, from: data) else { continue }
             config.keywords.append(contentsOf: file.keywords.map { $0.lowercased() })
             config.languagePatterns.append(contentsOf: file.patterns.compactMap {
                 try? NSRegularExpression(pattern: $0, options: .caseInsensitive)
             })
         }
-        if let data = fileData(customPatternsFile),
+        if let data = fileData(customPatternsFile, cacheDirectory: cacheDirectory),
            let file = try? JSONDecoder().decode(CustomPatternsFile.self, from: data) {
             config.customPatterns = file.customPatterns.compactMap { entry in
                 (try? NSRegularExpression(pattern: entry.pattern)).map { (entry.service, $0) }
@@ -99,8 +112,8 @@ final class OTPParser {
         return config
     }
 
-    private static func fileData(_ fileName: String) -> Data? {
-        let cached = cacheDirectory().appendingPathComponent(fileName)
+    private static func fileData(_ fileName: String, cacheDirectory: URL) -> Data? {
+        let cached = cacheDirectory.appendingPathComponent(fileName)
         if let data = try? Data(contentsOf: cached) {
             return data
         }
@@ -111,7 +124,7 @@ final class OTPParser {
         return url.flatMap { try? Data(contentsOf: $0) }
     }
 
-    private static func cacheDirectory() -> URL {
+    static func defaultCacheDirectory() -> URL {
         let directory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("OTPKeywords")
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -121,20 +134,14 @@ final class OTPParser {
     /// Downloads updated pattern files from GitHub so new patterns can ship
     /// without an app update. Each file is validated before it is cached; on any
     /// failure the existing cached or bundled copy stays in use.
-    private func refreshFromRemote() async {
+    func refreshFromRemote() async {
         var updatedAny = false
         for fileName in Self.languageFiles + [Self.customPatternsFile] {
-            guard let url = URL(string: "\(Self.remoteBaseURL)/\(fileName)"),
-                  let (data, response) = try? await URLSession.shared.data(from: url),
-                  (response as? HTTPURLResponse)?.statusCode == 200 else { continue }
-
-            let isValid = fileName == Self.customPatternsFile
-                ? (try? JSONDecoder().decode(CustomPatternsFile.self, from: data)) != nil
-                : (try? JSONDecoder().decode(LanguageFile.self, from: data)) != nil
-            guard isValid else { continue }
+            guard let data = await download(remoteBaseURL.appendingPathComponent(fileName)),
+                  Self.isAcceptable(data, fileName: fileName) else { continue }
 
             do {
-                try data.write(to: Self.cacheDirectory().appendingPathComponent(fileName))
+                try data.write(to: cacheDirectory.appendingPathComponent(fileName))
                 updatedAny = true
             } catch {
                 DebugLogger.shared.log("Failed to cache pattern file", category: "PARSER", data: fileName)
@@ -142,12 +149,70 @@ final class OTPParser {
         }
 
         if updatedAny {
-            let refreshed = Self.loadConfiguration()
+            let refreshed = Self.loadConfiguration(cacheDirectory: cacheDirectory)
             lock.lock()
             _configuration = refreshed
             lock.unlock()
             DebugLogger.shared.log("Pattern files refreshed from GitHub", category: "PARSER")
         }
+    }
+
+    // MARK: - Remote file limits
+
+    private static let maxFileBytes = 64 * 1024
+    private static let maxEntries = 200
+    private static let maxPatternLength = 300
+
+    /// Reads at most `maxFileBytes`, so a hostile or broken host cannot make us buffer an unbounded body.
+    private func download(_ url: URL) async -> Data? {
+        guard let (bytes, response) = try? await session.bytes(from: url),
+              (response as? HTTPURLResponse)?.statusCode == 200 else { return nil }
+        var data = Data()
+        do {
+            for try await byte in bytes {
+                data.append(byte)
+                if data.count > Self.maxFileBytes { return nil }
+            }
+        } catch {
+            return nil
+        }
+        return data
+    }
+
+    /// A file is cached whole or not at all: one bad entry rejects the file, so a partial
+    /// update never mixes trusted and untrusted patterns.
+    private static func isAcceptable(_ data: Data, fileName: String) -> Bool {
+        let decoder = JSONDecoder()
+        if fileName == customPatternsFile {
+            guard let file = try? decoder.decode(CustomPatternsFile.self, from: data) else { return false }
+            return file.customPatterns.count <= maxEntries && file.customPatterns.allSatisfy { isSafe(pattern: $0.pattern) }
+        }
+        guard let file = try? decoder.decode(LanguageFile.self, from: data) else { return false }
+        return file.keywords.count <= maxEntries && file.patterns.count <= maxEntries && file.patterns.allSatisfy { isSafe(pattern: $0) }
+    }
+
+    /// NSRegularExpression backtracks and has no time limit, so a pattern such as `(a+)+$` can freeze
+    /// the app on a short message. Reject any group repeated without a bound (`)+`, `)*`, `){n,}`).
+    /// The bundled patterns use none, and bounded repeats such as `(\d{3}){2}` stay allowed.
+    private static func isSafe(pattern: String) -> Bool {
+        guard pattern.count <= maxPatternLength else { return false }
+        let characters = Array(pattern)
+        var escaped = false
+        var inClass = false
+        for (index, character) in characters.enumerated() {
+            if escaped { escaped = false; continue }
+            if character == "\\" { escaped = true; continue }
+            if inClass { inClass = character != "]"; continue }
+            if character == "[" { inClass = true; continue }
+            if character == ")" && repeatsWithoutBound(characters[(index + 1)...]) { return false }
+        }
+        return true
+    }
+
+    private static func repeatsWithoutBound(_ rest: ArraySlice<Character>) -> Bool {
+        guard let next = rest.first else { return false }
+        if next == "+" || next == "*" { return true }
+        return next == "{" && String(rest).range(of: #"^\{\d+,\}"#, options: .regularExpression) != nil
     }
 
     /// Parses a message body for a one-time code. `sender` (a handle, phone number,
