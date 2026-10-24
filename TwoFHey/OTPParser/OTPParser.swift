@@ -40,6 +40,12 @@ final class OTPParser {
 
     private struct Configuration {
         var keywords: [String] = []
+        /// Keywords longer than 4 letters, or non-ASCII, are matched anywhere in the message
+        /// so compound words ("Sicherheitscode") still open the gate.
+        var substringKeywords: [String] = []
+        /// Short ASCII keywords ("pin", "auth", "code") are matched as whole words only,
+        /// so they can't fire inside "helping" or "authoritarian".
+        var wholeWordKeywordPatterns: [NSRegularExpression] = []
         var languagePatterns: [NSRegularExpression] = []
         var customPatterns: [(service: String, regex: NSRegularExpression)] = []
     }
@@ -96,7 +102,19 @@ final class OTPParser {
                 (try? NSRegularExpression(pattern: entry.pattern)).map { (entry.service, $0) }
             }
         }
+        let isShort: (String) -> Bool = { $0.count <= 4 && $0.allSatisfy(\.isASCII) }
+        config.substringKeywords = config.keywords.filter { !isShort($0) }
+        config.wholeWordKeywordPatterns = Set(config.keywords.filter(isShort)).compactMap {
+            try? NSRegularExpression(pattern: #"(?<![\p{L}\p{N}])"# + NSRegularExpression.escapedPattern(for: $0) + #"s?(?![\p{L}\p{N}])"#)
+        }
         return config
+    }
+
+    private static func containsKeyword(_ lowercased: String, in config: Configuration) -> Bool {
+        config.substringKeywords.contains(where: lowercased.contains)
+            || config.wholeWordKeywordPatterns.contains {
+                $0.firstMatch(in: lowercased, range: NSRange(lowercased.startIndex..., in: lowercased)) != nil
+            }
     }
 
     private static func fileData(_ fileName: String) -> Data? {
@@ -181,7 +199,7 @@ final class OTPParser {
         // keyword gate nor be mistaken for codes.
         let searchText = Self.stripURLs(from: text)
         let searchLowercased = searchText.lowercased()
-        guard config.keywords.contains(where: searchLowercased.contains) else { return nil }
+        guard Self.containsKeyword(searchLowercased, in: config) else { return nil }
 
         let lowercased = text.lowercased()
         let guarded = NumberGuard(text: searchText, senderDigits: senderDigits)
