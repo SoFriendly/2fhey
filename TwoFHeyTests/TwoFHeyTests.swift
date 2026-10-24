@@ -137,6 +137,13 @@ class OTPParserTests: XCTestCase {
         assertCode("Your verification code is 482913. Reply Stop2End to opt out", "482913")
     }
 
+    func testKeywordInsideURLDoesNotEnableExtraction() {
+        // "pin" appears only in the link path, so nothing else in the message may become a code.
+        assertNoCode("Will you chip in $15 to our campaign? i.example.com/ppiNg4AP\n\nStop2End")
+        // "code" appears only in a query parameter name.
+        assertNoCode("Chip in today: https://example.com/donate?refcode=abc\n\nSD26")
+    }
+
     func testMessagesWithoutKeywordsAreIgnored() {
         assertNoCode("Hey, meet me at 123456 Main St")
         assertNoCode("Running 15 minutes late, sorry!")
