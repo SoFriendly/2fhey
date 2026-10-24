@@ -128,6 +128,28 @@ class OTPParserTests: XCTestCase {
         assertNoCode("Verify at https://example.com/session/12345678")
     }
 
+    func testKeywordInsideOrdinaryWordDoesNotEnableExtraction() {
+        // "auth" appears only inside "authoritarian".
+        assertNoCode("His authoritarian agenda is a threat. We won in 2024 and can win again. Give $15 today.")
+        // "pin" appears only inside "helping".
+        assertNoCode("Thanks for helping us grow. Our 2024 goal is on track.")
+    }
+
+    func testShortKeywordsStillMatchAsWholeWords() {
+        assertCode("Your PIN is 7391", "7391")
+        assertCode("Your PINs are 7391 and 8264", "7391")
+        assertCode("Your codes are 123456 and 654321", "123456")
+        assertCode("Use the auth code 246810 to log in.", "246810")
+        assertCode("Your OTP: 482913", "482913")
+        assertCode("Use 2FA code 135790 now", "135790")
+    }
+
+    func testCompoundKeywordsStillMatchInsideLongerWords() {
+        // German keywords are often the stem of a compound word.
+        assertCode("Ihr Sicherheitscode ist 123456", "123456")
+        assertCode("Ihr Verifizierungscode lautet 654321", "654321")
+    }
+
     func testKeywordInsideURLDoesNotEnableExtraction() {
         // "pin" appears only in the link path, so nothing else in the message may become a code.
         assertNoCode("Will you chip in $15 to our campaign? i.example.com/ppiNg4AP\n\nStop2End")
