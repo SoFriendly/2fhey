@@ -128,6 +128,15 @@ class OTPParserTests: XCTestCase {
         assertNoCode("Verify at https://example.com/session/12345678")
     }
 
+    func testOptOutFootersAreNotCodes() {
+        // A keyword with no real code must not fall through to the opt-out footer.
+        assertNoCode("Please verify your account at example.com/account. Reply Stop2End to opt out")
+        assertNoCode("Please verify your account at example.com/account. Reply STOP2END to opt out")
+        assertNoCode("Please verify your account at example.com/account.\n\nEnd2End")
+        // A real code in the same message is still returned.
+        assertCode("Your verification code is 482913. Reply Stop2End to opt out", "482913")
+    }
+
     func testKeywordInsideOrdinaryWordDoesNotEnableExtraction() {
         // "auth" appears only inside "authoritarian".
         assertNoCode("His authoritarian agenda is a threat. We won in 2024 and can win again. Give $15 today.")
