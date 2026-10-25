@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import CryptoKit
 @testable import _FHey
 
 class OTPParserTests: XCTestCase {
@@ -169,5 +170,61 @@ class OTPParserTests: XCTestCase {
     func testMessagesWithoutKeywordsAreIgnored() {
         assertNoCode("Hey, meet me at 123456 Main St")
         assertNoCode("Running 15 minutes late, sorry!")
+    }
+}
+
+// MARK: - Google Messages DMG
+
+/// The Google Messages app is ad-hoc signed, so the download is only trustworthy if it matches the
+/// pinned checksum. Nothing may reach the mount and copy steps otherwise.
+final class GoogleMessagesDMGTests: XCTestCase {
+    private var directory: URL!
+    private let downloadedCopy = NSTemporaryDirectory() + "Google-Messages.dmg"
+
+    override func setUpWithError() throws {
+        directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try? FileManager.default.removeItem(atPath: downloadedCopy)
+    }
+
+    override func tearDown() {
+        try? FileManager.default.removeItem(at: directory)
+        try? FileManager.default.removeItem(atPath: downloadedCopy)
+    }
+
+    private func served(_ contents: String) throws -> (url: URL, sha256: String) {
+        let url = directory.appendingPathComponent("Google-Messages.dmg")
+        let data = Data(contents.utf8)
+        try data.write(to: url)
+        let sha256 = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        return (url, sha256)
+    }
+
+    func testDownloadMatchingThePinIsAccepted() async throws {
+        let file = try served("genuine disk image")
+        let path = try await GoogleMessagesSetupService(dmgURL: file.url, expectedSHA256: file.sha256).downloadDMG()
+        XCTAssertTrue(FileManager.default.fileExists(atPath: path))
+    }
+
+    func testPinMatchIgnoresHexCase() async throws {
+        let file = try served("genuine disk image")
+        let path = try await GoogleMessagesSetupService(dmgURL: file.url, expectedSHA256: file.sha256.uppercased()).downloadDMG()
+        XCTAssertTrue(FileManager.default.fileExists(atPath: path))
+    }
+
+    func testTamperedDownloadIsRejectedAndNotLeftOnDisk() async throws {
+        let file = try served("swapped by an attacker")
+        let genuine = String(repeating: "0", count: 64)
+        do {
+            _ = try await GoogleMessagesSetupService(dmgURL: file.url, expectedSHA256: genuine).downloadDMG()
+            XCTFail("a download that does not match the pin was accepted")
+        } catch GoogleMessagesSetupError.checksumMismatch {
+            // expected
+        }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: downloadedCopy))
+    }
+
+    func testPublishedPinIsAWellFormedSHA256() {
+        XCTAssertNotNil(GoogleMessagesSetupService.pinnedDMGSHA256.range(of: "^[0-9a-f]{64}$", options: .regularExpression))
     }
 }
